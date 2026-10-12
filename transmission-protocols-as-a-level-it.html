@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transmission &amp; Protocols — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --bg-deep:#090d18;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#04141a;}
+
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 24px 120px; }
+
+  nav.theory-nav{
+    max-width:760px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:44px 24px 34px; max-width:760px; margin:0 auto; border-bottom:1px solid var(--trace);
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,38px);
+    line-height:1.15; margin:0 0 14px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
+
+  nav.tabs{
+    max-width:760px; margin:0 auto; padding:14px 24px; display:flex; gap:6px;
+    overflow-x:auto; border-bottom:1px solid var(--trace); position:sticky; top:0;
+    background:rgba(13,18,32,.95); backdrop-filter: blur(4px); z-index:30;
+  }
+  nav.tabs button{
+    font-family:var(--mono); font-size:12.5px; white-space:nowrap; background:transparent;
+    border:1px solid var(--trace); color:var(--paper-dim); padding:8px 13px;
+    border-radius:var(--radius); cursor:pointer; flex-shrink:0;
+  }
+  nav.tabs button:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  nav.tabs button.active{ background:var(--signal); color:#04141a; border-color:var(--signal); font-weight:500; }
+
+  .panel{ display:none; padding:40px 0 8px; }
+  .panel.active{ display:block; }
+
+  h2.section-title{
+    font-family:var(--mono); font-size:22px; color:var(--signal-bright);
+    margin:0 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2.section-title .tag{
+    font-size:12px; color:var(--sage); border:1px solid var(--trace);
+    padding:2px 7px; border-radius:var(--radius);
+  }
+  h3{ font-family:var(--mono); font-size:16px; color:var(--gold); margin:26px 0 8px; font-weight:500; }
+  p{margin:10px 0;}
+  ul, ol{padding-left:22px; margin:10px 0;}
+  li{margin:4px 0;}
+  strong{color:var(--paper); font-weight:600;}
+  code{ font-family:var(--mono); font-size:0.92em; background:var(--bg-deep); padding:1px 5px; border-radius:2px; color:var(--signal-bright); }
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0 8px; font-size:15px; }
+  th,td{ border:1px solid var(--trace); padding:8px 10px; text-align:left; vertical-align:top; }
+  th{ font-family:var(--mono); font-size:12px; color:var(--sage); font-weight:500; background:rgba(134,201,160,0.06); }
+  .table-scroll{ overflow-x:auto; }
+  .note{ color:var(--paper-dim); font-size:14.5px; }
+
+  .block{ border-left:2px solid var(--trace); padding-left:18px; margin:18px 0; }
+  .block ul, .block ol{ margin:0; padding-left:20px; }
+
+  .proscons{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 8px; }
+  .pc{ border:1px solid var(--trace); border-radius:var(--radius); background:var(--bg-raised); padding:2px 14px 12px; }
+  .pc.pro{ border-top:2px solid var(--sage); }
+  .pc.con{ border-top:2px solid var(--brick); }
+  .pc-title{ font-family:var(--mono); font-size:12.5px; font-weight:500; margin:12px 0 4px; }
+  .pc.pro .pc-title{ color:var(--sage); }
+  .pc.con .pc-title{ color:var(--brick); }
+  .pc ul{ padding-left:18px; margin:6px 0 0; font-size:15px; }
+  @media (max-width:600px){ .proscons{ grid-template-columns:1fr; } }
+
+  details.fold{ border:1px solid var(--trace); border-radius:var(--radius); margin:12px 0; background:var(--bg-raised); }
+  details.fold summary{ font-family:var(--mono); font-size:13.5px; color:var(--gold); padding:11px 14px; cursor:pointer; }
+  details.fold[open] summary{ border-bottom:1px solid var(--trace); }
+  details.fold .fold-body{ padding:2px 14px 12px; }
+
+  .task{ margin:32px 0; border:1px solid var(--trace); border-radius:var(--radius); background: var(--bg-raised); padding:20px 20px 22px; }
+  .task-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .task-label .pts{color:var(--sage);}
+  .task h4{ margin:0 0 12px; font-family:var(--serif); font-weight:600; font-size:16.5px; color:var(--paper); }
+  .task .sub-q{margin:18px 0;}
+  .task .sub-q:first-child{margin-top:0;}
+  .sub-q label{ display:block; font-family:var(--serif); font-size:15.5px; margin-bottom:8px; color:var(--paper); }
+
+  textarea{
+    width:100%; min-height:52px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-radius:var(--radius); color:var(--paper); font-family:var(--serif);
+    font-size:15.5px; padding:10px 12px; resize:vertical;
+  }
+  textarea:focus, button:focus-visible, .opt:focus-visible, summary:focus-visible, input[type=checkbox]:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:1px; }
+  .row{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+
+  button{
+    font-family:var(--mono); font-size:13px; background:var(--signal); color:#04141a;
+    border:none; padding:9px 15px; border-radius:var(--radius); cursor:pointer; font-weight:500;
+  }
+  button:hover{background:var(--signal-bright);}
+  button.ghost{ background:transparent; border:1px solid var(--trace); color:var(--paper-dim); }
+  button.ghost:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  button:disabled{opacity:.5; cursor:default;}
+
+  .error-msg{ color:var(--brick); font-family:var(--mono); font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show{display:block;}
+
+  .answer-reveal{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .answer-reveal.show{display:block;}
+  .answer-reveal .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:5px; }
+
+  .self-mark{ display:none; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:13px; color:var(--paper-dim); }
+  .self-mark.show{display:flex;}
+  .self-mark input[type=checkbox]{ width:17px; height:17px; accent-color: var(--gold); cursor:pointer; }
+  .self-mark label{cursor:pointer; margin:0; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+
+  .markpoints{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .markpoints.show{display:block;}
+  .markpoints .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:6px; }
+  .markpoints .mp-item{
+    display:flex; gap:10px; align-items:flex-start; margin:0; padding:7px 0;
+    border-bottom:1px solid var(--trace-dim); font-size:15px; font-weight:400; cursor:pointer;
+  }
+  .markpoints .mp-item:last-of-type{border-bottom:none;}
+  .markpoints .mp-item input{ width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--gold); cursor:pointer; }
+  .mp-foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; font-family:var(--mono); font-size:13px; }
+  .mp-count{ color:var(--gold); }
+  .mp-note{ color:var(--brick); }
+
+  .mcq{margin:20px 0;}
+  .mcq:first-of-type{margin-top:0;}
+  .mcq p.q{ font-family:var(--serif); font-size:15.5px; color:var(--paper); margin:0 0 10px; }
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:10px 13px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer; font-weight:400;
+  }
+  .opt:hover:not(:disabled){border-color:var(--signal); background:var(--bg-deep);}
+  .opt.correct{border-color:var(--sage); background:rgba(134,201,160,0.14);}
+  .opt.incorrect{border-color:var(--brick); background:rgba(224,104,92,0.14);}
+  .opt:disabled{cursor:default;}
+  .mcq-feedback{ font-family:var(--mono); font-size:13px; margin-top:8px; min-height:1.2em; }
+  .mcq-feedback.ok{color:var(--sage);}
+  .mcq-feedback.bad{color:var(--brick);}
+
+  .classify-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 0; border-bottom:1px solid var(--trace-dim); flex-wrap:wrap;
+  }
+  .classify-item:last-child{border-bottom:none;}
+  .classify-item .term{font-size:15px; max-width:60%;}
+  .classify-item .choices{display:flex; gap:8px; flex-wrap:wrap;}
+  .classify-item .choices button{
+    background:transparent; border:1px solid var(--trace); color:var(--paper-dim);
+    font-size:12px; padding:6px 10px;
+  }
+  .classify-item .choices button:hover:not(:disabled){ color:var(--paper); border-color:var(--paper-dim); }
+  .classify-item .choices button.correct{background:rgba(134,201,160,0.16); border-color:var(--sage); color:var(--paper);}
+  .classify-item .choices button.incorrect{background:rgba(224,104,92,0.16); border-color:var(--brick); color:var(--paper);}
+  @media (max-width:600px){ .classify-item .term{max-width:100%;} }
+
+  #score-badge{
+    position:fixed; top:14px; right:14px; z-index:50; font-family:var(--mono); font-size:13px;
+    background:var(--bg-raised); border:1px solid var(--signal); color:var(--signal-bright);
+    padding:8px 13px; border-radius:var(--radius); box-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  #score-badge .n{color:var(--gold); font-weight:700;}
+
+  footer{ max-width:760px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    header.hero{padding:36px 20px 26px;}
+    #score-badge{top:auto; bottom:14px; right:14px;}
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+</style>
+</head>
+<body>
+
+<div id="score-badge">Score: <span class="n" id="score-val">0</span> / <span id="score-max">0</span></div>
+
+<nav class="theory-nav">
+  <a class="disabled" href="#" aria-disabled="true">← <span class="full">Previous theory</span></a>
+  <span class="spacer"></span>
+  <a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a>
+</nav>
+
+<header class="hero">
+  <p class="kicker">Cambridge AS &amp; A Level IT · Chapter 14 Communications Technology</p>
+  <h1 class="title">Transmission &amp; Protocols</h1>
+  <p>How data actually moves across a network: bandwidth and streaming, how packets are routed, the protocols devices use to agree on the rules, how routers manage traffic, and the physical media data travels along.</p>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-panel="transmission">14.5 Transmission</button>
+  <button class="tab-btn" data-panel="routing">14.6 Routing</button>
+  <button class="tab-btn" data-panel="protocols">14.7 Protocols</button>
+  <button class="tab-btn" data-panel="traffic">14.8 Traffic mgmt</button>
+  <button class="tab-btn" data-panel="methods">14.9 Methods</button>
+</nav>
+
+<div class="wrap">
+
+<div class="panel active" id="panel-transmission">
+  <h2 class="section-title">Data transmission across networks <span class="tag">14.5</span></h2>
+
+  <h3>Bandwidth</h3>
+  <p><strong>Bandwidth</strong> is the range of frequencies available to a communication method, which determines its transmission rate — the maximum amount of data that could be transferred across a network in a given time (usually one second). The more bandwidth a connection has, the more data it can transfer at once. It's often measured in Hertz (Hz).</p>
+  <p>Bandwidth isn't the same as speed: bandwidth is the <em>potential</em> capacity, while speed is the actual transfer rate a user experiences, which is also affected by factors such as latency and the efficiency of the device.</p>
+
+  <h3>Bit rate</h3>
+  <p><strong>Bit rate</strong> is the rate at which bits are actually transferred in a given period of time, usually in bits per second (bps) or a multiple such as kilobits per second (Kbps). A transfer's bit rate can never exceed the bandwidth available, since bandwidth is the maximum possible bit rate.</p>
+
+  <h3>Real-time and on-demand streaming</h3>
+  <p>There are two types of media streaming. In <strong>real-time streaming</strong>, data is streamed as soon as it's recorded, for example by a camera. In <strong>on-demand streaming</strong>, data is pre-recorded and streamed to the user whenever they request it.</p>
+  <p>Streaming removes the need to download and store a whole file before viewing or listening to it. Data arrives as a series of bits and is held in a temporary storage area called a <strong>buffer</strong>: it's stored in the buffer as it downloads, then removed to be played while more data is simultaneously added, ready for when it's needed.</p>
+  <p>Available bandwidth limits the quality of video or audio that can be streamed — a connection with only 2 Mbps of bandwidth, for example, is highly unlikely to stream a 4K movie, because producing each frame needs far more data than that bandwidth can carry.</p>
+
+  <h3>How bit rate and bandwidth affect streaming quality</h3>
+<div class="block">
+  <ul>
+    <li>Bit rate represents how much data is stored per unit of time in the streamed video</li>
+    <li>The bandwidth of the connection determines the bit rate that can actually be used</li>
+    <li>If the connection doesn't have enough bandwidth for the required bit rate, the video stalls, becomes jerky, or has to keep buffering, harming the viewer's experience</li>
+    <li>Video can be sampled or compressed at different bit rates — a lower bit rate produces video that lacks detail, looks pixelated, or shows jerky motion</li>
+    <li>The more bits used, the higher the quality</li>
+  </ul>
+</div>
+<div class="table-scroll">
+<table>
+<tr><th>Approximate bit rate</th><th>Typical quality</th></tr>
+<tr><td>16 kbit/s</td><td>Suitable only for videophone calls — detail is lacking and any significant movement pixelates the image</td></tr>
+<tr><td>2.5 Mbit/s</td><td>Suitable for low-quality internet streaming</td></tr>
+<tr><td>9.6 Mbit/s</td><td>Roughly DVD quality</td></tr>
+<tr><td>8–15 Mbit/s</td><td>HD quality</td></tr>
+<tr><td>40 Mbit/s</td><td>Enough for 1080p / Blu-ray disc quality</td></tr>
+</table>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="0"><p class="q">1. What is the key difference between bandwidth and speed?</p><div class="opts"><button class="opt" data-idx="0">Bandwidth is the potential capacity; speed is the actual transfer rate experienced</button><button class="opt" data-idx="1">They are exactly the same thing</button><button class="opt" data-idx="2">Bandwidth only applies to wireless connections</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">2. What is a buffer used for when streaming video?</p><div class="opts"><button class="opt" data-idx="0">Temporarily storing incoming data before it's needed for playback</button><button class="opt" data-idx="1">Permanently storing the whole file after it finishes</button><button class="opt" data-idx="2">Compressing the video file</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">3. Why might a 2 Mbps connection struggle to stream a 4K movie?</p><div class="opts"><button class="opt" data-idx="0">4K video needs a far higher bit rate than that bandwidth can carry</button><button class="opt" data-idx="1">4K movies are always shorter</button><button class="opt" data-idx="2">2 Mbps connections can't connect to streaming services at all</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+<div class="panel" id="panel-routing">
+  <h2 class="section-title">Routing data in networks <span class="tag">14.6</span></h2>
+
+  <h3>Structure of a data packet</h3>
+  <p>A <strong>data packet</strong> is normally the smallest unit of data sent across a network, and its exact contents depend on the network it's travelling over — a packet sent over the internet, for example, needs more information to be directed to the right place. A packet typically has three parts: a header, a payload and a trailer.</p>
+<div class="table-scroll">
+<table>
+<tr><th>Part</th><th>What it can contain</th></tr>
+<tr><td>Header</td><td>The sender's IP address (the source IP address); the receiving device's IP address (the destination IP address); a sequence number, so packets can be reordered at the receiving end; the MAC addresses of the sender and receiver (removed once the packet passes through a router, since MAC addresses are only used by switches); and any protocols used.</td></tr>
+<tr><td>Payload</td><td>The actual data from the file being transmitted.</td></tr>
+<tr><td>Trailer</td><td>A flag marking the end of the packet, and any error-checking information.</td></tr>
+</table>
+</div>
+
+  <p>The header and trailer exist to make sure the payload data arrives at its intended destination without errors.</p>
+
+  <h3>Packet switching</h3>
+  <p>In <strong>packet switching</strong>, a message is divided into smaller units — data packets — which are each given a unique sequence number and sent individually. Every packet's header carries information such as the source address, destination address and sequence number. Packets travel from router to router, each taking whatever path the router judges shortest at that moment, so different packets from the same message can take different routes and arrive at different times. They are reassembled in the correct order at the receiving end; if a packet is missing or corrupted, a message is sent asking for it to be resent, and once all packets have arrived correctly an acknowledgment is sent back.</p>
+  <p>There are two main methods of packet switching: <strong>connection-oriented</strong> (also called virtual circuit switching) and <strong>connectionless</strong> (also called datagram switching).</p>
+
+  <h3>Connection-oriented switching</h3>
+  <p>A session is created before any data is transferred, forming a fixed channel for the data to travel along. The first packet sent includes a request for acknowledgment; if the acknowledgment is received, the sender transmits further packets, and if not, it tries again with the first packet. Frame relay and TCP are both connection-oriented.</p>
+<div class="table-scroll">
+<table>
+<tr><th>Method</th><th>How it works</th></tr>
+<tr><td>Frame relay</td><td>Data is separated into units called frames. Error correction is handled by the devices at each end of the transmission, which speeds things up. If an error is detected in a frame, that frame is simply dropped, and the endpoint devices detect the gap and request a retransmission — making frame relay best suited to situations where errors are likely to be rare. It uses permanent virtual circuits (PVCs), intended to exist for long periods even when no data is being sent, or switched virtual circuits (SVCs), temporary connections that exist only for a single session.</td></tr>
+<tr><td>TCP (Transmission Control Protocol)</td><td>A connection is created and kept open until the applications at each end have finished exchanging data. TCP decides how data is broken into packets, handing them to (and receiving them from) the network layer in the TCP/IP model. It is responsible for error-free transmission and for managing the flow of data.</td></tr>
+</table>
+</div>
+
+  <h3>Connectionless switching</h3>
+  <p>There's no prior arrangement between devices before data is sent — packets are simply dispatched, with no way to know whether the receiver is ready, and no way to confirm the transmission succeeded. Ethernet, IP and UDP are all connectionless.</p>
+<div class="table-scroll">
+<table>
+<tr><th>Method</th><th>How it works</th></tr>
+<tr><td>Ethernet</td><td>A long-established protocol for connecting devices over a wired connection, making sure devices on the network format and transmit data in a way others will understand. Most home and school networks use Ethernet.</td></tr>
+<tr><td>IP (Internet Protocol)</td><td>The protocol used when data is sent across the internet, responsible for delivering packets of data to the receiving device.</td></tr>
+<tr><td>UDP (User Datagram Protocol)</td><td>An alternative to TCP. It sends data in units called datagrams, and — unlike TCP — doesn't control the flow of data or carry out error checking. This makes exchanging data with UDP generally faster than with TCP, though less reliable.</td></tr>
+</table>
+</div>
+
+  <h3>Circuit switching</h3>
+  <p><strong>Circuit switching</strong> establishes a dedicated path between sender and receiver before any communication takes place — rather like how a traditional telephone call works. Once a connection is established, that dedicated path remains in use until the connection ends, and no other device can use that same path while it's active.</p>
+  <p>Steps: the sender identifies the intended receiver; the system checks whether the receiver is ready; if so, a sequence of links is established across the network; the data is transferred; and finally the links are taken down. Circuit switching is used in the public telephone network, mainly for voice transmission, and only a fixed amount of data can be transferred at a time.</p>
+
+  <h3>Message switching</h3>
+  <p>In <strong>message switching</strong>, a complete message is treated as a single unit and routed through intermediate nodes, where it's stored and then forwarded — a <strong>store-and-forward</strong> approach. No dedicated path is set up between sender and receiver in advance; instead, the destination address is attached to the message, and each node stores the whole message before forwarding it on, choosing what it judges to be the most efficient route at that point (a form of dynamic routing). Each message is treated as an independent entity.</p>
+
+  <h3>IP addressing</h3>
+  <p>An <strong>IP address</strong> identifies a device's location on a network, or uniquely identifies it on the internet. IP addresses can be <strong>IPv4</strong> (32 bits long) or <strong>IPv6</strong> (128 bits long), and can be <strong>static</strong> (stays the same every time the device reconnects) or <strong>dynamic</strong> (changes each session) — most devices use a dynamic address unless the user specifically requests a static one from their internet provider.</p>
+
+  <h3>MAC addressing</h3>
+  <p>A <strong>MAC address</strong> identifies a device on a network via its NIC. It sits at the <strong>data link layer</strong> (layer 2) of the OSI model, and matters for communication within the local network: it lets routers identify devices within the same network segment so they can forward data correctly. The <strong>Address Resolution Protocol (ARP)</strong> relies on MAC addresses to map IP addresses within the local network. Because each MAC address is unique — made up of a manufacturer ID and the device's own serial number — there's no duplication or address conflict. In wireless networks, MAC addresses also help with access control and filtering, letting administrators permit or block specific devices.</p>
+<div class="task" data-task="classify" data-points="5">
+  <p class="task-label"><span>Sort it</span><span class="pts">5 points</span></p>
+  <h4>Click which switching method each description matches.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="message"><span class="term">A complete message is stored at each intermediate node before being forwarded on, as a store-and-forward network</span><span class="choices"><button data-choice="packet">Packet switching</button><button data-choice="circuit">Circuit switching</button><button data-choice="message">Message switching</button></span></div>
+    <div class="classify-item" data-answer="packet"><span class="term">A message is divided into numbered units that may each take a different route and are reassembled at the end</span><span class="choices"><button data-choice="packet">Packet switching</button><button data-choice="circuit">Circuit switching</button><button data-choice="message">Message switching</button></span></div>
+    <div class="classify-item" data-answer="circuit"><span class="term">A dedicated path is set up end-to-end before any data is sent, and stays reserved until the connection ends</span><span class="choices"><button data-choice="packet">Packet switching</button><button data-choice="circuit">Circuit switching</button><button data-choice="message">Message switching</button></span></div>
+    <div class="classify-item" data-answer="circuit"><span class="term">Used by the public telephone network for voice calls, where no other device can use the same path while it's active</span><span class="choices"><button data-choice="packet">Packet switching</button><button data-choice="circuit">Circuit switching</button><button data-choice="message">Message switching</button></span></div>
+    <div class="classify-item" data-answer="packet"><span class="term">Each unit's header carries a sequence number so the pieces can be reordered correctly on arrival</span><span class="choices"><button data-choice="packet">Packet switching</button><button data-choice="circuit">Circuit switching</button><button data-choice="message">Message switching</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="4">
+  <p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p>
+  <h4>Name the term from its description.</h4>
+  <div class="sub-q">
+    <label>a) The part of a data packet that carries the actual file data being transmitted.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>The payload</div>
+    <div class="self-mark"><input type="checkbox" id="sm-1"><label for="sm-1">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>b) The protocol that maps an IP address to a MAC address within a local network.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Address Resolution Protocol (ARP)</div>
+    <div class="self-mark"><input type="checkbox" id="sm-2"><label for="sm-2">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>c) The type of IP address that changes every time a device reconnects to a network.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>A dynamic IP address</div>
+    <div class="self-mark"><input type="checkbox" id="sm-3"><label for="sm-3">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>d) The connectionless protocol that is generally faster than TCP because it skips flow control and error checking.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>UDP (User Datagram Protocol)</div>
+    <div class="self-mark"><input type="checkbox" id="sm-4"><label for="sm-4">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="4">
+  <p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p>
+  <h4>Compare connection-oriented and connectionless packet switching. (4 marks)</h4>
+  <div class="sub-q mp" data-max="4">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 4)</span>
+      <label class="mp-item"><input type="checkbox"><span>Connection-oriented switching sets up a session/fixed channel before any data is sent</span></label>
+      <label class="mp-item"><input type="checkbox"><span>The first packet requests an acknowledgment, and further packets are only sent once it's received</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Connectionless switching has no prior arrangement between devices before data is sent</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Connectionless packets are dispatched without knowing if the receiver is ready, and with no confirmation the transmission succeeded</span></label>
+      <label class="mp-item"><input type="checkbox"><span>TCP and frame relay are examples of connection-oriented switching</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Ethernet, IP and UDP are examples of connectionless switching</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="0"><p class="q">1. What is the main role of the trailer in a data packet?</p><div class="opts"><button class="opt" data-idx="0">It marks the end of the packet and may carry error-checking information</button><button class="opt" data-idx="1">It stores the actual file data</button><button class="opt" data-idx="2">It stores the sender's password</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="1"><p class="q">2. Which addressing scheme operates at the data link layer and is used within a local network segment?</p><div class="opts"><button class="opt" data-idx="0">IP addressing</button><button class="opt" data-idx="1">MAC addressing</button><button class="opt" data-idx="2">DNS addressing</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="1"><p class="q">3. What happens in circuit switching once a dedicated path is established?</p><div class="opts"><button class="opt" data-idx="0">Other devices can also use that same path simultaneously</button><button class="opt" data-idx="1">No other device can use that path until the connection ends</button><button class="opt" data-idx="2">The path changes for every packet sent</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+<div class="panel" id="panel-protocols">
+  <h2 class="section-title">Network protocols <span class="tag">14.7</span></h2>
+  <p>A <strong>protocol</strong> is a set of rules for sending and receiving data between devices on a network. Protocols define the format, timing, sequencing and error checking of data exchanged, so devices from different manufacturers can communicate seamlessly.</p>
+<div class="table-scroll">
+<table>
+<tr><th>Protocol</th><th>What it does</th></tr>
+<tr><td>TCP (Transmission Control Protocol)</td><td>Sends data as datagrams over IP, in connection-oriented, point-to-point communication. Provides checksums and port numbers for the source/destination, reports lost or damaged packets back to the sender, manages flow control, and uses handshaking to establish a connection. Used whenever reliable delivery matters.</td></tr>
+<tr><td>IP (Internet Protocol)</td><td>Lets different devices communicate over the internet, giving each one a unique address and ensuring packets are routed correctly. Takes a packet from the transport layer, adds its own header (with sender and recipient IP addresses), encapsulates the data into a datagram, and passes it to the link layer for transmission.</td></tr>
+<tr><td>ICMP (Internet Control Message Protocol)</td><td>An error-reporting protocol that generates error messages back to the sender when network problems prevent data packets being delivered.</td></tr>
+<tr><td>ARP (Address Resolution Protocol)</td><td>Translates an IP address into a MAC address for a device, bridging the network layer and the data link layer of the OSI model.</td></tr>
+<tr><td>IARP (Inverse Address Resolution Protocol)</td><td>The reverse of ARP: translates a MAC address into an IP address.</td></tr>
+<tr><td>DHCP (Dynamic Host Configuration Protocol)</td><td>A network management protocol that automatically assigns IP addresses, a gateway address and a subnet mask to devices on a network, keeping a database to avoid addressing conflicts.</td></tr>
+<tr><td>UDP (User Datagram Protocol)</td><td>Sends data as datagrams over IP, like TCP, but for connectionless communication: no reporting of lost packets, no handshaking, no guarantee of delivery or order, and no error checking. Used when speed matters more than guaranteed delivery, avoiding the overhead of error checking.</td></tr>
+<tr><td>HTTP / HTTPS</td><td>HTTP transfers web page content from a server to a browser. HTTPS adds security, encrypting data using TLS/SSL, authenticating the website with a public-key certificate, restricting access to authorised users, and protecting against eavesdropping, man-in-the-middle attacks, and the alteration or insertion of malicious code into a site.</td></tr>
+<tr><td>FTP (File Transfer Protocol)</td><td>Responsible for transferring files between a client and a server on a network.</td></tr>
+<tr><td>Tunnelling protocol</td><td>Used for secure data transmission across networks. Encapsulates private data packets so they look like ordinary public packets, letting them travel across a public network (data may be further encrypted with SSH or IPSec). Important for VPNs, and can also let a network use a protocol it wouldn't otherwise support, such as IPv6 over an IPv4 network.</td></tr>
+<tr><td>SMTP (Simple Mail Transfer Protocol)</td><td>Sends email from a computer to a mail server, and between different mail servers.</td></tr>
+<tr><td>POP (Post Office Protocol, e.g. POP3)</td><td>Retrieves email from a mail server: when the user checks their mailbox, the email is downloaded to their device and then deleted from the server.</td></tr>
+<tr><td>IMAP (Internet Message Access Protocol)</td><td>Also retrieves email from a mail server, but — unlike POP — doesn't delete it from the server automatically; the email stays there until the user chooses to delete it.</td></tr>
+<tr><td>Telnet</td><td>Lets a user connect remotely to another computer over the internet, but sends data in plain text with no authentication or encryption, making it insecure and largely replaced by SSH.</td></tr>
+<tr><td>SSH (Secure Shell)</td><td>Gives secure access to a computer over an unsecured network, encrypting data end-to-end between applications. Uses a client-server model, works at the application layer, and uses automatically generated public/private key pairs so an observer can't make sense of intercepted data.</td></tr>
+<tr><td>TLS/SSL</td><td>Designed to secure connections between web clients and web/mail servers, using both public and private keys to encrypt data in transit. TLS is the updated version of SSL, using newer, more secure encryption algorithms.</td></tr>
+</table>
+</div>
+<div class="task" data-task="classify" data-points="6">
+  <p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p>
+  <h4>Click which protocol each description matches.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="dhcp"><span class="term">Automatically assigns IP addresses, a gateway address and a subnet mask to new devices</span><span class="choices"><button data-choice="tcp">TCP</button><button data-choice="udp">UDP</button><button data-choice="dhcp">DHCP</button><button data-choice="https">HTTPS</button><button data-choice="imap">IMAP</button><button data-choice="ssh">SSH</button></span></div>
+    <div class="classify-item" data-answer="imap"><span class="term">Retrieves email but leaves a copy on the server until the user deletes it themselves</span><span class="choices"><button data-choice="tcp">TCP</button><button data-choice="udp">UDP</button><button data-choice="dhcp">DHCP</button><button data-choice="https">HTTPS</button><button data-choice="imap">IMAP</button><button data-choice="ssh">SSH</button></span></div>
+    <div class="classify-item" data-answer="tcp"><span class="term">Provides reliable, connection-oriented delivery with handshaking and lost-packet reporting</span><span class="choices"><button data-choice="tcp">TCP</button><button data-choice="udp">UDP</button><button data-choice="dhcp">DHCP</button><button data-choice="https">HTTPS</button><button data-choice="imap">IMAP</button><button data-choice="ssh">SSH</button></span></div>
+    <div class="classify-item" data-answer="https"><span class="term">Encrypts a website's data using TLS/SSL and authenticates it with a public-key certificate</span><span class="choices"><button data-choice="tcp">TCP</button><button data-choice="udp">UDP</button><button data-choice="dhcp">DHCP</button><button data-choice="https">HTTPS</button><button data-choice="imap">IMAP</button><button data-choice="ssh">SSH</button></span></div>
+    <div class="classify-item" data-answer="ssh"><span class="term">Gives secure remote access to a computer, encrypting data with automatically generated key pairs</span><span class="choices"><button data-choice="tcp">TCP</button><button data-choice="udp">UDP</button><button data-choice="dhcp">DHCP</button><button data-choice="https">HTTPS</button><button data-choice="imap">IMAP</button><button data-choice="ssh">SSH</button></span></div>
+    <div class="classify-item" data-answer="udp"><span class="term">Sends datagrams over IP with no handshaking, no error checking and no guarantee of delivery</span><span class="choices"><button data-choice="tcp">TCP</button><button data-choice="udp">UDP</button><button data-choice="dhcp">DHCP</button><button data-choice="https">HTTPS</button><button data-choice="imap">IMAP</button><button data-choice="ssh">SSH</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="4">
+  <p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p>
+  <h4>Name the protocol from its description.</h4>
+  <div class="sub-q">
+    <label>a) Translates an IP address into a MAC address.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>ARP (Address Resolution Protocol)</div>
+    <div class="self-mark"><input type="checkbox" id="sm-5"><label for="sm-5">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>b) Generates error messages back to the sender when a packet can't be delivered.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>ICMP (Internet Control Message Protocol)</div>
+    <div class="self-mark"><input type="checkbox" id="sm-6"><label for="sm-6">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>c) Deletes an email from the server as soon as the user's device downloads it.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>POP (e.g. POP3)</div>
+    <div class="self-mark"><input type="checkbox" id="sm-7"><label for="sm-7">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>d) Lets a private data packet travel across a public network disguised as an ordinary public packet.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>A tunnelling protocol</div>
+    <div class="self-mark"><input type="checkbox" id="sm-8"><label for="sm-8">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="0"><p class="q">1. Why would a service choose UDP over TCP?</p><div class="opts"><button class="opt" data-idx="0">Speed matters more than guaranteed, ordered delivery</button><button class="opt" data-idx="1">UDP always encrypts the data automatically</button><button class="opt" data-idx="2">UDP requires a handshake before sending data</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">2. What is the main security weakness of Telnet?</p><div class="opts"><button class="opt" data-idx="0">It sends data in plain text with no encryption</button><button class="opt" data-idx="1">It only works over Wi-Fi</button><button class="opt" data-idx="2">It cannot connect to remote computers at all</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="1"><p class="q">3. Which protocol is responsible for authenticating a website using a public-key certificate?</p><div class="opts"><button class="opt" data-idx="0">FTP</button><button class="opt" data-idx="1">HTTPS</button><button class="opt" data-idx="2">SMTP</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+<div class="panel" id="panel-traffic">
+  <h2 class="section-title">Managing network traffic <span class="tag">14.8</span></h2>
+
+  <h3>Routing</h3>
+  <p><strong>Routing</strong> is the process of working out the route data packets should take, and happens at the <strong>network layer</strong> of the OSI model. Routers use it to decide the next hop to send a packet to. Routing algorithms build a <strong>routing (forwarding) table</strong>, stored in the router's non-volatile memory, used to choose the preferred route. There are two types: static and dynamic, and both provide a default route for a packet if no specific route can be found.</p>
+<div class="table-scroll">
+<table>
+<tr><th>Type</th><th>Key features</th></tr>
+<tr><td>Static routing</td><td>Routes are entered into the router by a network administrator, and stay fixed — they aren't configured automatically. Defines a 'route of last resort' (where to send a packet if no destination is known), and provides a fail-safe if dynamic routing can't find a route. Can also be used to transfer routing information from one routing protocol to another.</td></tr>
+<tr><td>Dynamic routing</td><td>Routing protocols build the table automatically, from the real-time state of the network, rather than a human entering it. Routing information can be shared automatically with other routers using the same protocol, to discover remote networks or changes. Can limit how many hops a packet may take, give each route a 'time to live' after which the table is refreshed, reroute packets around network issues or a failed router, and keep as many alternative routes open as possible.</td></tr>
+</table>
+</div>
+
+  <h3>Routing protocols</h3>
+  <p>Routers use routing protocols to decide how to communicate with each other and select the route data should travel. There are three main types:</p>
+<div class="table-scroll">
+<table>
+<tr><th>Protocol type</th><th>Role</th></tr>
+<tr><td>Interior gateway protocol</td><td>Specifies how routers communicate within a single network, such as a LAN.</td></tr>
+<tr><td>Exterior gateway protocol</td><td>Specifies how routers communicate between different networks.</td></tr>
+<tr><td>Border gateway protocol</td><td>A specific kind of exterior gateway protocol managing the exchange of data across the largest network of all: the internet.</td></tr>
+</table>
+</div>
+
+  <h3>The OSI model</h3>
+  <p>The <strong>OSI model</strong> describes networking as seven layers, each handling a specific function:</p>
+<div class="table-scroll">
+<table>
+<tr><th>Layer</th><th>Function</th></tr>
+<tr><td>Application</td><td>The top layer, interacting directly with user data. Applications such as web browsers and email clients rely on it (though end-user software like a word processor isn't part of this layer itself). Manages protocols such as HTTP and SMTP.</td></tr>
+<tr><td>Presentation</td><td>Prepares data for the application layer — translating, encrypting/decrypting and compressing/decompressing it as needed, so it's understood by the receiving device and transmitted efficiently.</td></tr>
+<tr><td>Session</td><td>Opens and closes the communication link (the 'session') between devices, keeping it open just long enough for all the data to be transmitted before closing it.</td></tr>
+<tr><td>Transport</td><td>Breaks data from the session layer into segments, hands them to the network layer, and reassembles them at the receiving end. Also handles flow control and error checking, requesting retransmission if data is incomplete.</td></tr>
+<tr><td>Network</td><td>Breaks transport-layer segments into smaller units called packets, and reassembles them after transmission. Handles routing — finding the best path across the network — when data moves from network to network. The router is a key device at this layer.</td></tr>
+<tr><td>Data link</td><td>Similar to the network layer, but for transmitting data from node to node within one network rather than between networks. Converts packets into frames. The switch is a key device at this layer.</td></tr>
+<tr><td>Physical</td><td>The physical equipment used to transmit data, such as cables. Breaks data down into bits for transmission as binary, and reassembles bits into frames after transmission.</td></tr>
+</table>
+</div>
+
+  <h3>The TCP/IP model</h3>
+<div class="table-scroll">
+<table>
+<tr><th>Layer</th><th>Function</th></tr>
+<tr><td>Application layer</td><td>Condenses the OSI model's application, presentation and session layers into one. Uses protocols such as HTTP, SMTP, POP and FTP for a standardised exchange of data.</td></tr>
+<tr><td>Transport layer</td><td>Comparable to the OSI transport layer: maintains end-to-end communication between devices, mainly using TCP or UDP.</td></tr>
+<tr><td>Network (internet) layer</td><td>Comparable to the OSI network layer: breaks data into packets and moves it from network to network, mainly using IP or ICMP.</td></tr>
+<tr><td>Link layer</td><td>Also called the physical layer; condenses the OSI model's data link and physical layers. Uses protocols such as ARP.</td></tr>
+</table>
+</div>
+
+  <h3>OSI vs TCP/IP</h3>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">What they share</p><ul><li>Both use a logical, layered framework for defining and implementing network standards</li><li>Each layer in both models only defines a specific set of functions</li><li>Both divide complex functionality into simpler sections, making network behaviour easier to understand</li><li>Both reference existing standards and let manufacturers build interoperable devices and components</li></ul></div>
+  <div class="pc con"><p class="pc-title">How they differ</p><ul><li>The OSI model has seven layers; the TCP/IP model has four (or five, depending on how it's described) — more layers overall in OSI</li><li>OSI splits application-level functions into three separate layers, where TCP/IP uses just one combined application layer</li><li>OSI keeps the physical and data link layers separate; TCP/IP combines them into a single link layer</li><li>The OSI network layer supports both connection-oriented and connectionless links; the TCP/IP network layer only supports connectionless</li><li>The OSI transport layer only supports connection-oriented links; the TCP/IP transport layer supports both</li><li>The OSI transport layer guarantees delivery of packets; the TCP/IP transport layer doesn't</li></ul></div>
+</div>
+<div class="task" data-task="classify" data-points="6">
+  <p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p>
+  <h4>Click which OSI layer each job belongs to.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="pres"><span class="term">Encrypting and compressing data so it's ready for the application layer</span><span class="choices"><button data-choice="app">Application</button><button data-choice="pres">Presentation</button><button data-choice="sess">Session</button><button data-choice="trans">Transport</button><button data-choice="net">Network</button><button data-choice="dlink">Data link</button><button data-choice="phys">Physical</button></span></div>
+    <div class="classify-item" data-answer="dlink"><span class="term">Converting packets into frames for transmission between nodes within a network</span><span class="choices"><button data-choice="app">Application</button><button data-choice="pres">Presentation</button><button data-choice="sess">Session</button><button data-choice="trans">Transport</button><button data-choice="net">Network</button><button data-choice="dlink">Data link</button><button data-choice="phys">Physical</button></span></div>
+    <div class="classify-item" data-answer="sess"><span class="term">Opening a communication link between two devices and closing it once data has transferred</span><span class="choices"><button data-choice="app">Application</button><button data-choice="pres">Presentation</button><button data-choice="sess">Session</button><button data-choice="trans">Transport</button><button data-choice="net">Network</button><button data-choice="dlink">Data link</button><button data-choice="phys">Physical</button></span></div>
+    <div class="classify-item" data-answer="net"><span class="term">Breaking segments into packets and finding the best path from network to network</span><span class="choices"><button data-choice="app">Application</button><button data-choice="pres">Presentation</button><button data-choice="sess">Session</button><button data-choice="trans">Transport</button><button data-choice="net">Network</button><button data-choice="dlink">Data link</button><button data-choice="phys">Physical</button></span></div>
+    <div class="classify-item" data-answer="trans"><span class="term">Breaking data from the session layer into segments and checking nothing is missing</span><span class="choices"><button data-choice="app">Application</button><button data-choice="pres">Presentation</button><button data-choice="sess">Session</button><button data-choice="trans">Transport</button><button data-choice="net">Network</button><button data-choice="dlink">Data link</button><button data-choice="phys">Physical</button></span></div>
+    <div class="classify-item" data-answer="phys"><span class="term">Converting data into bits for transmission along a cable</span><span class="choices"><button data-choice="app">Application</button><button data-choice="pres">Presentation</button><button data-choice="sess">Session</button><button data-choice="trans">Transport</button><button data-choice="net">Network</button><button data-choice="dlink">Data link</button><button data-choice="phys">Physical</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="4">
+  <p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p>
+  <h4>Explain the difference between static and dynamic routing. (4 marks)</h4>
+  <div class="sub-q mp" data-max="4">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 4)</span>
+      <label class="mp-item"><input type="checkbox"><span>Static routes are entered manually by a network administrator</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Static routes stay fixed and don't change automatically</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Dynamic routing tables are built automatically by routing protocols/algorithms</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Dynamic routing reacts to the real-time state of the network, such as congestion or a failed link</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Dynamic routing can share information automatically with other routers to discover changes in the network</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Both provide a default route if no specific route can be found</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="0"><p class="q">1. At which OSI layer does routing take place?</p><div class="opts"><button class="opt" data-idx="0">The network layer</button><button class="opt" data-idx="1">The physical layer</button><button class="opt" data-idx="2">The presentation layer</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">2. Which device is most associated with the data link layer?</p><div class="opts"><button class="opt" data-idx="0">A switch</button><button class="opt" data-idx="1">A repeater</button><button class="opt" data-idx="2">An application</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">3. What is one key difference between the OSI and TCP/IP transport layers?</p><div class="opts"><button class="opt" data-idx="0">TCP/IP's transport layer supports both connection-oriented and connectionless links; OSI's only supports connection-oriented</button><button class="opt" data-idx="1">OSI has no transport layer</button><button class="opt" data-idx="2">TCP/IP always guarantees packet delivery</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+<div class="panel" id="panel-methods">
+  <h2 class="section-title">Data transmission methods <span class="tag">14.9</span></h2>
+<div class="table-scroll">
+<table>
+<tr><th>Method</th><th>How it works</th><th>Typical uses</th><th>Advantages</th><th>Disadvantages</th></tr>
+<tr><td>Fibre optic</td><td>Made of many fine glass threads. Electrical signals are converted to light (an LED or laser sends a light beam along the fibre, with data modulated onto the carrier wave) and converted back to electricity at the far end by a photodetector. Lasers suit longer distances and give greater bandwidth; LEDs are cheaper and suit shorter distances.</td><td>Modern internet connections, high-performance networks carrying large amounts of data, and long-distance links such as telephone signals.</td><td>Highest bandwidth of the three cable types; carries signals much further with less interference; hard to hack, so more secure; uses less power; lighter; needs less signal boosting.</td><td>Highest cost to manufacture and buy; carries only data, not power; difficult to terminate; fragile glass can make installation tricky.</td></tr>
+<tr><td>Copper — coaxial</td><td>A central wire surrounded by an insulating layer, also able to carry radio-frequency signals.</td><td>TV and cable TV connections; some internet connections.</td><td>Low cost; lower error rate, since the central wire sits inside a Faraday shield that blocks magnetic interference; flexible; easier to terminate.</td><td>Lowest bandwidth of the three cable types; needs repeaters; its insulation can make installation and maintenance tricky.</td></tr>
+<tr><td>Copper — twisted pair</td><td>Two separately insulated wires twisted around each other and covered by an outer jacket, carrying electric current.</td><td>Telephone communications; part of Ethernet networks.</td><td>Minimises crosstalk (signal bleeding from one channel to another); lowest cost to manufacture and buy; higher bandwidth than coaxial; flexible; easier to terminate.</td><td>Susceptible to electromagnetic interference; needs repeaters; shortest distance before the signal starts to deteriorate.</td></tr>
+<tr><td>Lasers (free-space)</td><td>Uses high-power laser beams that travel directly through the air (a 'free space laser system') rather than through a fibre, carrying light signals between two points in line of sight.</td><td>Links between spacecraft in orbit; connecting sites across roads or other barriers the sender/receiver doesn't own; temporary links in disaster areas where cabling isn't possible.</td><td>Carries more data in a single downlink than comparable radio systems; ideal for space missions, needing less volume, weight and power; offers very high-speed broadband.</td><td>Short range in the atmosphere, since particles disperse the beam; accurate aiming is difficult; harder still if sender or receiver is moving; blocked by objects or weather in the beam's path.</td></tr>
+</table>
+</div>
+<div class="task" data-task="classify" data-points="5">
+  <p class="task-label"><span>Sort it</span><span class="pts">5 points</span></p>
+  <h4>Click which transmission medium each clue describes.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="coax"><span class="term">Carries radio-frequency signals and is commonly used for cable TV connections</span><span class="choices"><button data-choice="fibre">Fibre optic</button><button data-choice="coax">Coaxial</button><button data-choice="twisted">Twisted pair</button><button data-choice="laser">Free-space laser</button></span></div>
+    <div class="classify-item" data-answer="fibre"><span class="term">Hardest to hack of the cable types, and carries data the furthest with least interference</span><span class="choices"><button data-choice="fibre">Fibre optic</button><button data-choice="coax">Coaxial</button><button data-choice="twisted">Twisted pair</button><button data-choice="laser">Free-space laser</button></span></div>
+    <div class="classify-item" data-answer="twisted"><span class="term">Two insulated wires twisted together to minimise crosstalk</span><span class="choices"><button data-choice="fibre">Fibre optic</button><button data-choice="coax">Coaxial</button><button data-choice="twisted">Twisted pair</button><button data-choice="laser">Free-space laser</button></span></div>
+    <div class="classify-item" data-answer="laser"><span class="term">Used between spacecraft in orbit, travelling directly through free space rather than a cable</span><span class="choices"><button data-choice="fibre">Fibre optic</button><button data-choice="coax">Coaxial</button><button data-choice="twisted">Twisted pair</button><button data-choice="laser">Free-space laser</button></span></div>
+    <div class="classify-item" data-answer="coax"><span class="term">Has the lowest bandwidth of the three cable types, and needs repeaters</span><span class="choices"><button data-choice="fibre">Fibre optic</button><button data-choice="coax">Coaxial</button><button data-choice="twisted">Twisted pair</button><button data-choice="laser">Free-space laser</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="0"><p class="q">1. Why is fibre optic cable considered more secure than copper cable?</p><div class="opts"><button class="opt" data-idx="0">It's difficult to tap into or hack</button><button class="opt" data-idx="1">It doesn't carry any data at all</button><button class="opt" data-idx="2">It only works over very short distances</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">2. What is the main weakness of a free-space laser link?</p><div class="opts"><button class="opt" data-idx="0">It is easily blocked by objects or weather in its path</button><button class="opt" data-idx="1">It cannot be used in space</button><button class="opt" data-idx="2">It requires no aiming at all</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">3. Which cable type is most associated with minimising crosstalk between channels?</p><div class="opts"><button class="opt" data-idx="0">Twisted pair</button><button class="opt" data-idx="1">Coaxial</button><button class="opt" data-idx="2">Fibre optic</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+
+</div>
+
+<footer>
+  Cambridge AS &amp; A Level IT · Communications Technology (14.5–14.9) — built for revision, points are just for you.
+</footer>
+
+<script>
+(function(){
+  const scoreValEl = document.getElementById('score-val');
+  const scoreMaxEl = document.getElementById('score-max');
+  let score = 0;
+  function addScore(n){
+    score += n;
+    if(score < 0) score = 0;
+    scoreValEl.textContent = score;
+  }
+
+  let max = 0;
+  document.querySelectorAll('.self-mark input[type=checkbox]').forEach(function(cb){
+    max += parseInt(cb.dataset.points || '1', 10);
+  });
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    max += parseInt(sq.dataset.max, 10);
+  });
+  max += document.querySelectorAll('.classify-item').length;
+  max += document.querySelectorAll('.mcq').length;
+  scoreMaxEl.textContent = max;
+
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  document.querySelectorAll('.sub-q:not(.mp)').forEach(function(sq){
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const reveal = sq.querySelector('.answer-reveal');
+    const mark = sq.querySelector('.self-mark');
+    const checkbox = mark ? mark.querySelector('input[type=checkbox]') : null;
+    if(!btn || !reveal || !mark) return;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        reveal.classList.remove('show');
+        mark.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      reveal.classList.add('show');
+      mark.classList.add('show');
+    });
+
+    if(checkbox){
+      checkbox.addEventListener('change', function(){
+        const pts = parseInt(checkbox.dataset.points || '1', 10);
+        addScore(checkbox.checked ? pts : -pts);
+      });
+    }
+  });
+
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    const cap = parseInt(sq.dataset.max, 10);
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const panel = sq.querySelector('.markpoints');
+    const note = sq.querySelector('.mp-note');
+    const count = sq.querySelector('.mp-count');
+    const boxes = panel.querySelectorAll('input[type=checkbox]');
+    let awarded = 0;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        panel.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      panel.classList.add('show');
+    });
+
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if(cb.checked){
+          if(awarded >= cap){
+            cb.checked = false;
+            note.textContent = "That's already full marks (" + cap + "). Untick a point first to swap it.";
+            return;
+          }
+          awarded += 1;
+          addScore(1);
+        } else {
+          awarded -= 1;
+          addScore(-1);
+        }
+        note.textContent = '';
+        count.textContent = awarded + ' / ' + cap + ' marks';
+      });
+    });
+  });
+
+  document.querySelectorAll('.classify-item').forEach(function(item){
+    const answer = item.dataset.answer;
+    const buttons = item.querySelectorAll('.choices button');
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){
+        buttons.forEach(function(other){ other.disabled = true; });
+        if(b.dataset.choice === answer){
+          b.classList.add('correct');
+          addScore(1);
+        } else {
+          b.classList.add('incorrect');
+          buttons.forEach(function(other){
+            if(other.dataset.choice === answer) other.classList.add('correct');
+          });
+        }
+      });
+    });
+  });
+
+  document.querySelectorAll('.mcq').forEach(function(mcq){
+    const correctIdx = mcq.dataset.answer;
+    const opts = mcq.querySelectorAll('.opt');
+    const feedback = mcq.querySelector('.mcq-feedback');
+    opts.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        opts.forEach(function(o){ o.disabled = true; });
+        if(opt.dataset.idx === correctIdx){
+          opt.classList.add('correct');
+          feedback.textContent = 'Correct.';
+          feedback.className = 'mcq-feedback ok';
+          addScore(1);
+        } else {
+          opt.classList.add('incorrect');
+          opts.forEach(function(o){
+            if(o.dataset.idx === correctIdx) o.classList.add('correct');
+          });
+          feedback.textContent = 'Not quite — the correct answer is highlighted above.';
+          feedback.className = 'mcq-feedback bad';
+        }
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
