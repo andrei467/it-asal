@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eSecurity — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --bg-deep:#090d18;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#04141a;}
+
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 24px 120px; }
+
+  nav.theory-nav{
+    max-width:760px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:44px 24px 34px; max-width:760px; margin:0 auto; border-bottom:1px solid var(--trace);
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,38px);
+    line-height:1.15; margin:0 0 14px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
+
+  nav.tabs{
+    max-width:760px; margin:0 auto; padding:14px 24px; display:flex; gap:6px;
+    overflow-x:auto; border-bottom:1px solid var(--trace); position:sticky; top:0;
+    background:rgba(13,18,32,.95); backdrop-filter: blur(4px); z-index:30;
+  }
+  nav.tabs button{
+    font-family:var(--mono); font-size:12.5px; white-space:nowrap; background:transparent;
+    border:1px solid var(--trace); color:var(--paper-dim); padding:8px 13px;
+    border-radius:var(--radius); cursor:pointer; flex-shrink:0;
+  }
+  nav.tabs button:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  nav.tabs button.active{ background:var(--signal); color:#04141a; border-color:var(--signal); font-weight:500; }
+
+  .panel{ display:none; padding:40px 0 8px; }
+  .panel.active{ display:block; }
+
+  h2.section-title{
+    font-family:var(--mono); font-size:22px; color:var(--signal-bright);
+    margin:0 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2.section-title .tag{
+    font-size:12px; color:var(--sage); border:1px solid var(--trace);
+    padding:2px 7px; border-radius:var(--radius);
+  }
+  h3{ font-family:var(--mono); font-size:16px; color:var(--gold); margin:26px 0 8px; font-weight:500; }
+  p{margin:10px 0;}
+  ul, ol{padding-left:22px; margin:10px 0;}
+  li{margin:4px 0;}
+  strong{color:var(--paper); font-weight:600;}
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0 8px; font-size:15px; }
+  th,td{ border:1px solid var(--trace); padding:8px 10px; text-align:left; vertical-align:top; }
+  th{ font-family:var(--mono); font-size:12px; color:var(--sage); font-weight:500; background:rgba(134,201,160,0.06); }
+  .table-scroll{ overflow-x:auto; }
+  .note{ color:var(--paper-dim); font-size:14.5px; }
+
+  .block{ border-left:2px solid var(--trace); padding-left:18px; margin:18px 0; }
+  .block ul, .block ol{ margin:0; padding-left:20px; }
+
+  .proscons{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 8px; }
+  .pc{ border:1px solid var(--trace); border-radius:var(--radius); background:var(--bg-raised); padding:2px 14px 12px; }
+  .pc.pro{ border-top:2px solid var(--sage); }
+  .pc.con{ border-top:2px solid var(--brick); }
+  .pc-title{ font-family:var(--mono); font-size:12.5px; font-weight:500; margin:12px 0 4px; }
+  .pc.pro .pc-title{ color:var(--sage); }
+  .pc.con .pc-title{ color:var(--brick); }
+  .pc ul{ padding-left:18px; margin:6px 0 0; font-size:15px; }
+  @media (max-width:600px){ .proscons{ grid-template-columns:1fr; } }
+
+  details.fold{ border:1px solid var(--trace); border-radius:var(--radius); margin:12px 0; background:var(--bg-raised); }
+  details.fold summary{ font-family:var(--mono); font-size:13.5px; color:var(--gold); padding:11px 14px; cursor:pointer; }
+  details.fold[open] summary{ border-bottom:1px solid var(--trace); }
+  details.fold .fold-body{ padding:2px 14px 12px; }
+
+  /* ---- box types: key word / practical activity / reflection / research task ---- */
+  .keyword{ border:1px solid var(--trace); border-left:3px solid var(--gold); border-radius:var(--radius); background:var(--bg-raised); padding:2px 18px 14px; margin:18px 0; }
+  .keyword .kw-label{ font-family:var(--mono); font-size:12px; color:var(--gold); margin:14px 0 8px; display:block; letter-spacing:.02em; }
+  .keyword dl{ margin:0; }
+  .keyword dt{ font-family:var(--mono); font-size:14.5px; color:var(--paper); font-weight:500; margin-top:8px; }
+  .keyword dt:first-child{ margin-top:0; }
+  .keyword dd{ margin:2px 0 0; color:var(--paper-dim); font-size:15px; }
+
+  .activity{ border:1px solid var(--trace); border-left:3px solid var(--signal); border-radius:var(--radius); background:var(--bg-raised); padding:2px 18px 16px; margin:18px 0; }
+  .activity .a-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:14px 0 6px; display:block; letter-spacing:.02em; }
+  .activity p:first-of-type{ margin-top:0; }
+
+  .discussion{ border:1px solid var(--trace); border-left:3px solid var(--brick); border-radius:var(--radius); background:var(--bg-raised); padding:2px 18px 16px; margin:18px 0; }
+  .discussion .d-label{ font-family:var(--mono); font-size:12px; color:var(--brick); margin:14px 0 6px; display:block; letter-spacing:.02em; }
+  .discussion p:first-of-type{ margin-top:0; }
+  .discussion textarea{ margin-top:8px; }
+  .discussion .d-note{ font-family:var(--mono); font-size:11.5px; color:var(--paper-dim); margin-top:6px; }
+
+  .research{ border:1px solid var(--trace); border-left:3px solid var(--sage); border-radius:var(--radius); background:var(--bg-raised); padding:2px 18px 16px; margin:18px 0; }
+  .research .r-label{ font-family:var(--mono); font-size:12px; color:var(--sage); margin:14px 0 6px; display:block; letter-spacing:.02em; }
+  .research p:first-of-type{ margin-top:0; }
+  .research textarea{ margin-top:8px; }
+  .research .r-note{ font-family:var(--mono); font-size:11.5px; color:var(--paper-dim); margin-top:6px; }
+
+  .task{ margin:32px 0; border:1px solid var(--trace); border-radius:var(--radius); background: var(--bg-raised); padding:20px 20px 22px; }
+  .task-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .task-label .pts{color:var(--sage);}
+  .task h4{ margin:0 0 12px; font-family:var(--serif); font-weight:600; font-size:16.5px; color:var(--paper); }
+  .task .sub-q{margin:18px 0;}
+  .task .sub-q:first-child{margin-top:0;}
+  .sub-q label{ display:block; font-family:var(--serif); font-size:15.5px; margin-bottom:8px; color:var(--paper); }
+
+  textarea{
+    width:100%; min-height:52px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-radius:var(--radius); color:var(--paper); font-family:var(--serif);
+    font-size:15.5px; padding:10px 12px; resize:vertical;
+  }
+  textarea:focus, button:focus-visible, .opt:focus-visible, summary:focus-visible, input[type=checkbox]:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:1px; }
+  .row{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+
+  button{
+    font-family:var(--mono); font-size:13px; background:var(--signal); color:#04141a;
+    border:none; padding:9px 15px; border-radius:var(--radius); cursor:pointer; font-weight:500;
+  }
+  button:hover{background:var(--signal-bright);}
+  button.ghost{ background:transparent; border:1px solid var(--trace); color:var(--paper-dim); }
+  button.ghost:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  button:disabled{opacity:.5; cursor:default;}
+
+  .error-msg{ color:var(--brick); font-family:var(--mono); font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show{display:block;}
+
+  .answer-reveal{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .answer-reveal.show{display:block;}
+  .answer-reveal .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:5px; }
+
+  .self-mark{ display:none; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:13px; color:var(--paper-dim); }
+  .self-mark.show{display:flex;}
+  .self-mark input[type=checkbox]{ width:17px; height:17px; accent-color: var(--gold); cursor:pointer; }
+  .self-mark label{cursor:pointer; margin:0; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+
+  .markpoints{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .markpoints.show{display:block;}
+  .markpoints .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:6px; }
+  .markpoints .mp-item{
+    display:flex; gap:10px; align-items:flex-start; margin:0; padding:7px 0;
+    border-bottom:1px solid var(--trace-dim); font-size:15px; font-weight:400; cursor:pointer;
+  }
+  .markpoints .mp-item:last-of-type{border-bottom:none;}
+  .markpoints .mp-item input{ width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--gold); cursor:pointer; }
+  .mp-foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; font-family:var(--mono); font-size:13px; }
+  .mp-count{ color:var(--gold); }
+  .mp-note{ color:var(--brick); }
+
+  .mcq{margin:20px 0;}
+  .mcq:first-of-type{margin-top:0;}
+  .mcq p.q{ font-family:var(--serif); font-size:15.5px; color:var(--paper); margin:0 0 10px; }
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:10px 13px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer; font-weight:400;
+  }
+  .opt:hover:not(:disabled){border-color:var(--signal); background:var(--bg-deep);}
+  .opt.correct{border-color:var(--sage); background:rgba(134,201,160,0.14);}
+  .opt.incorrect{border-color:var(--brick); background:rgba(224,104,92,0.14);}
+  .opt:disabled{cursor:default;}
+  .mcq-feedback{ font-family:var(--mono); font-size:13px; margin-top:8px; min-height:1.2em; }
+  .mcq-feedback.ok{color:var(--sage);}
+  .mcq-feedback.bad{color:var(--brick);}
+
+  .classify-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 0; border-bottom:1px solid var(--trace-dim); flex-wrap:wrap;
+  }
+  .classify-item:last-child{border-bottom:none;}
+  .classify-item .term{font-size:15px; max-width:60%;}
+  .classify-item .choices{display:flex; gap:8px; flex-wrap:wrap;}
+  .classify-item .choices button{
+    background:transparent; border:1px solid var(--trace); color:var(--paper-dim);
+    font-size:12px; padding:6px 10px;
+  }
+  .classify-item .choices button:hover:not(:disabled){ color:var(--paper); border-color:var(--paper-dim); }
+  .classify-item .choices button.correct{background:rgba(134,201,160,0.16); border-color:var(--sage); color:var(--paper);}
+  .classify-item .choices button.incorrect{background:rgba(224,104,92,0.16); border-color:var(--brick); color:var(--paper);}
+  @media (max-width:600px){ .classify-item .term{max-width:100%;} }
+
+  #score-badge{
+    position:fixed; top:14px; right:14px; z-index:50; font-family:var(--mono); font-size:13px;
+    background:var(--bg-raised); border:1px solid var(--signal); color:var(--signal-bright);
+    padding:8px 13px; border-radius:var(--radius); box-shadow:0 2px 10px rgba(0,0,0,.35);
+    display:flex; align-items:center; white-space:nowrap;
+  }
+  #score-badge .n{color:var(--gold); font-weight:700;}
+  #score-badge button.ghost{ color:var(--paper-dim); }
+
+  footer{ max-width:760px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    header.hero{padding:36px 20px 26px;}
+    #score-badge{top:auto; bottom:14px; right:14px;}
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+</style>
+</head>
+<body>
+
+<div id="score-badge">Score: <span class="n" id="score-val">0</span> / <span id="score-max">0</span> <button class="ghost" id="reset-progress" style="margin-left:8px; font-size:11px; padding:4px 8px;">Reset</button></div>
+
+<nav class="theory-nav">
+  <a class="disabled" href="#" aria-disabled="true">← <span class="full">Previous theory</span></a>
+  <span class="spacer"></span>
+  <a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a>
+</nav>
+
+<header class="hero">
+  <p class="kicker">Cambridge AS &amp; A Level IT · Chapter 5 eSecurity</p>
+  <h1 class="title">eSecurity</h1>
+  <p>Your personal data is valuable, and attackers have many ways to try to get hold of it. This chapter covers how to keep personal data confidential and secure, how pharming, phishing, smishing and vishing try to steal it, and the malware — and its real-world uses and consequences — that attacks computer systems. Your answers on this page are saved automatically on this device.</p>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-panel="data">5.1 Personal data</button>
+  <button class="tab-btn" data-panel="malware">5.2 Malware</button>
+</nav>
+
+<div class="wrap">
+
+<div class="panel active" id="panel-data">
+  <h2 class="section-title">Personal data <span class="tag">5.1</span></h2>
+
+  <h3>What personal data is</h3>
+  <p><strong>Personal data</strong> is any data that can be used to identify or recognise somebody. Data can still count as personal data even after it has been de-identified, encrypted or pseudonymised, if it could be reconstituted in a way that lets an individual be identified again.</p>
+  <p>Examples include a name, address, phone number, location data, IP address, and an identification card number.</p>
+
+  <h3>Why personal data should be kept confidential</h3>
+  <p>Personal data can fall into the wrong hands and be misused in several ways:</p>
+<div class="block">
+  <ul>
+    <li>Someone who accesses a person's login details can commit identity fraud</li>
+    <li>Fraudsters who obtain banking information can make unauthorised withdrawals and transfers</li>
+    <li>Announcing a holiday, or when you won't be home, on social media can leave you open to burglary</li>
+    <li>Sharing opinions about politics, religion or a current job on social networks can hinder future job opportunities</li>
+    <li>Criminals can take a person's business information and use it to create false email accounts and fake employee names</li>
+    <li>Credit card numbers and security codes can be intercepted when used for online shopping, fuelling credit card scams</li>
+    <li>Home or life insurance could be denied if risky behaviour by that person, or about their home, is posted on social media</li>
+    <li>Criminals specifically look for detailed medical information on troll websites, which they can use to try to gain medical attention for themselves, or sell to others — which can in turn lead to the real owner of that information being refused medical attention over unpaid debts run up in their name</li>
+  </ul>
+</div>
+
+  <h3>How personal data can be kept confidential</h3>
+
+  <p><strong>De-identification</strong> — a common strategy for preventing a person's identity being revealed. Items of personal data, such as an individual's name, are removed from a record entirely.</p>
+
+  <p><strong>Pseudonymised data</strong> — instead of removing personal items of data, they are replaced with a temporary ID, so you see an ID that means nothing to you rather than the person's name. The problem is that if someone can recognise the individual from the rest of the record, they can work out which ID belongs to them. However, if data has been amended so thoroughly that it's impossible to recognise an individual at all, it's no longer classed as personal data.</p>
+
+  <p><strong>Encryption</strong> — scrambling data to make it unintelligible. This converts plain text into cypher text, which can't be understood without decrypting it back into plain text, making the data useless if accessed illegally, unless the attacker also has the decryption key.</p>
+
+  <p><strong>Data Protection Acts</strong> — rules organisations must stick to in order to protect data. Many workers need to look at other people's personal data as part of their job, so it's important they maintain its confidentiality. Organisations can encourage this awareness, but workers who deal with confidential information also have a <strong>duty of confidence</strong>: they mustn't share or use it except with the permission of the person who gave it. Workers are often required to sign a <strong>confidentiality agreement</strong>, which allows a legal injunction to be taken out against them if they make unauthorised use of the data.</p>
+
+  <p><strong>Aggregating information</strong> — combining the personal details of a number of people without identifying any one of them individually, to prevent any single person being identified. This doesn't always safeguard details adequately.</p>
+
+  <p><strong>Limiting posting updates online</strong> — insurance companies and most employers tend to carry out online background checks, including looking at social media profiles. Personal information that might put off a prospective employer shouldn't be posted. Insurance companies take a similar approach, and may charge higher monthly payments based on the lifestyle a customer appears to have online, or even use it as evidence when deciding not to pay out on a claim.</p>
+
+  <p><strong>Removal of geotags</strong> — photos and videos taken on a smartphone contain metadata, including the time and place they were taken (a <strong>geotag</strong>). If intercepted, this can reveal an individual's address or workplace. Smartphones have software that can delete the geotag from images, or disable geotagging altogether.</p>
+
+  <p><strong>Leaving out information</strong> — only filling in the data a form actually requires, such as a name and contact number, and not providing additional personal data such as an email address if it isn't needed. A person could still be identified if someone manages to piece together other parts of data and recognise them anyway.</p>
+
+  <h3>Keeping personal data secure</h3>
+
+  <p><strong>Firewall</strong> — designed to prevent unauthorised network access. A firewall examines data coming into the network, breaking it down into smaller pieces of information, such as the IP address it came from (a combination of numbers that identifies each computer on a network). If the IP address isn't allowed, the firewall blocks that traffic, which can prevent certain computers from accessing the network at all. Firewalls don't always stop a determined hacker — they could physically steal a computer that's already permitted to access the network, or use software to change their own computer's IP address to one the firewall will accept.</p>
+
+  <p><strong>Penetration testing</strong> — companies employ somebody to deliberately attack their own computer network. This authorised hacker identifies weaknesses in the system's security, so the company can take measures to improve it where necessary, helping to secure personal data against illegal hackers who might otherwise find and exploit the same weaknesses.</p>
+
+  <p><strong>Authentication techniques</strong> — typing in a user ID and password only the user knows, inserting or swiping a smart card belonging to the user, or using biometric data related to the user's physical characteristics, can all be used to authenticate someone. Biometrics can involve an iris or fingerprint scan; iris scanners tend to be more effective, since an eye print is harder to replicate than a fingerprint, and iris scanners don't need as much cleaning as fingerprint scanners, which can be affected by grease and dirt from fingers. <strong>Two-factor</strong> or <strong>multi-factor authentication</strong> is generally preferred, since it's more secure — it combines multiple authentication techniques, for example a PIN code together with a debit card to access a bank account through an ATM.</p>
+
+  <p><strong>Levels of access</strong> — different groups of users can be granted different levels of access to data on a network, limiting hackers' ability to retrieve personal data even if they get in. Access is often tied to a user's ID, though some systems let all network users log on. Allocating different access levels to different groups limits what each group can see and do — for example, doctors might only be able to see a patient's medical records, while admin staff can see non-health information such as an insurance number or contact details. A social media user can similarly restrict their personal details to friends, friends of friends, or make them public to everyone.</p>
+
+  <p><strong>Network policies</strong> — a set of rules letting companies choose who can access their computer network, and control what they do once they're on it. Workers are typically required to sign an agreement, such as an <strong>acceptable use policy</strong>, specifying what use is and isn't acceptable — for example, agreeing not to use the network for illegal, unethical or distracting non-work activities such as downloading copyrighted material or chatting with friends on social media. This doesn't stop hackers gaining access, but it does help limit what employees themselves might be tempted to do with personal data.</p>
+
+  <p><strong>Software updates</strong> — useful for eliminating bugs and making software easier to use, but also effective at eliminating security weaknesses. If weaknesses exist in an operating system, hackers can take advantage of them to access the computer. It's important to install updates as soon as possible, to limit the time hackers have to find and exploit them — the longer a system or app goes without updating, the more hackers may become aware of its vulnerabilities and use that knowledge to access personal information stored on it. Operating systems and anti-virus software are the main types of software that need regular updating.</p>
+
+  <p><strong>Remote deletion of a cell phone</strong> — if a device is lost or stolen, the owner can send a command from another phone to completely erase its data. Any data that wasn't backed up to the cloud is then lost forever, but at least the thief can't see it. To receive the command, the device has to be switched on and connected to the internet — so anyone who has stolen it can prevent the deletion simply by turning it off, removing the SIM card, and switching it back on without connecting to any wireless network such as Bluetooth or Wi-Fi. To send the command in the first place, the relevant app has to already be installed on the phone being used to contact the stolen one. Many such apps also let the owner make the stolen phone ring loudly for several minutes, in case it has simply been mislaid rather than stolen.</p>
+
+  <h3>Pharming</h3>
+  <p>In <strong>pharming</strong>, hackers create a fake website that looks like a genuine, legitimate-looking website, such as a bank's — fooling the user into thinking they've reached the real site.</p>
+<div class="block">
+  <ol>
+    <li>A user downloads a piece of malicious software or code onto their computer, often without realising it</li>
+    <li>The software corrupts the computer's Hosts file</li>
+    <li>It adds the URLs of banks and other frequently used websites, paired with the IP address of the fake website</li>
+    <li>The fraudster redirects the genuine website's traffic to their own site</li>
+    <li>The user is now unknowingly sending their personal details to the fraudster's website</li>
+    <li>The hacker gains personal information when the customer enters their details</li>
+    <li>The hacker uses this information to log on to the user's real bank account — for example, to make unauthorised purchases or withdraw cash</li>
+  </ol>
+</div>
+
+  <p><strong>How to prevent it:</strong></p>
+<div class="block">
+  <ul>
+    <li>Use up-to-date anti-virus software, to help prevent the download of software that changes the Hosts file</li>
+    <li>Use a firewall, to help prevent malicious software entering the computer</li>
+    <li>Install the latest software updates</li>
+    <li>Keep the browser up to date, so it can raise an alert if a fake website is loaded</li>
+    <li>Use a trusted, legitimate internet service provider (ISP)</li>
+    <li>Check a site's digital certificate to make sure it's legitimate</li>
+    <li>Use trusted DNS servers, and check the URL begins with HTTPS and shows a padlock</li>
+    <li>Watch for poor grammar or spelling, which can be a sign of a fake site</li>
+    <li>Avoid using public Wi-Fi systems</li>
+  </ul>
+</div>
+
+  <h3>Phishing</h3>
+  <p><strong>Phishing</strong> uses email to persuade people to divulge their personal information. The email may include a URL inviting the receiver to visit a site, and both the email and the website are made to look like they belong to a genuine organisation, when they're actually fakes. Clicking the link takes the target to the fake website, or the email itself may ask the customer to reply with their bank details. The email usually demands immediate attention — for example: "We confirm that you have signed up to our service. You will be charged $2 a day unless you cancel your order on this URL…" The website then asks the target to enter their personal or financial information.</p>
+  <p><strong>How to prevent it:</strong></p>
+<div class="block">
+  <ul>
+    <li>Use anti-phishing software, which identifies content in websites or emails that could be phishing, blocks it, and warns the user — often built into web browsers or email software</li>
+    <li>Run anti-virus and anti-spyware software, and update it at regular intervals</li>
+    <li>Look out for grammatical or spelling mistakes, which phishing emails often contain</li>
+    <li>Never open unexpected or suspicious emails, or click any link they contain</li>
+    <li>Remember that organisations never ask for personal details by email, so treat any that do with caution</li>
+    <li>Double-check the URLs and email addresses mentioned in an email to see if they're genuine</li>
+    <li>Note that most organisations say their official emails are automated and monitored by a bot that won't reply, whereas phishing emails tend to ask the user to reply with personal information</li>
+  </ul>
+</div>
+
+  <h3>Smishing</h3>
+  <p><strong>Smishing</strong> is a variation of phishing in which fraudsters use SMS/text messages rather than email, with the same goal of getting the recipient to reveal personal details. Fraudsters may try to get users to download an attachment containing malware that feeds personal data from the phone back to them, or include a link to a fake website, or simply ask the recipient to reply with their bank details. The message often demands immediate action, such as changing a bank PIN to one mentioned in the message, or claims the recipient is entitled to a financial reward. It may include a phone number connecting to an automated voice system pretending to be a bank or other legitimate organisation.</p>
+  <p><strong>How to prevent it:</strong></p>
+<div class="block">
+  <ul>
+    <li>Run mobile protection software at all times</li>
+    <li>Look out for spelling or grammatical errors in the message</li>
+    <li>Ignore messages demanding immediate action, or offering a reward that seems too good to be true</li>
+    <li>Don't interact with a message asking you to verify an activity you didn't carry out, such as an online purchase you don't recognise</li>
+    <li>Go directly to the sender's genuine website yourself and check its URL and digital certificate, rather than replying to the message or downloading any attachment</li>
+    <li>Never phone any number given in the text message</li>
+  </ul>
+</div>
+
+  <h3>Vishing</h3>
+  <p><strong>Vishing</strong> is voice phishing — phone calls made to get someone to divulge their personal or banking details. A fraudster claiming to be from the user's bank might call to say their account has been accessed by a hacker, and offer to help them change their password; by giving the fraudster their account number and password, the victim gives them full access to the account. The fraudster may instead leave a message asking the user to call a number about an urgent matter — which is actually the fraudster's own number, sometimes with an answerphone message asking the caller to leave their account number and other personal details. They might also call about a prize the user has supposedly won, asking for a card number over the phone to pay a shipping or redemption fee.</p>
+  <p>Sometimes the fraudster asks the customer to hang up and phone the bank to confirm the call — while the fraudster secretly stays on the line, so what the customer thinks is a fresh call is really the same one continuing. They may talk the customer through logging on to their bank's website and entering their details to "transfer money to a new account" — which is actually the fraudster's own account.</p>
+  <p><strong>How to prevent it:</strong></p>
+<div class="block">
+  <ul>
+    <li>Call the bank using the helpline number on their official social media pages, website, or physical credit/debit card, to confirm whether the call was genuine</li>
+    <li>Never share personal details during the call, even if asked, or told the call isn't being recorded</li>
+    <li>Block the number</li>
+    <li>Register your phone with a national do-not-call registry</li>
+    <li>Don't call a number mentioned in a voicemail</li>
+    <li>Don't answer calls from numbers you don't recognise</li>
+    <li>Use a vishing-blocking app that filters numbers known to be spam or fraudulent</li>
+  </ul>
+</div>
+<div class="task" data-task="classify" data-points="6">
+  <p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p>
+  <h4>Click which attack type each scenario describes.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="vish" data-qid="q1"><span class="term">A caller claims to be from the bank and offers to help change a password, then asks for the account number and password directly</span><span class="choices"><button data-choice="pharm">Pharming</button><button data-choice="phish">Phishing</button><button data-choice="smish">Smishing</button><button data-choice="vish">Vishing</button></span></div>
+    <div class="classify-item" data-answer="pharm" data-qid="q2"><span class="term">Malicious code corrupts the Hosts file so a genuine bank URL quietly redirects to a fake site</span><span class="choices"><button data-choice="pharm">Pharming</button><button data-choice="phish">Phishing</button><button data-choice="smish">Smishing</button><button data-choice="vish">Vishing</button></span></div>
+    <div class="classify-item" data-answer="smish" data-qid="q3"><span class="term">A text message asks the recipient to reply with their bank details to claim a prize</span><span class="choices"><button data-choice="pharm">Pharming</button><button data-choice="phish">Phishing</button><button data-choice="smish">Smishing</button><button data-choice="vish">Vishing</button></span></div>
+    <div class="classify-item" data-answer="phish" data-qid="q4"><span class="term">An email claims a $2 daily charge will apply unless the user clicks a link to cancel</span><span class="choices"><button data-choice="pharm">Pharming</button><button data-choice="phish">Phishing</button><button data-choice="smish">Smishing</button><button data-choice="vish">Vishing</button></span></div>
+    <div class="classify-item" data-answer="smish" data-qid="q5"><span class="term">A text includes a phone number connecting to an automated system pretending to be a bank</span><span class="choices"><button data-choice="pharm">Pharming</button><button data-choice="phish">Phishing</button><button data-choice="smish">Smishing</button><button data-choice="vish">Vishing</button></span></div>
+    <div class="classify-item" data-answer="vish" data-qid="q6"><span class="term">A fraudster stays on the line while the victim thinks they're calling the bank back to confirm the call</span><span class="choices"><button data-choice="pharm">Pharming</button><button data-choice="phish">Phishing</button><button data-choice="smish">Smishing</button><button data-choice="vish">Vishing</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="4">
+  <p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p>
+  <h4>Name the term from its description.</h4>
+  <div class="sub-q" data-qid="q7">
+    <label>a) Replacing a person's name in a record with a temporary ID, rather than removing it outright.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Pseudonymisation</div>
+    <div class="self-mark"><input type="checkbox" id="sm-1"><label for="sm-1">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q" data-qid="q8">
+    <label>b) A legal document a worker signs agreeing not to misuse confidential data they have access to.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>A confidentiality agreement</div>
+    <div class="self-mark"><input type="checkbox" id="sm-2"><label for="sm-2">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q" data-qid="q9">
+    <label>c) Combining personal details from many people so no single individual can be identified.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Aggregating information</div>
+    <div class="self-mark"><input type="checkbox" id="sm-3"><label for="sm-3">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q" data-qid="q10">
+    <label>d) Authentication that combines two different methods, such as a PIN and a debit card.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Two-factor (or multi-factor) authentication</div>
+    <div class="self-mark"><input type="checkbox" id="sm-4"><label for="sm-4">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="6">
+  <p class="task-label"><span>Extended answer</span><span class="pts">6 points</span></p>
+  <h4>Describe the steps of a pharming attack, and explain two ways a user could help prevent becoming a victim of one. (6 marks)</h4>
+  <div class="sub-q mp" data-max="6" data-qid="q11">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 6)</span>
+      <label class="mp-item"><input type="checkbox"><span>Malicious software or code is downloaded onto the user's computer, often without them realising</span></label>
+      <label class="mp-item"><input type="checkbox"><span>The software corrupts the computer's Hosts file</span></label>
+      <label class="mp-item"><input type="checkbox"><span>It adds the IP address of a fake website against the URLs of genuine, frequently used sites such as banks</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Genuine website traffic is redirected to the fraudster's own fake site</span></label>
+      <label class="mp-item"><input type="checkbox"><span>The user unknowingly enters their personal details into the fake site</span></label>
+      <label class="mp-item"><input type="checkbox"><span>The hacker uses the stolen details to access the user's real account</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Using up-to-date anti-virus software helps prevent the download of Hosts-file-changing malware</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Checking the URL begins with HTTPS and shows a padlock/checking the digital certificate helps confirm a site is genuine</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Keeping the browser up to date can trigger a warning if a fake site is detected</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 6 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="0" data-qid="q12"><p class="q">1. What is 'de-identification'?</p><div class="opts"><button class="opt" data-idx="0">Removing items of personal data, such as a name, from a record</button><button class="opt" data-idx="1">Encrypting an entire database</button><button class="opt" data-idx="2">Giving every user the same access level</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0" data-qid="q13"><p class="q">2. Why might an iris scanner be preferred over a fingerprint scanner?</p><div class="opts"><button class="opt" data-idx="0">It is harder to replicate and isn't affected by grease or dirt the way a fingerprint scanner can be</button><button class="opt" data-idx="1">It never requires any hardware</button><button class="opt" data-idx="2">It works without the user being present</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0" data-qid="q14"><p class="q">3. What is the main risk of a geotag attached to a photo?</p><div class="opts"><button class="opt" data-idx="0">It can reveal where the photo's owner lives or works</button><button class="opt" data-idx="1">It makes the photo file larger</button><button class="opt" data-idx="2">It prevents the photo from being shared at all</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+<div class="panel" id="panel-malware">
+  <h2 class="section-title">Malware <span class="tag">5.2</span></h2>
+  <p><strong>Malware</strong> (malicious software) is short for any program created with the deliberate intention of causing damage or disruption, or gaining access to a computer without its owner's permission.</p>
+
+  <h3>Trojan horse</h3>
+  <p>A <strong>trojan</strong> is a malicious program used to hack into a computer while misleading users about its true intent. It disguises itself as authentic software, letting its creator take control of the infected computer. Trojans generally don't try to infect other files, and don't try to self-replicate — they have to be activated by the attacker. A trojan can provide a <strong>backdoor</strong> into the computer so a third party can take control, can copy and delete files from the hard disk, can corrupt data, and can be used to download other malware.</p>
+
+  <h3>Virus</h3>
+  <p>A <strong>virus</strong> is designed to spread from one computer to another, usually over the internet, causing changes to how each computer operates as it spreads. Viruses can replicate themselves, and can delete, corrupt or change data on disk. They insert themselves into another computer program, and often lie dormant until a situation arises that causes the computer to execute their code.</p>
+  <p>Symptoms that can indicate a virus include: pop-up windows that suddenly start appearing frequently; the user's homepage changing from what it normally is; a password changing, preventing the user logging on; large numbers of emails being sent from the user's account without their knowledge; the computer frequently crashing; and the computer's processing speed noticeably slowing down.</p>
+
+  <h3>Worms</h3>
+  <p>A <strong>worm</strong> is a standalone malicious program or code that replicates itself in order to spread to other computers. It exploits security holes in networks and computers to spread throughout a network, and — unlike a virus — doesn't need to attach itself to an existing program or file. Worms consume bandwidth, slowing down network traffic, and consume processing power, slowing down computer operations; as they replicate, they occupy more and more space. They can modify or delete files, and can also install backdoors. Files going missing, or suddenly appearing, can be a sign that a worm is present.</p>
+
+  <h3>Spyware</h3>
+  <p><strong>Spyware</strong> collects information about a computer user's activities without their knowledge. A <strong>key logger</strong> is commonly used to record the user's keystrokes, sending this data — which could include credit card numbers, usernames and passwords — back to the hacker. Spyware also collects data such as web browsing habits. Unlike a worm or virus, spyware doesn't replicate itself. A user might notice it because it slows down their computer's processing power and the network's bandwidth, since both are used by the spyware to communicate information back to the hacker.</p>
+
+  <h3>Adware</h3>
+  <p><strong>Adware</strong> automatically generates advertisements to earn revenue for its author, and is normally downloaded bundled with free software, without the user's knowledge. When the software is opened, adverts may appear in its interface or on screen. It examines which websites are visited and shows advertising matched to the goods or services the user seems interested in, often causing unrequested pop-up adverts to appear in the browser. It's more a nuisance than a danger, though it has recently been linked to spyware. Symptoms can be hard to notice, though some adware slows down the computer and causes more pop-ups to appear than usual.</p>
+
+  <h3>Rootkit</h3>
+  <p>A <strong>rootkit</strong> is designed to give continued administrator access to a computer while actively hiding its own presence ("root" refers to the administrator account on Unix and Linux systems, and "kit" to the software components implementing the tool). Rootkits can be installed in several ways, including phishing attacks or social engineering that tricks a user into giving permission for it to install. A rootkit lets someone maintain command and control over a computer without the owner knowing — the controller can remotely execute files and change system settings on the host machine, access log files, and spy on how the owner uses it. Rootkits are difficult to detect because they activate before the operating system has finished booting up.</p>
+
+  <h3>Malicious bots</h3>
+  <p>Bots normally automate tasks and provide information or services that would otherwise need a human, such as gathering information through instant messaging or other web interfaces, or interacting dynamically with websites. A <strong>malicious bot</strong> is self-propagating malware designed to infect a host and connect back to a central server or servers, letting attackers launch broad-based "remote-control" or "flood type" attacks against their targets — much like a worm's ability to self-propagate. Bots can log keystrokes, gather passwords, and capture and analyse network packets. They can also launch DDoS attacks and open backdoors on an infected network, often infecting it in a way that escapes immediate notice.</p>
+
+  <h3>Ransomware</h3>
+  <p><strong>Ransomware</strong> threatens to publish a victim's data, or block access to it, unless a ransom is paid. It typically encrypts the victim's files, making them unreadable, and demands payment to decrypt them. It often infiltrates a PC disguised as a worm or trojan, usually after the user clicks an infected email attachment or visits a compromised website. Some ransomware still allows general use of the computer, but prevents certain files from being opened.</p>
+
+  <h3>Fileless malware</h3>
+  <p><strong>Fileless malware</strong> doesn't rely on files, and leaves no evidence once it has run, making it very difficult for anti-malware software to detect or remove. It resides only in main memory (RAM), so it doesn't perform any action that affects the hard drive, and it stops working entirely once the system is rebooted.</p>
+
+  <h3>Scareware</h3>
+  <p><strong>Scareware</strong> tricks a user into thinking their computer has been infected with a virus. It typically appears as a pop-up that seems to come from a genuine anti-virus provider; the user then pays this "provider" to download the fix, only discovering afterwards that it was a scam.</p>
+
+  <h3>How malware is used</h3>
+
+  <p><strong>Fraud</strong> uses a computer to take or alter electronic data, or to gain unlawful use of a computer or system, for illegal financial benefit.</p>
+<div class="block">
+  <ul>
+    <li>Spyware collects a user's personal data, browsing habits and keystrokes, which can lead to credit card fraud and identity theft</li>
+    <li>Once fraudsters have a user's personal and financial data, they can sell it to other criminals, or impersonate the user themselves</li>
+    <li>They can use the data to request a new PIN or an extra card from the bank</li>
+    <li>They can buy goods online using stolen credit card details, or withdraw large sums from the user's bank account</li>
+    <li>Most credit card fraud victims don't realise what has happened until much later</li>
+    <li>Scareware is used to obtain money under false pretences</li>
+    <li>Phishing, vishing, smishing and pharming are all intended to get the user to divulge passwords, card numbers or bank details, so the fraudster can withdraw money, transfer funds, or shop using those details</li>
+    <li>Ransomware is used to blackmail users into paying large sums, usually in Bitcoin so it can't be traced, with attackers often pretending to be police or another official authority</li>
+  </ul>
+</div>
+
+  <p><strong>Industrial espionage</strong> uses malware with the aim of stealing company secrets.</p>
+<div class="block">
+  <ul>
+    <li>Malware can be downloaded without an employee realising, for example by clicking on adware</li>
+    <li>Spyware or a trojan can be used to collect data and send it back to the hacker</li>
+    <li>Malware can give access to computers, networks or databases, to obtain files such as intellectual property, research or future business plans</li>
+    <li>Malware is used to exploit weaknesses in software in order to gain that access</li>
+    <li>Some spyware specifically targets a particular company to spy on it for industrial espionage</li>
+  </ul>
+</div>
+
+  <p><strong>Sabotage</strong> refers to deliberate attacks intended to stop computers or networks functioning properly.</p>
+<div class="block">
+  <ul>
+    <li>Sabotage within an organisation is often carried out by disgruntled employees intent on making the organisation lose money</li>
+    <li>Employees might make unauthorised attempts to view, disclose, retrieve, delete or change information by misusing the privileges they've been granted</li>
+    <li>Some acts of sabotage are carried out by former employees unhappy with how they lost their job, though most attacks by current or former employees happen remotely</li>
+    <li>This can take the form of a virus that stops users logging on, or malware that lets hackers illegally access the organisation's network</li>
+    <li>Organisations should protect both hardware and software, for example with a firewall and anti-virus software, along with regularly updating every employee's computer password</li>
+  </ul>
+</div>
+
+  <h3>Consequences for organisations</h3>
+<div class="block">
+  <ul>
+    <li>The procedures an organisation uses to secure its network and systems can be wrecked</li>
+    <li>Business operations can be disrupted, leading to loss of income</li>
+    <li>Hackers can corrupt, destroy or steal an organisation's data</li>
+    <li>Stolen or leaked data can give a competitive advantage to competitors</li>
+    <li>Hackers can obtain personal information about employees and clients, leading to legal action and fines against the organisation</li>
+    <li>Stolen data can be used to blackmail the organisation</li>
+    <li>Ransomware can be used to hold the organisation to ransom</li>
+    <li>Infected computers have to be disconnected from the network, so other devices aren't infected too, leaving fewer machines available for use</li>
+    <li>Infected computers have to be treated with anti-virus software</li>
+    <li>Costs increase, and extra expertise may need to be brought in to clean the affected computers</li>
+    <li>Confidence in the organisation can be undermined, leading to a loss of customers and business</li>
+    <li>Network and computer performance suffers, since malware tends to slow processing speed and reduce bandwidth</li>
+    <li>A rootkit can let a computer be taken over and used to commit illegal acts</li>
+    <li>Stolen data can be auctioned to the highest bidder on the dark web</li>
+  </ul>
+</div>
+
+  <h3>Consequences for individuals</h3>
+<div class="block">
+  <ul>
+    <li>Malware can let hackers obtain valuable information such as bank details, date of birth, email address and passwords</li>
+    <li>The hacker can then commit identity fraud</li>
+    <li>Scareware can fool users into paying for anti-virus software that doesn't actually exist</li>
+    <li>A slower computer can be, at the very least, inconvenient for an individual</li>
+    <li>Some attackers — pranksters — simply want to see the havoc their programs cause, while others attack PCs with malware to build a reputation within the hacker community</li>
+  </ul>
+</div>
+
+  <h3>Prevention of malware</h3>
+
+  <p><strong>Software methods</strong></p>
+<div class="block">
+  <ul>
+    <li>Anti-virus software should scan all data entering the company's network for malicious code, and alert the user to take action, such as deleting or cleaning infected files</li>
+    <li>A firewall, filtering incoming traffic and blocking malicious software, should be used at every external entry point to the network</li>
+    <li>Anti-virus software should be kept up to date and running at all times, with scans scheduled at frequent intervals</li>
+    <li>Only one anti-virus program should run at a time, since two different programs may conflict with each other</li>
+    <li>Anti-spyware software should run if it isn't already included in the anti-virus software, without conflicting with it</li>
+    <li>A spam filter should be used to minimise the effect of spam, especially if the email software doesn't already have one</li>
+    <li>Anti-malware software can protect network computers against malware entering the network, and remove any malware that has already got in</li>
+  </ul>
+</div>
+
+  <p><strong>Physical methods</strong></p>
+<div class="block">
+  <ul>
+    <li>A record of known malicious websites should be kept and blocked by the firewall</li>
+    <li>Dedicated, stand-alone virus-checking computers equipped with anti-virus software should be available, capable of scanning any type of media</li>
+    <li>All employees should be educated about the risks from malware, and the everyday procedures that help prevent infection</li>
+    <li>They should be encouraged to stop and think before clicking a link, and to contact the IT department straight away if they encounter a malicious one</li>
+    <li>They must not connect removable media or personally owned devices to the network</li>
+    <li>They need to know to report any strange or unexpected system behaviour to a technician or IT department member</li>
+    <li>Operating systems and browser software should always be kept up to date</li>
+    <li>Software that is no longer used, or is outdated, should be removed, since it's open to malware attacks</li>
+    <li>Emails should be read with suspicion, since malware downloads often rely on the user not paying close attention to who sent an email or what it's suggesting</li>
+    <li>Look out for incorrect spelling and poor grammar in a message, as well as the sender's address and any URL it provides</li>
+    <li>Strong passwords should be used that are unique, changed often, and not related to personal information</li>
+    <li>Websites should show an appropriate padlock next to the URL</li>
+    <li>Users should log off their computer at the end of a session</li>
+  </ul>
+</div>
+<div class="task" data-task="classify" data-points="10">
+  <p class="task-label"><span>Sort it</span><span class="pts">10 points</span></p>
+  <h4>Click which type of malware each description matches.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="fileless" data-qid="q15"><span class="term">Only exists in RAM, leaves no evidence, and stops working once the system is rebooted</span><span class="choices"><button data-choice="trojan">Trojan</button><button data-choice="virus">Virus</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button><button data-choice="fileless">Fileless malware</button><button data-choice="scare">Scareware</button></span></div>
+    <div class="classify-item" data-answer="trojan" data-qid="q16"><span class="term">Disguises itself as authentic software, and has to be activated by the attacker rather than self-replicating</span><span class="choices"><button data-choice="trojan">Trojan</button><button data-choice="virus">Virus</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button><button data-choice="fileless">Fileless malware</button><button data-choice="scare">Scareware</button></span></div>
+    <div class="classify-item" data-answer="virus" data-qid="q17"><span class="term">Inserts itself into another program and often lies dormant until the computer executes its code</span><span class="choices"><button data-choice="trojan">Trojan</button><button data-choice="virus">Virus</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button><button data-choice="fileless">Fileless malware</button><button data-choice="scare">Scareware</button></span></div>
+    <div class="classify-item" data-answer="scare" data-qid="q18"><span class="term">A pop-up pretends to be a genuine anti-virus provider and tricks the user into paying for a fix that doesn't exist</span><span class="choices"><button data-choice="trojan">Trojan</button><button data-choice="virus">Virus</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button><button data-choice="fileless">Fileless malware</button><button data-choice="scare">Scareware</button></span></div>
+    <div class="classify-item" data-answer="rootkit" data-qid="q19"><span class="term">Gives continued hidden administrator access, activating before the operating system has finished booting</span><span class="choices"><button data-choice="trojan">Trojan</button><button data-choice="virus">Virus</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button><button data-choice="fileless">Fileless malware</button><button data-choice="scare">Scareware</button></span></div>
+    <div class="classify-item" data-answer="worm" data-qid="q20"><span class="term">A standalone program that exploits security holes to spread across a network without attaching to a file</span><span class="choices"><button data-choice="trojan">Trojan</button><button data-choice="virus">Virus</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button><button data-choice="fileless">Fileless malware</button><button data-choice="scare">Scareware</button></span></div>
+    <div class="classify-item" data-answer="bot" data-qid="q21"><span class="term">Self-propagating malware that connects infected hosts back to a central server to launch coordinated attacks</span><span class="choices"><button data-choice="trojan">Trojan</button><button data-choice="virus">Virus</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button><button data-choice="fileless">Fileless malware</button><button data-choice="scare">Scareware</button></span></div>
+    <div class="classify-item" data-answer="adware" data-qid="q22"><span class="term">Automatically shows targeted adverts, often bundled with free software without the user's knowledge</span><span class="choices"><button data-choice="trojan">Trojan</button><button data-choice="virus">Virus</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button><button data-choice="fileless">Fileless malware</button><button data-choice="scare">Scareware</button></span></div>
+    <div class="classify-item" data-answer="ransom" data-qid="q23"><span class="term">Encrypts a victim's files and demands payment before they'll be decrypted</span><span class="choices"><button data-choice="trojan">Trojan</button><button data-choice="virus">Virus</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button><button data-choice="fileless">Fileless malware</button><button data-choice="scare">Scareware</button></span></div>
+    <div class="classify-item" data-answer="spyware" data-qid="q24"><span class="term">Uses a key logger to record keystrokes and send them back to the attacker</span><span class="choices"><button data-choice="trojan">Trojan</button><button data-choice="virus">Virus</button><button data-choice="worm">Worm</button><button data-choice="spyware">Spyware</button><button data-choice="adware">Adware</button><button data-choice="rootkit">Rootkit</button><button data-choice="bot">Bot</button><button data-choice="ransom">Ransomware</button><button data-choice="fileless">Fileless malware</button><button data-choice="scare">Scareware</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="4">
+  <p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p>
+  <h4>Name the term from its description.</h4>
+  <div class="sub-q" data-qid="q25">
+    <label>a) The hidden means of entry a trojan can create, letting a third party take control of a computer later.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>A backdoor</div>
+    <div class="self-mark"><input type="checkbox" id="sm-5"><label for="sm-5">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q" data-qid="q26">
+    <label>b) The use of malware to steal a company's intellectual property or future business plans.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Industrial espionage</div>
+    <div class="self-mark"><input type="checkbox" id="sm-6"><label for="sm-6">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q" data-qid="q27">
+    <label>c) Deliberate attacks, often by a disgruntled employee, intended to stop a network functioning properly.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Sabotage</div>
+    <div class="self-mark"><input type="checkbox" id="sm-7"><label for="sm-7">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q" data-qid="q28">
+    <label>d) The marketplace where stolen data is often sold to the highest bidder.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>The dark web</div>
+    <div class="self-mark"><input type="checkbox" id="sm-8"><label for="sm-8">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="6">
+  <p class="task-label"><span>Extended answer</span><span class="pts">6 points</span></p>
+  <h4>Discuss the consequences for an organisation of a successful ransomware attack. (6 marks)</h4>
+  <div class="sub-q mp" data-max="6" data-qid="q29">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 6)</span>
+      <label class="mp-item"><input type="checkbox"><span>Business operations can be disrupted, leading to loss of income</span></label>
+      <label class="mp-item"><input type="checkbox"><span>The organisation may be held to ransom, and face pressure to pay a large sum, often in untraceable Bitcoin</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Infected computers need to be disconnected from the network, leaving fewer machines available for staff to use</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Costs increase, since infected machines need treating and extra expertise may be needed</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Confidence in the organisation can be undermined, leading to a loss of customers and business</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Data could still be lost, leaked or sold even if the ransom is paid</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Legal action or fines are possible if customer or employee personal data is exposed</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 6 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="5">
+  <p class="task-label"><span>Extended answer</span><span class="pts">5 points</span></p>
+  <h4>Explain the difference between how a virus and a worm spread, and why a worm can slow down a whole network rather than just one computer. (5 marks)</h4>
+  <div class="sub-q mp" data-max="5" data-qid="q30">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 5)</span>
+      <label class="mp-item"><input type="checkbox"><span>A virus inserts itself into another program or file and needs that host to be run before it can act</span></label>
+      <label class="mp-item"><input type="checkbox"><span>A worm is a standalone program that doesn't need to attach to another file</span></label>
+      <label class="mp-item"><input type="checkbox"><span>A worm exploits security holes in a network or computer to spread by itself</span></label>
+      <label class="mp-item"><input type="checkbox"><span>As a worm replicates, it consumes bandwidth, slowing down network traffic for everyone, not just the infected computer</span></label>
+      <label class="mp-item"><input type="checkbox"><span>A worm also consumes processing power on the infected machine, slowing its operations down too</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 5 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="4">
+  <p class="task-label"><span>Quick check</span><span class="pts">4 points</span></p>
+  <div class="mcq" data-answer="0" data-qid="q31"><p class="q">1. Which type of malware is specifically designed to be almost undetectable because it never writes itself to a file?</p><div class="opts"><button class="opt" data-idx="0">Fileless malware</button><button class="opt" data-idx="1">Adware</button><button class="opt" data-idx="2">A trojan</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0" data-qid="q32"><p class="q">2. Why is a rootkit particularly hard to detect?</p><div class="opts"><button class="opt" data-idx="0">It activates before the operating system has finished booting up</button><button class="opt" data-idx="1">It only runs once a week</button><button class="opt" data-idx="2">It only infects printers</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0" data-qid="q33"><p class="q">3. What is the main goal of industrial espionage using malware?</p><div class="opts"><button class="opt" data-idx="0">Stealing company secrets such as research or business plans</button><button class="opt" data-idx="1">Slowing down a user's home internet connection</button><button class="opt" data-idx="2">Displaying targeted adverts</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0" data-qid="q34"><p class="q">4. Why should only one anti-virus program run on a computer at a time?</p><div class="opts"><button class="opt" data-idx="0">Two different programs may conflict with each other</button><button class="opt" data-idx="1">A single anti-virus program is always free</button><button class="opt" data-idx="2">Running two programs is illegal</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+
+</div>
+
+<footer>
+  Cambridge AS &amp; A Level IT · eSecurity — built for revision. Points and answers on this page are saved on this device only.
+</footer>
+
+<script>
+(function(){
+  const STORE_KEY = 'esecurity2-progress';
+
+  function loadState(){
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+    catch(e){ return {}; }
+  }
+  function saveState(){
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+    catch(e){ /* storage unavailable — carry on without persistence */ }
+  }
+  const state = loadState();
+
+  const scoreValEl = document.getElementById('score-val');
+  const scoreMaxEl = document.getElementById('score-max');
+  let score = 0;
+  function addScore(n){
+    score += n;
+    if(score < 0) score = 0;
+    scoreValEl.textContent = score;
+  }
+
+  let max = 0;
+  document.querySelectorAll('.self-mark input[type=checkbox]').forEach(function(cb){
+    max += parseInt(cb.dataset.points || '1', 10);
+  });
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    max += parseInt(sq.dataset.max, 10);
+  });
+  max += document.querySelectorAll('.classify-item').length;
+  max += document.querySelectorAll('.mcq').length;
+  scoreMaxEl.textContent = max;
+
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // ---- Self-marked open questions ----
+  document.querySelectorAll('.sub-q:not(.mp)').forEach(function(sq){
+    const qidKey = sq.dataset.qid;
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const reveal = sq.querySelector('.answer-reveal');
+    const mark = sq.querySelector('.self-mark');
+    const checkbox = mark ? mark.querySelector('input[type=checkbox]') : null;
+    if(!btn || !reveal || !mark) return;
+
+    function persist(){
+      if(!qidKey) return;
+      state[qidKey] = {
+        type: 'open',
+        text: ta.value,
+        revealed: reveal.classList.contains('show'),
+        checked: checkbox ? checkbox.checked : false
+      };
+      saveState();
+    }
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        reveal.classList.remove('show');
+        mark.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      reveal.classList.add('show');
+      mark.classList.add('show');
+      persist();
+    });
+
+    if(checkbox){
+      checkbox.addEventListener('change', function(){
+        const pts = parseInt(checkbox.dataset.points || '1', 10);
+        addScore(checkbox.checked ? pts : -pts);
+        persist();
+      });
+    }
+    ta.addEventListener('input', persist);
+
+    if(qidKey && state[qidKey]){
+      const saved = state[qidKey];
+      if(saved.text) ta.value = saved.text;
+      if(saved.revealed){
+        reveal.classList.add('show');
+        mark.classList.add('show');
+      }
+      if(saved.checked && checkbox){
+        checkbox.checked = true;
+        addScore(parseInt(checkbox.dataset.points || '1', 10));
+      }
+    }
+  });
+
+  // ---- Markpoints extended answers ----
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    const qidKey = sq.dataset.qid;
+    const cap = parseInt(sq.dataset.max, 10);
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const panel = sq.querySelector('.markpoints');
+    const note = sq.querySelector('.mp-note');
+    const count = sq.querySelector('.mp-count');
+    const boxes = panel.querySelectorAll('input[type=checkbox]');
+    let awarded = 0;
+
+    function persist(){
+      if(!qidKey) return;
+      state[qidKey] = {
+        type: 'mp',
+        text: ta.value,
+        revealed: panel.classList.contains('show'),
+        ticked: Array.from(boxes).map(function(b){ return b.checked; })
+      };
+      saveState();
+    }
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        panel.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      panel.classList.add('show');
+      persist();
+    });
+
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if(cb.checked){
+          if(awarded >= cap){
+            cb.checked = false;
+            note.textContent = "That's already full marks (" + cap + "). Untick a point first to swap it.";
+            persist();
+            return;
+          }
+          awarded += 1;
+          addScore(1);
+        } else {
+          awarded -= 1;
+          addScore(-1);
+        }
+        note.textContent = '';
+        count.textContent = awarded + ' / ' + cap + ' marks';
+        persist();
+      });
+    });
+
+    ta.addEventListener('input', persist);
+
+    if(qidKey && state[qidKey]){
+      const saved = state[qidKey];
+      if(saved.text) ta.value = saved.text;
+      if(saved.revealed){
+        panel.classList.add('show');
+      }
+      if(saved.ticked){
+        saved.ticked.forEach(function(wasChecked, i){
+          if(wasChecked && boxes[i] && awarded < cap){
+            boxes[i].checked = true;
+            awarded += 1;
+            addScore(1);
+          }
+        });
+        count.textContent = awarded + ' / ' + cap + ' marks';
+      }
+    }
+  });
+
+  // ---- Classify ("Sort it") ----
+  document.querySelectorAll('.classify-item').forEach(function(item){
+    const qidKey = item.dataset.qid;
+    const answer = item.dataset.answer;
+    const buttons = item.querySelectorAll('.choices button');
+
+    function persist(chosen, correct){
+      if(!qidKey) return;
+      state[qidKey] = { type: 'classify', chosen: chosen, correct: correct };
+      saveState();
+    }
+
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){
+        buttons.forEach(function(other){ other.disabled = true; });
+        const isCorrect = b.dataset.choice === answer;
+        if(isCorrect){
+          b.classList.add('correct');
+          addScore(1);
+        } else {
+          b.classList.add('incorrect');
+          buttons.forEach(function(other){
+            if(other.dataset.choice === answer) other.classList.add('correct');
+          });
+        }
+        persist(b.dataset.choice, isCorrect);
+      });
+    });
+
+    if(qidKey && state[qidKey]){
+      const saved = state[qidKey];
+      buttons.forEach(function(b){
+        b.disabled = true;
+        if(b.dataset.choice === saved.chosen){
+          b.classList.add(saved.correct ? 'correct' : 'incorrect');
+        } else if(b.dataset.choice === answer && !saved.correct){
+          b.classList.add('correct');
+        }
+      });
+      if(saved.correct) addScore(1);
+    }
+  });
+
+  // ---- MCQ ("Quick check") ----
+  document.querySelectorAll('.mcq').forEach(function(mcqEl){
+    const qidKey = mcqEl.dataset.qid;
+    const correctIdx = mcqEl.dataset.answer;
+    const opts = mcqEl.querySelectorAll('.opt');
+    const feedback = mcqEl.querySelector('.mcq-feedback');
+
+    function persist(chosenIdx, correct){
+      if(!qidKey) return;
+      state[qidKey] = { type: 'mcq', chosen: chosenIdx, correct: correct };
+      saveState();
+    }
+
+    opts.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        opts.forEach(function(o){ o.disabled = true; });
+        const isCorrect = opt.dataset.idx === correctIdx;
+        if(isCorrect){
+          opt.classList.add('correct');
+          feedback.textContent = 'Correct.';
+          feedback.className = 'mcq-feedback ok';
+          addScore(1);
+        } else {
+          opt.classList.add('incorrect');
+          opts.forEach(function(o){
+            if(o.dataset.idx === correctIdx) o.classList.add('correct');
+          });
+          feedback.textContent = 'Not quite — the correct answer is highlighted above.';
+          feedback.className = 'mcq-feedback bad';
+        }
+        persist(opt.dataset.idx, isCorrect);
+      });
+    });
+
+    if(qidKey && state[qidKey]){
+      const saved = state[qidKey];
+      opts.forEach(function(o){
+        o.disabled = true;
+        if(o.dataset.idx === saved.chosen){
+          o.classList.add(saved.correct ? 'correct' : 'incorrect');
+        } else if(o.dataset.idx === correctIdx && !saved.correct){
+          o.classList.add('correct');
+        }
+      });
+      if(saved.correct){
+        feedback.textContent = 'Correct.';
+        feedback.className = 'mcq-feedback ok';
+      } else {
+        feedback.textContent = 'Not quite — the correct answer is highlighted above.';
+        feedback.className = 'mcq-feedback bad';
+      }
+      if(saved.correct) addScore(1);
+    }
+  });
+
+  // ---- Reset progress ----
+  const resetBtn = document.getElementById('reset-progress');
+  if(resetBtn){
+    resetBtn.addEventListener('click', function(){
+      if(confirm('Clear all saved answers and scores on this page?')){
+        try { localStorage.removeItem(STORE_KEY); } catch(e){}
+        location.reload();
+      }
+    });
+  }
+})();
+</script>
+</body>
+</html>
