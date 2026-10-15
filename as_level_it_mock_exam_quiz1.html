@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IT Mock Quiz - Student Assessment Portal</title>
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-hover: #1d4ed8;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #475569;
+      --border: #e2e8f0;
+      --accent: #dbeafe;
+      --accent-text: #1e40af;
+      --ms-bg: #f0fdf4;
+      --ms-border: #86efac;
+      --ms-text: #166534;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 120px;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      padding: 1rem 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    .subtitle {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .score-badge {
+      background: var(--accent);
+      color: var(--accent-text);
+      padding: 0.5rem 1rem;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .student-info {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 2rem auto;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    label {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    input[type="text"], textarea, select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      background: #fff;
+    }
+
+    input[type="text"]:focus, textarea:focus, select:focus {
+      outline: 2px solid var(--primary);
+      border-color: transparent;
+    }
+
+    .section-title {
+      font-size: 1.3rem;
+      margin: 2rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .question-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .question-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .question-title {
+      font-weight: 600;
+      font-size: 1.05rem;
+      white-space: pre-line;
+    }
+
+    .marks-tag {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+      margin-bottom: 1rem;
+    }
+
+    .controls-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background: #f8fafc;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .mark-select-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .mark-select-group select {
+      width: auto;
+      padding: 0.4rem 0.8rem;
+    }
+
+    .btn-ms {
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .btn-ms:hover {
+      background: var(--accent);
+      color: var(--accent-text);
+      border-color: var(--accent);
+    }
+
+    .mark-scheme {
+      display: none;
+      margin-top: 1rem;
+      background: var(--ms-bg);
+      border: 1px solid var(--ms-border);
+      color: var(--ms-text);
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      white-space: pre-line;
+    }
+
+    .mark-scheme.visible {
+      display: block;
+    }
+
+    .action-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-top: 1px solid var(--border);
+      padding: 1rem 0;
+      box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .action-bar-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-submit {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-submit:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-reset {
+      background: transparent;
+      color: #ef4444;
+      border: 1px solid #fca5a5;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .btn-reset:hover {
+      background: #fef2f2;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-content">
+      <div>
+        <h1>IT Mock Quiz</h1>
+        <div class="subtitle">Grade 11 ICT • Chapters 1–5 • Time: 45 Mins</div>
+      </div>
+      <div class="score-badge" id="liveScore">Score: 0 / 90</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="student-info">
+      <div class="form-group">
+        <label for="studentName">Student Full Name:</label>
+        <input type="text" id="studentName" placeholder="Enter your full name here..." oninput="saveProgress()">
+      </div>
+    </div>
+
+    <div id="quizContainer"></div>
+  </main>
+
+  <div class="action-bar">
+    <div class="container action-bar-content">
+      <button class="btn-reset" onclick="resetForm()">Clear Saved Answers</button>
+      <button class="btn-submit" onclick="exportToFile()">Submit & Download (.txt)</button>
+    </div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        section: "Section A – Data and Information (Chapter 1) [32 marks]",
+        questions: [
+          { id: "q1", title: "1. Explain why the data 359 is not information, and describe how it could be turned into information.", maxMarks: 4, ms: "• On its own 359 is raw data / a number with no context (1) and no meaning (1)\n• It becomes information when it is given context, e.g. it is a price (1) and meaning, e.g. the price of a mobile phone cover (1)" },
+          { id: "q2a", title: "2(a). A shop owner wants to find out how much competitors charge for a pair of shoes. Identify two direct data sources the shop owner could use.", maxMarks: 2, ms: "Any two from (1 mark each):\n• Visiting the shops and writing down the prices\n• Visiting shop websites and noting the prices\n• A survey / questionnaire of shop owners\n• An interview\n• Observation" },
+          { id: "q2b", title: "2(b). Give one disadvantage of using an indirect data source instead.", maxMarks: 1, ms: "Any one from (1 mark):\n• Data may be out of date\n• The original source may not be known / trusted\n• May contain extra data that is not needed\n• Data may be missing / biased / not in required format" },
+          { id: "q3a", title: "3(a). Explain why out-of-date information is of poor quality. Give an example.", maxMarks: 2, ms: "• Information must be up to date to be useful / old information is no longer correct (1)\n• Valid example (1), e.g. using census data from 40 years ago to find how many people live in a town" },
+          { id: "q3b", title: "3(b). Explain what is meant by the completeness of information. Give an example.", maxMarks: 2, ms: "• All the information that is required must be provided / information cannot be used properly if something is missing (1)\n• Valid example (1), e.g. a garage gives the street name but not the building number" },
+          { id: "q4a", title: "4(a). The Caesar cipher with a shift of +3 replaces each letter with the letter three places later in the alphabet (A = D). Encrypt the word CAT.", maxMarks: 2, ms: "• FDW (2 marks)\n• Award 1 mark if two letters are correct" },
+          { id: "q4b", title: "4(b). Describe one difference between symmetric and asymmetric encryption.", maxMarks: 2, ms: "• Symmetric encryption uses one secret (private) key shared by sender and receiver (1) whereas asymmetric encryption uses a pair of keys – a public key to encrypt and a private key to decrypt (1)" },
+          { id: "q4c", title: "4(c). Explain why a USB memory stick that holds sensitive data should be encrypted.", maxMarks: 2, ms: "• A USB memory stick is portable so it can easily be lost or stolen (1)\n• If it is encrypted the data cannot be understood without the key / password (1)" },
+          { id: "q5a", title: "5(a). State the name of the validation check that makes sure a password is at least eight characters long.", maxMarks: 1, ms: "• Length check (1 mark)" },
+          { id: "q5b", title: "5(b). Describe how a check digit is used to validate a barcode number.", maxMarks: 3, ms: "• An extra digit is added to the end of the number, calculated from the other digits using an algorithm (1)\n• When the number is entered the same algorithm is run on the digits (1)\n• The result is compared with the check digit – if they match the data is valid, if not it is rejected (1)" },
+          { id: "q5c", title: "5(c). Give one example of data that was validated but is incorrect.", maxMarks: 1, ms: "• Any valid example (1 mark), e.g. a grade of C entered when it should be A; or a date of birth of 28/12/2087 passing a type check" },
+          { id: "q6", title: "6. Candidate marks are entered into a computer. Describe how a hash total is used to check that the marks have been entered correctly.", maxMarks: 3, ms: "• Before data entry the values in one field are added together manually to give a hash total (1)\n• After input the computer adds up the same field automatically (1)\n• The two totals are compared – if they are different there has been an error in the data entry (1)" },
+          { id: "q7a", title: "7(a). State what is stored in a master file.", maxMarks: 1, ms: "• Data about one set of things, e.g. customers / employees / products (1 mark)" },
+          { id: "q7b", title: "7(b). Describe how a transaction file is used with the master file when the invoices are produced.", maxMarks: 3, ms: "• The transaction file stores data about events, e.g. customer orders (1)\n• The transaction file is validated and sorted into the same order as the master file (1)\n• Each transaction is matched to its record in the master file, the master file is updated and invoices are produced (1)" },
+          { id: "q8", title: "8. Explain why an autonomous (self-driving) car needs real-time processing.", maxMarks: 3, ms: "• The car must react immediately to dangers such as pedestrians, other vehicles and bends in the road (1)\n• Sensors continuously send data to the microprocessor and the outputs affect the next inputs (feedback) (1)\n• Any delay in processing could cause an accident (1)" }
+        ]
+      },
+      {
+        section: "Section B – Hardware and Software (Chapter 2) [33 marks]",
+        questions: [
+          { id: "q9a", title: "9(a). Explain what is meant by redundancy in a mainframe computer.", maxMarks: 2, ms: "• Spare components are ready to take over if another component fails (1)\n• So a failed component can be replaced without affecting the operation of the mainframe / hot-swappable (1)" },
+          { id: "q9b", title: "9(b). State two disadvantages of mainframe computers and supercomputers.", maxMarks: 2, ms: "Any two from (1 mark each):\n• Very high cost\n• Large amount of space and temperature control needed\n• Specialist support staff required\n• Command-driven interface that is difficult to understand\n• Expensive specialist operating systems" },
+          { id: "q9c", title: "9(c). Explain why many data centres are built in colder parts of the world.", maxMarks: 2, ms: "• Mainframes and supercomputers generate a lot of heat so cooling is needed (1)\n• Natural cold air can be circulated, which uses less power than air-conditioning / fans (1)" },
+          { id: "q10a", title: "10(a). Describe the role of the BIOS when a computer is switched on.", maxMarks: 2, ms: "• The BIOS is stored on ROM on the motherboard and is the first thing to load (1)\n• It then loads the operating system (1)" },
+          { id: "q10b", title: "10(b). Describe the function of a linker.", maxMarks: 2, ms: "• Combines the separate object files / modules into a single executable file (1)\n• It can also link in modules from a common library, selecting only the modules that are needed (1)" },
+          { id: "q11a", title: "11(a). Describe the function of a compiler.", maxMarks: 2, ms: "• Translates the whole of the high-level source code into machine code / an executable file (1)\n• All at once, before the program is run (1)" },
+          { id: "q11b", title: "11(b). The software for a car’s engine control unit (ECU) is created using a cross compiler. Explain why a cross compiler is used.", maxMarks: 3, ms: "• The ECU has a small / low-powered CPU that cannot run a compiler (1)\n• The program is written and compiled on a more powerful computer (1)\n• A cross compiler creates executable code for a different system / architecture, which is then transferred to the ECU (1)" },
+          { id: "q12a", title: "12(a). Explain the difference between low-level formatting and high-level formatting of a hard disk.", maxMarks: 3, ms: "• Low-level formatting completely removes all data and recreates the tracks and sectors, so data cannot be recovered; it takes a long time (1)\n• High-level formatting (quick format) only deletes the old file system and creates a new one, so it is much quicker (1)\n• With high-level formatting the old data still exists on the disk until it is overwritten, so it could be recovered (1)" },
+          { id: "q12b", title: "12(b). Describe two benefits of using a data compression utility.", maxMarks: 2, ms: "• Files are reduced in size so they use less storage space / more files can be stored (1)\n• Smaller files can be transferred from one location to another more quickly (1)" },
+          { id: "q13", title: "13. A small company needs software to manage its payroll. Describe two reasons why the company might choose off-the-shelf software instead of custom-written software.", maxMarks: 4, ms: "Award 2 marks for each reason (1 for reason, 1 for development). Any two from:\n• It is cheaper (1) as the development cost is shared between many customers (1)\n• It is available immediately (1) so the company can start using it straight away (1)\n• It has been tested by thousands of users (1) so bugs have already been found and fixed (1)\n• More support is available (1) e.g. telephone support, forums, online training (1)" },
+          { id: "q14a", title: "14(a). Describe what is meant by proprietary software.", maxMarks: 2, ms: "• Software that is owned by an individual or organisation who sells it for use under an agreed licence (1)\n• Only the files needed to run the software are supplied – the source code stays with the owner (1)" },
+          { id: "q14b", title: "14(b). State what is meant by shareware.", maxMarks: 1, ms: "• Software that can be used free of charge but some features may be restricted / it stops working after a trial period until payment is made (1 mark)" },
+          { id: "q15a", title: "15(a). Identify and describe two form controls that could be used on the registration form.", maxMarks: 4, ms: "Award 1 mark for control identified, 1 mark for valid use (Any two from):\n• Label (1) – prompt / instruction that cannot be edited (1)\n• Text box (1) – area where user types text (1)\n• Tick box (1) – select as many options as apply (1)\n• Option button (1) – select only one option in a group (1)\n• Drop-down box (1) – choose one option from a list (1)\n• Button (1) – confirms or clears inputs (1)" },
+          { id: "q15b", title: "15(b). Describe one advantage and one disadvantage of a gesture-based interface.", maxMarks: 2, ms: "• Advantage (1): No screen contact so helps control infection; simple to use / no specific commands to learn\n• Disadvantage (1): May not recognise certain movements; needs accurate cameras/sensors; difficult pointer control" }
+        ]
+      },
+      {
+        section: "Section C – Monitoring and Control Technologies (Chapter 3) [13 marks]",
+        questions: [
+          { id: "q16", title: "16. Explain the difference between a monitoring system and a control system.", maxMarks: 4, ms: "• A monitoring system only collects data and stores it for use later (1), e.g. temperature logged over a week (1)\n• A control system collects data, analyses it (compares with stored values) and takes action (1) using actuators, e.g. turning a heater on/off (1)" },
+          { id: "q17", title: "17. A temperature sensor always reads 2 °C higher than the real temperature. Describe how one-point calibration is used to correct the sensor.", maxMarks: 3, ms: "• Take a reading with the sensor and compare it with a reading from a reference device (1)\n• Calculate the offset – the difference between reference value and sensor reading (1)\n• Apply the offset (−2 °C) to every reading from the sensor to give the calibrated value (1)" },
+          { id: "q18", title: "18. A car park has an automatic barrier at the entrance. Describe how a control system can use sensors, a microprocessor and an actuator to let cars in only when there is a free space.", maxMarks: 6, ms: "Any six points (1 mark each):\n• Sensor detects car approaching barrier\n• Sensor sends data/signal to microprocessor\n• Microprocessor checks stored number of free spaces\n• If free space exists, signal sent to actuator\n• Actuator (motor) raises barrier\n• Sensor detects car passed through, barrier lowered\n• Free spaces reduced by one\n• Process repeated continuously" }
+        ]
+      },
+      {
+        section: "Section E – Personal Data and Malware (Chapter 5) [12 marks]",
+        questions: [
+          { id: "q20a", title: "20(a). State two examples of personal data.", maxMarks: 2, ms: "Any two from (1 mark each):\nName, Date of birth, Address, Telephone number, Email address, Bank details, Medical records, Salary" },
+          { id: "q20b", title: "20(b). Describe one danger to an individual if their personal data is shared without their permission.", maxMarks: 2, ms: "• Identity theft / fraud (1) – data used to withdraw money, take out loans or access accounts (1)\n• Blackmail / bullying (1) – based on private information (1)" },
+          { id: "q21a", title: "21(a). Describe what is meant by vishing.", maxMarks: 2, ms: "• Voice phishing – user receives a telephone call from automated system or real person (1)\n• Caller claims there is a problem and asks for personal/login details or PIN (1)" },
+          { id: "q21b", title: "21(b). State two ways in which a user can recognise a phishing email.", maxMarks: 2, ms: "Any two from (1 mark each):\n• Impersonal greeting (e.g. 'Dear customer')\n• Fake/suspicious sender email domain\n• Spelling/grammar errors\n• Urgent/threatening language\n• Asks to click a link not matching real domain" },
+          { id: "q22a", title: "22(a). Describe one difference between a virus and a worm.", maxMarks: 2, ms: "• A virus attaches itself to/infects an existing file (1) whereas a worm replicates itself without needing to attach to a file/program (1)" },
+          { id: "q22b", title: "22(b). Describe how a firewall helps to protect a computer from malware.", maxMarks: 2, ms: "• It monitors/filters incoming and outgoing network traffic (1)\n• Checks traffic against set criteria/rules, blocking anything that does not meet them (1)" }
+        ]
+      }
+    ];
+
+    function renderQuiz() {
+      const container = document.getElementById("quizContainer");
+      container.innerHTML = "";
+
+      quizData.forEach(section => {
+        const secTitle = document.createElement("h2");
+        secTitle.className = "section-title";
+        secTitle.textContent = section.section;
+        container.appendChild(secTitle);
+
+        section.questions.forEach(q => {
+          const card = document.createElement("div");
+          card.className = "question-card";
+
+          let optionsHtml = '<option value="0">0 marks</option>';
+          for (let i = 1; i <= q.maxMarks; i++) {
+            optionsHtml += `<option value="${i}">${i} mark${i > 1 ? 's' : ''}</option>`;
+          }
+
+          card.innerHTML = `
+            <div class="question-header">
+              <div class="question-title">${q.title}</div>
+              <div class="marks-tag">[${q.maxMarks} Mark${q.maxMarks > 1 ? 's' : ''}]</div>
+            </div>
+            <textarea id="${q.id}_ans" placeholder="Type your response here..." oninput="saveProgress()"></textarea>
+            <div class="controls-row">
+              <button class="btn-ms" onclick="toggleMS('${q.id}')">Show Mark Scheme</button>
+              <div class="mark-select-group">
+                <label for="${q.id}_score">Self Awarded Score:</label>
+                <select id="${q.id}_score" onchange="updateTotalScore(); saveProgress();">
+                  ${optionsHtml}
+                </select>
+              </div>
+            </div>
+            <div class="mark-scheme" id="${q.id}_ms">${q.ms}</div>
+          `;
+          container.appendChild(card);
+        });
+      });
+
+      loadProgress();
+    }
+
+    function toggleMS(id) {
+      const msDiv = document.getElementById(`${id}_ms`);
+      msDiv.classList.toggle("visible");
+    }
+
+    function updateTotalScore() {
+      let total = 0;
+      quizData.forEach(section => {
+        section.questions.forEach(q => {
+          const select = document.getElementById(`${q.id}_score`);
+          if (select) {
+            total += parseInt(select.value) || 0;
+          }
+        });
+      });
+      document.getElementById("liveScore").textContent = `Score: ${total} / 90`;
+      return total;
+    }
+
+    function saveProgress() {
+      const state = {
+        name: document.getElementById("studentName").value,
+        answers: {},
+        scores: {}
+      };
+
+      quizData.forEach(sec => {
+        sec.questions.forEach(q => {
+          const ansEl = document.getElementById(`${q.id}_ans`);
+          const scoreEl = document.getElementById(`${q.id}_score`);
+          if (ansEl) state.answers[q.id] = ansEl.value;
+          if (scoreEl) state.scores[q.id] = scoreEl.value;
+        });
+      });
+
+      localStorage.setItem("ict_mock_b_progress", JSON.stringify(state));
+    }
+
+    function loadProgress() {
+      const saved = localStorage.getItem("ict_mock_b_progress");
+      if (!saved) return;
+
+      try {
+        const state = JSON.parse(saved);
+        if (state.name) document.getElementById("studentName").value = state.name;
+
+        quizData.forEach(sec => {
+          sec.questions.forEach(q => {
+            if (state.answers && state.answers[q.id] !== undefined) {
+              const ansEl = document.getElementById(`${q.id}_ans`);
+              if (ansEl) ansEl.value = state.answers[q.id];
+            }
+            if (state.scores && state.scores[q.id] !== undefined) {
+              const scoreEl = document.getElementById(`${q.id}_score`);
+              if (scoreEl) scoreEl.value = state.scores[q.id];
+            }
+          });
+        });
+        updateTotalScore();
+      } catch (e) {
+        console.error("Could not load progress", e);
+      }
+    }
+
+    function resetForm() {
+      if (confirm("Are you sure you want to clear all your saved answers and scores?")) {
+        localStorage.removeItem("ict_mock_b_progress");
+        document.getElementById("studentName").value = "";
+        quizData.forEach(sec => {
+          sec.questions.forEach(q => {
+            const ansEl = document.getElementById(`${q.id}_ans`);
+            const scoreEl = document.getElementById(`${q.id}_score`);
+            if (ansEl) ansEl.value = "";
+            if (scoreEl) scoreEl.value = "0";
+          });
+        });
+        updateTotalScore();
+      }
+    }
+
+    function exportToFile() {
+      const rawName = document.getElementById("studentName").value.trim();
+      if (!rawName) {
+        alert("Please enter your full name before exporting.");
+        document.getElementById("studentName").focus();
+        return;
+      }
+
+      const formattedName = rawName.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-");
+      const filename = `${formattedName}-mock-exam-ict.txt`;
+
+      let totalScore = updateTotalScore();
+      let fileContent = `==================================================\n`;
+      fileContent += `ICT COMBINED QUIZ (VERSION B) - ASSESSMENT REPORT\n`;
+      fileContent += `==================================================\n`;
+      fileContent += `Student Name: ${rawName}\n`;
+      fileContent += `Total Score:  ${totalScore} / 90\n`;
+      fileContent += `Generated On: ${new Date().toLocaleString()}\n`;
+      fileContent += `==================================================\n\n`;
+
+      quizData.forEach(sec => {
+        fileContent += `--------------------------------------------------\n`;
+        fileContent += `${sec.section}\n`;
+        fileContent += `--------------------------------------------------\n\n`;
+
+        sec.questions.forEach(q => {
+          const ans = document.getElementById(`${q.id}_ans`).value.trim() || "[ No response provided ]";
+          const score = document.getElementById(`${q.id}_score`).value;
+
+          fileContent += `${q.title}\n`;
+          fileContent += `[Max Marks: ${q.maxMarks} | Awarded: ${score}]\n\n`;
+          fileContent += `Student Answer:\n${ans}\n\n`;
+          fileContent += `. . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n\n`;
+        });
+      });
+
+      const blob = new Blob([fileContent], { type: "text/plain;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href);
+    }
+
+    window.onload = renderQuiz;
+  </script>
+</body>
+</html>
