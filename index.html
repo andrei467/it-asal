@@ -1393,13 +1393,13 @@ Next line in transaction file</pre></div>
   resetBtn.textContent = 'Reset my answers';
   resetBtn.setAttribute('type', 'button');
   resetBtn.style.cssText = 'position:fixed;bottom:14px;left:14px;z-index:50;font-family:JetBrains Mono,monospace;'
-    + 'font-size:11px;padding:7px 11px;background:transparent;border:1px solid #496354;'
-    + 'color:#a9a294;border-radius:3px;cursor:pointer;';
-  resetBtn.addEventListener('mouseenter', function(){ resetBtn.style.color = '#e9e4d6'; });
-  resetBtn.addEventListener('mouseleave', function(){ resetBtn.style.color = '#a9a294'; });
+    + 'font-size:11px;padding:7px 11px;background:#141b2e;border:1px solid #40557d;'
+    + 'color:#9ba4bc;border-radius:3px;cursor:pointer;';
+  resetBtn.addEventListener('mouseenter', function(){ resetBtn.style.color = '#e7e9f1'; });
+  resetBtn.addEventListener('mouseleave', function(){ resetBtn.style.color = '#9ba4bc'; });
   resetBtn.addEventListener('click', function(){
     if(confirm('Clear all your saved answers on this page?')){
-      localStorage.removeItem(STORE_KEY);
+      try { localStorage.removeItem(STORE_KEY); } catch(e){}
       location.reload();
     }
   });
