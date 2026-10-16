@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>eSecurity — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --bg-deep:#090d18;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#04141a;}
+
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 24px 120px; }
+
+  nav.theory-nav{
+    max-width:760px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:44px 24px 34px; max-width:760px; margin:0 auto; border-bottom:1px solid var(--trace);
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,38px);
+    line-height:1.15; margin:0 0 14px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
+
+  nav.tabs{
+    max-width:760px; margin:0 auto; padding:14px 24px; display:flex; gap:6px;
+    overflow-x:auto; border-bottom:1px solid var(--trace); position:sticky; top:0;
+    background:rgba(13,18,32,.95); backdrop-filter: blur(4px); z-index:30;
+  }
+  nav.tabs button{
+    font-family:var(--mono); font-size:12.5px; white-space:nowrap; background:transparent;
+    border:1px solid var(--trace); color:var(--paper-dim); padding:8px 13px;
+    border-radius:var(--radius); cursor:pointer; flex-shrink:0;
+  }
+  nav.tabs button:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  nav.tabs button.active{ background:var(--signal); color:#04141a; border-color:var(--signal); font-weight:500; }
+
+  .panel{ display:none; padding:40px 0 8px; }
+  .panel.active{ display:block; }
+
+  h2.section-title{
+    font-family:var(--mono); font-size:22px; color:var(--signal-bright);
+    margin:0 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2.section-title .tag{
+    font-size:12px; color:var(--sage); border:1px solid var(--trace);
+    padding:2px 7px; border-radius:var(--radius);
+  }
+  h3{ font-family:var(--mono); font-size:16px; color:var(--gold); margin:26px 0 8px; font-weight:500; }
+  p{margin:10px 0;}
+  ul, ol{padding-left:22px; margin:10px 0;}
+  li{margin:4px 0;}
+  strong{color:var(--paper); font-weight:600;}
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0 8px; font-size:15px; }
+  th,td{ border:1px solid var(--trace); padding:8px 10px; text-align:left; vertical-align:top; }
+  th{ font-family:var(--mono); font-size:12px; color:var(--sage); font-weight:500; background:rgba(134,201,160,0.06); }
+  .table-scroll{ overflow-x:auto; }
+  .note{ color:var(--paper-dim); font-size:14.5px; }
+
+  .block{ border-left:2px solid var(--trace); padding-left:18px; margin:18px 0; }
+  .block ul, .block ol{ margin:0; padding-left:20px; }
+
+  .proscons{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 8px; }
+  .pc{ border:1px solid var(--trace); border-radius:var(--radius); background:var(--bg-raised); padding:2px 14px 12px; }
+  .pc.pro{ border-top:2px solid var(--sage); }
+  .pc.con{ border-top:2px solid var(--brick); }
+  .pc-title{ font-family:var(--mono); font-size:12.5px; font-weight:500; margin:12px 0 4px; }
+  .pc.pro .pc-title{ color:var(--sage); }
+  .pc.con .pc-title{ color:var(--brick); }
+  .pc ul{ padding-left:18px; margin:6px 0 0; font-size:15px; }
+  @media (max-width:600px){ .proscons{ grid-template-columns:1fr; } }
+
+  details.fold{ border:1px solid var(--trace); border-radius:var(--radius); margin:12px 0; background:var(--bg-raised); }
+  details.fold summary{ font-family:var(--mono); font-size:13.5px; color:var(--gold); padding:11px 14px; cursor:pointer; }
+  details.fold[open] summary{ border-bottom:1px solid var(--trace); }
+  details.fold .fold-body{ padding:2px 14px 12px; }
+
+  /* ---- box types: key word / practical activity / reflection / research task ---- */
+  .keyword{ border:1px solid var(--trace); border-left:3px solid var(--gold); border-radius:var(--radius); background:var(--bg-raised); padding:2px 18px 14px; margin:18px 0; }
+  .keyword .kw-label{ font-family:var(--mono); font-size:12px; color:var(--gold); margin:14px 0 8px; display:block; letter-spacing:.02em; }
+  .keyword dl{ margin:0; }
+  .keyword dt{ font-family:var(--mono); font-size:14.5px; color:var(--paper); font-weight:500; margin-top:8px; }
+  .keyword dt:first-child{ margin-top:0; }
+  .keyword dd{ margin:2px 0 0; color:var(--paper-dim); font-size:15px; }
+
+  .activity{ border:1px solid var(--trace); border-left:3px solid var(--signal); border-radius:var(--radius); background:var(--bg-raised); padding:2px 18px 16px; margin:18px 0; }
+  .activity .a-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:14px 0 6px; display:block; letter-spacing:.02em; }
+  .activity p:first-of-type{ margin-top:0; }
+
+  .discussion{ border:1px solid var(--trace); border-left:3px solid var(--brick); border-radius:var(--radius); background:var(--bg-raised); padding:2px 18px 16px; margin:18px 0; }
+  .discussion .d-label{ font-family:var(--mono); font-size:12px; color:var(--brick); margin:14px 0 6px; display:block; letter-spacing:.02em; }
+  .discussion p:first-of-type{ margin-top:0; }
+  .discussion textarea{ margin-top:8px; }
+  .discussion .d-note{ font-family:var(--mono); font-size:11.5px; color:var(--paper-dim); margin-top:6px; }
+
+  .research{ border:1px solid var(--trace); border-left:3px solid var(--sage); border-radius:var(--radius); background:var(--bg-raised); padding:2px 18px 16px; margin:18px 0; }
+  .research .r-label{ font-family:var(--mono); font-size:12px; color:var(--sage); margin:14px 0 6px; display:block; letter-spacing:.02em; }
+  .research p:first-of-type{ margin-top:0; }
+  .research textarea{ margin-top:8px; }
+  .research .r-note{ font-family:var(--mono); font-size:11.5px; color:var(--paper-dim); margin-top:6px; }
+
+  .worked{ border:1px solid var(--trace); border-left:3px solid var(--gold); border-radius:var(--radius); background:var(--bg-raised); padding:2px 18px 16px; margin:18px 0; }
+  .worked .w-label{ font-family:var(--mono); font-size:12px; color:var(--gold); margin:14px 0 6px; display:block; letter-spacing:.02em; }
+  .worked p:first-of-type{ margin-top:0; }
+  .worked ol, .worked ul{ margin:8px 0; }
+  .worked code, .worked .calc{ font-family:var(--mono); font-size:14.5px; color:var(--signal-bright); }
+
+  .aside{ border:1px dashed var(--trace); border-radius:var(--radius); background:transparent; padding:10px 16px; margin:16px 0; }
+  .aside .as-label{ font-family:var(--mono); font-size:11px; color:var(--paper-dim); margin:0 0 4px; display:block; letter-spacing:.03em; text-transform:uppercase; }
+  .aside p{ margin:0; font-size:15px; color:var(--paper-dim); }
+
+  .task{ margin:32px 0; border:1px solid var(--trace); border-radius:var(--radius); background: var(--bg-raised); padding:20px 20px 22px; }
+  .task-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .task-label .pts{color:var(--sage);}
+  .task h4{ margin:0 0 12px; font-family:var(--serif); font-weight:600; font-size:16.5px; color:var(--paper); }
+  .task .sub-q{margin:18px 0;}
+  .task .sub-q:first-child{margin-top:0;}
+  .sub-q label{ display:block; font-family:var(--serif); font-size:15.5px; margin-bottom:8px; color:var(--paper); }
+
+  textarea{
+    width:100%; min-height:52px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-radius:var(--radius); color:var(--paper); font-family:var(--serif);
+    font-size:15.5px; padding:10px 12px; resize:vertical;
+  }
+  textarea:focus, button:focus-visible, .opt:focus-visible, summary:focus-visible, input[type=checkbox]:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:1px; }
+  .row{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+
+  button{
+    font-family:var(--mono); font-size:13px; background:var(--signal); color:#04141a;
+    border:none; padding:9px 15px; border-radius:var(--radius); cursor:pointer; font-weight:500;
+  }
+  button:hover{background:var(--signal-bright);}
+  button.ghost{ background:transparent; border:1px solid var(--trace); color:var(--paper-dim); }
+  button.ghost:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  button:disabled{opacity:.5; cursor:default;}
+
+  .error-msg{ color:var(--brick); font-family:var(--mono); font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show{display:block;}
+
+  .answer-reveal{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .answer-reveal.show{display:block;}
+  .answer-reveal .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:5px; }
+
+  .self-mark{ display:none; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:13px; color:var(--paper-dim); }
+  .self-mark.show{display:flex;}
+  .self-mark input[type=checkbox]{ width:17px; height:17px; accent-color: var(--gold); cursor:pointer; }
+  .self-mark label{cursor:pointer; margin:0; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+
+  .markpoints{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .markpoints.show{display:block;}
+  .markpoints .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:6px; }
+  .markpoints .mp-item{
+    display:flex; gap:10px; align-items:flex-start; margin:0; padding:7px 0;
+    border-bottom:1px solid var(--trace-dim); font-size:15px; font-weight:400; cursor:pointer;
+  }
+  .markpoints .mp-item:last-of-type{border-bottom:none;}
+  .markpoints .mp-item input{ width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--gold); cursor:pointer; }
+  .mp-foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; font-family:var(--mono); font-size:13px; }
+  .mp-count{ color:var(--gold); }
+  .mp-note{ color:var(--brick); }
+
+  .mcq{margin:20px 0;}
+  .mcq:first-of-type{margin-top:0;}
+  .mcq p.q{ font-family:var(--serif); font-size:15.5px; color:var(--paper); margin:0 0 10px; }
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:10px 13px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer; font-weight:400;
+  }
+  .opt:hover:not(:disabled){border-color:var(--signal); background:var(--bg-deep);}
+  .opt.correct{border-color:var(--sage); background:rgba(134,201,160,0.14);}
+  .opt.incorrect{border-color:var(--brick); background:rgba(224,104,92,0.14);}
+  .opt:disabled{cursor:default;}
+  .mcq-feedback{ font-family:var(--mono); font-size:13px; margin-top:8px; min-height:1.2em; }
+  .mcq-feedback.ok{color:var(--sage);}
+  .mcq-feedback.bad{color:var(--brick);}
+
+  .classify-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 0; border-bottom:1px solid var(--trace-dim); flex-wrap:wrap;
+  }
+  .classify-item:last-child{border-bottom:none;}
+  .classify-item .term{font-size:15px; max-width:60%;}
+  .classify-item .choices{display:flex; gap:8px; flex-wrap:wrap;}
+  .classify-item .choices button{
+    background:transparent; border:1px solid var(--trace); color:var(--paper-dim);
+    font-size:12px; padding:6px 10px;
+  }
+  .classify-item .choices button:hover:not(:disabled){ color:var(--paper); border-color:var(--paper-dim); }
+  .classify-item .choices button.correct{background:rgba(134,201,160,0.16); border-color:var(--sage); color:var(--paper);}
+  .classify-item .choices button.incorrect{background:rgba(224,104,92,0.16); border-color:var(--brick); color:var(--paper);}
+  @media (max-width:600px){ .classify-item .term{max-width:100%;} }
+
+  #score-badge{
+    position:fixed; top:14px; right:14px; z-index:50; font-family:var(--mono); font-size:13px;
+    background:var(--bg-raised); border:1px solid var(--signal); color:var(--signal-bright);
+    padding:8px 13px; border-radius:var(--radius); box-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  #score-badge .n{color:var(--gold); font-weight:700;}
+
+  footer{ max-width:760px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    header.hero{padding:36px 20px 26px;}
+    #score-badge{top:auto; bottom:14px; right:14px;}
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+</style>
+</head>
+<body>
+
+<div id="score-badge">Score: <span class="n" id="score-val">0</span> / <span id="score-max">0</span></div>
+
+<nav class="theory-nav">
+  <a class="disabled" href="#" aria-disabled="true">← <span class="full">Previous theory</span></a>
+  <span class="spacer"></span>
+  <a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a>
+</nav>
+
+<header class="hero">
+  <p class="kicker">Cambridge AS &amp; A Level IT · Chapter 1 Data, Information and Knowledge</p>
+  <h1 class="title">Data, Information and Knowledge</h1>
+  <p>Raw data only becomes useful once it has meaning. This chapter covers what separates data from information, what makes information good quality, how encryption keeps data secure, how systems check data is accurate, and the different ways data gets processed.</p>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-panel="datainfo">1.1 Data &amp; information</button>
+  <button class="tab-btn" data-panel="quality">1.2 Quality</button>
+  <button class="tab-btn" data-panel="encryption">1.3 Encryption</button>
+  <button class="tab-btn" data-panel="accuracy">1.4 Accuracy checks</button>
+  <button class="tab-btn" data-panel="processing">1.5 Data processing</button>
+</nav>
+
+<div class="wrap">
+
+<div class="panel active" id="panel-datainfo">
+  <h2 class="section-title">Data and information <span class="tag">1.1</span></h2>
+
+  <h3>Data</h3>
+  <p><strong>Data</strong> is raw numbers, letters, symbols, sounds or images without meaning.</p>
+<div class="aside"><span class="as-label">Did you know?</span><p>The word ‘data’ is plural. In English we often also say ‘a piece of data’ as well, even though data is plural — both ‘pieces of data’ and ‘a piece of data’ are correct.</p></div>
+
+  <p>Some examples of data are: <code>P952BR</code>, <code>@bbcclick</code>, <code>359</code>, <code>23557.99</code>. A picture with no description of what it shows is also an example of raw data.</p>
+  <p>The data <code>P952BR</code> could have several meanings: a product code, a postal/ZIP code, or a car registration number. Because we don't know what the data means, it's meaningless.</p>
+<div class="aside"><span class="as-label">Tip</span><p>When answering a question such as ‘Give one item of data’, don’t try to explain what the data means — that would make it information, not data. Just give numbers, letters, symbols or images.</p></div>
+
+  <h3>Information</h3>
+  <p>When we give data meaning or context, it becomes <strong>information</strong> — something a person reading it will understand. We turn data into information by giving it two things.</p>
+  <p>First, we give it <strong>context</strong>, which tells us what the data item represents:</p>
+<div class="table-scroll">
+<table>
+<tr><th>Data</th><th>Context</th><th>Comment</th></tr>
+<tr><td>P952BR</td><td>A product code</td><td>Still not known what it's a product code for, so it's still data.</td></tr>
+<tr><td>@bbcclick</td><td>An ‘X’ handle</td><td>Not information unless it's known to be an X handle or used within X software — and whose address it is.</td></tr>
+<tr><td>359</td><td>Price</td><td>A currency value, but it's not known what the price is for, so it's still data.</td></tr>
+</table>
+</div>
+
+  <p>Second, we give the data <strong>meaning</strong>:</p>
+<div class="table-scroll">
+<table>
+<tr><th>Data</th><th>Context</th><th>Comment</th></tr>
+<tr><td>P952BR</td><td>A product code</td><td>A product code for a can of noodles.</td></tr>
+<tr><td>@bbcclick</td><td>An ‘X’ handle</td><td>The X address for the BBC's weekly technology show, Click.</td></tr>
+<tr><td>359</td><td>Price</td><td>The price of a mobile phone cover.</td></tr>
+</table>
+</div>
+
+  <p class="note">Data + Context + Meaning = Information</p>
+
+  <h3>Sources of direct data</h3>
+  <p>A <strong>direct data source</strong> (also called a <strong>primary source</strong>) is data collected and used for a specific purpose, and must be used for that same purpose it was collected for. The data will often be collected or requested by the individual or organisation who intends to use it; the person collecting it must know the purpose it's intended for.</p>
+  <p>For example, to find out how much a pair of shoes costs in different shops, direct sources could include visiting shops and noting the prices, visiting shop websites, or surveying shop owners.</p>
+  <p><strong>Questionnaires</strong> are useful for collecting many responses, and need to be designed carefully to capture the information required, enable effective analysis, and be quick to complete. Online questionnaires often store data directly into a database, saving time and money.</p>
+  <p><strong>Interviews</strong> ask questions directly to respondents, and let the interviewer ask further questions based on the answers given.</p>
+  <p><strong>Data logging</strong> is the process of automatically collecting data through a computer's sensors, storing it for later use — for example, a scientist automatically logging river water quality to analyse afterwards.</p>
+  <p><strong>Observation</strong> collects data directly, such as watching and counting traffic, or recording video of an event to watch back and analyse.</p>
+
+  <h3>Sources of indirect data</h3>
+  <p>An <strong>indirect data source</strong> (also called a <strong>secondary source</strong>) is data collected for one purpose but then used for something different. It may be collected by the same person who later uses it, or by someone else entirely.</p>
+  <p>For example, to find shoe prices indirectly, you could look at a sales catalogue (collected for a wide range of shoes, not just the ones you want) or till receipts (there to prove purchase, not to show the going price).</p>
+
+  <h3>Common examples of indirect data</h3>
+  <p><strong>Weather data</strong> — no single person could collect weather data across a whole country, so large weather data centres use remote sensors worldwide to collect it in real time. They collect temperature, humidity, UV light levels, wind speed and direction, rainfall, and air pressure, which is used to predict a weather forecast.</p>
+  <p><strong>Census data</strong> — a census counts the people in a country and asks about aspects of their lives, such as jobs, age, qualifications and health. Governments use it to plan hospitals and transport; a toy store, for instance, might use it as an indirect source to see how many young people live in a region.</p>
+  <p><strong>Electoral registers</strong> — kept mainly so registered voters can vote, but can indirectly be used to check whether someone lives at an address, or to count how many people live in a household.</p>
+  <p><strong>Personal information collected by businesses</strong> — if you consent when buying something or signing up online, a business may pass your details to third parties for marketing. Businesses also buy lists of email or home addresses to target their marketing — for example, a textbook company benefiting from a list of teachers' emails. Most countries require businesses to get consent before sharing a customer's data with a third party.</p>
+  <p><strong>Research</strong> — using a library, textbook, journal or website to research something is using an indirect source: the information wasn't created specifically for your purpose.</p>
+
+  <h3>Comparing direct and indirect data</h3>
+<div class="table-scroll">
+<table>
+<tr><th>Direct data source</th><th>Indirect data source</th></tr>
+<tr><td>The data is relevant, because what's needed has been collected</td><td>Additional, unneeded data will exist and may take time to sort through; some needed data may not exist at all</td></tr>
+<tr><td>The original source is known, so it can be trusted</td><td>The original source may not be known, so it may not be trustworthy</td></tr>
+<tr><td>Can take a long time to gather</td><td>Immediately available</td></tr>
+<tr><td>A large sample can be hard to collect for a one-off purpose</td><td>Large samples are more likely to already be available for statistical analysis</td></tr>
+<tr><td>Likely up to date, since it was recently collected</td><td>May be out of date, since it was collected at a different time</td></tr>
+<tr><td>Can reduce bias</td><td>May be biased</td></tr>
+<tr><td>Can be collected and presented in the format required</td><td>Unlikely to be in the required format, which can make extracting it difficult</td></tr>
+</table>
+</div>
+<div class="task" data-task="classify" data-points="6">
+  <p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p>
+  <h4>Click whether each source is a direct or an indirect source of data.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="indirect"><span class="term">Looking at till receipts to work out what a shop charges for an item</span><span class="choices"><button data-choice="direct">Direct source</button><button data-choice="indirect">Indirect source</button></span></div>
+    <div class="classify-item" data-answer="direct"><span class="term">Carrying out your own survey of shop owners about their prices</span><span class="choices"><button data-choice="direct">Direct source</button><button data-choice="indirect">Indirect source</button></span></div>
+    <div class="classify-item" data-answer="indirect"><span class="term">Using last year's national census data to estimate how many children live in a town</span><span class="choices"><button data-choice="direct">Direct source</button><button data-choice="indirect">Indirect source</button></span></div>
+    <div class="classify-item" data-answer="direct"><span class="term">A scientist logging river water quality directly from their own sensors</span><span class="choices"><button data-choice="direct">Direct source</button><button data-choice="indirect">Indirect source</button></span></div>
+    <div class="classify-item" data-answer="indirect"><span class="term">Reading a sales catalogue to compare shoe prices</span><span class="choices"><button data-choice="direct">Direct source</button><button data-choice="indirect">Indirect source</button></span></div>
+    <div class="classify-item" data-answer="direct"><span class="term">Interviewing people directly and asking follow-up questions based on their answers</span><span class="choices"><button data-choice="direct">Direct source</button><button data-choice="indirect">Indirect source</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="4">
+  <p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p>
+  <h4>Answer each question about data and information.</h4>
+  <div class="sub-q">
+    <label>a) What two things must be added to data to turn it into information?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Context and meaning</div>
+    <div class="self-mark"><input type="checkbox" id="sm-1"><label for="sm-1">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>b) Give one reason the item of data ‘P952BR’ alone is meaningless.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>It could mean several different things (e.g. a product code, postal code or car registration), so without more context it isn't known what it actually represents</div>
+    <div class="self-mark"><input type="checkbox" id="sm-2"><label for="sm-2">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>c) What is the key difference between a direct and an indirect data source?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>A direct (primary) source is collected and used for the same specific purpose; an indirect (secondary) source is collected for one purpose but then used for something different</div>
+    <div class="self-mark"><input type="checkbox" id="sm-3"><label for="sm-3">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>d) Give one risk of using an indirect data source.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Any one of: it may be out of date, unknown/untrustworthy, biased, not in the needed format, or contain irrelevant extra data</div>
+    <div class="self-mark"><input type="checkbox" id="sm-4"><label for="sm-4">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="0"><p class="q">1. Which of these turns data into information?</p><div class="opts"><button class="opt" data-idx="0">Adding context and meaning</button><button class="opt" data-idx="1">Making the data longer</button><button class="opt" data-idx="2">Encrypting the data</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">2. Why is a census an indirect source when used by a toy company to plan stock?</p><div class="opts"><button class="opt" data-idx="0">It was collected for a different purpose (counting the population) than the company's use (planning stock)</button><button class="opt" data-idx="1">Censuses are always inaccurate</button><button class="opt" data-idx="2">Census data cannot legally be reused</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">3. Which is normally an advantage of a direct data source over an indirect one?</p><div class="opts"><button class="opt" data-idx="0">It is more likely to be relevant and trustworthy</button><button class="opt" data-idx="1">It is always free to collect</button><button class="opt" data-idx="2">It is available instantly with no effort</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+<div class="panel" id="panel-quality">
+  <h2 class="section-title">Quality of information <span class="tag">1.2</span></h2>
+  <p>The quality of information can be affected by several factors, including how accurate and complete it is.</p>
+
+  <h3>Accuracy</h3>
+  <p>Data must be accurate to be good quality. If a friend asks you to meet them at a large shopping centre but gives no further detail, you may not be able to find them — more accurate data, such as "meet me outside &lt;name of shop&gt; at 17:00", would help you locate each other.</p>
+  <p>Examples of inaccurate information include a decimal point in the wrong place (e.g. $90.30 instead of $903.00, making something look far cheaper than it is), spelling mistakes or the wrong words, and inaccurate context (e.g. using the wrong month's data to predict a shop's stock needs).</p>
+
+  <h3>Relevance</h3>
+  <p>Information must be relevant to its purpose. Extra information that isn't needed means the user has to search through the data to find what they actually want.</p>
+  <p>Examples of irrelevant information include being told the colour of a bus when you just need its arrival time, being told a car's rental price when you want to buy it, or a phone's user guide including instructions for assembling an electrical plug.</p>
+
+  <h3>Age</h3>
+  <p>Information must be up to date to be useful; old information is often no longer useful.</p>
+<div class="aside"><span class="as-label">Tip</span><p>When using indirect data sources, always check when the information was produced — there may be newer information available with more up-to-date results.</p></div>
+
+  <p>Examples of out-of-date information include using 40-year-old census data to find a town's current population, or using the score from the start of a sports match when it's nearly over.</p>
+
+  <h3>Level of detail</h3>
+  <p>Good quality information has exactly the right amount of detail. Too much detail makes it hard to find what's actually needed; too little means it can't be used correctly.</p>
+  <p>For example, someone ordering a vegetarian pizza who forgets to say which base they want, or give a delivery address, hasn't given the pizza company enough information to fulfil the order. Or a rail company's automated phone message might list the arrival time at every station on a route, forcing a passenger to wait through the whole message just to hear the one time they need.</p>
+
+  <h3>Completeness</h3>
+  <p>All required information must be provided for data to be good quality; missing information means it can't be used properly. For example, a garage mechanic who gives a customer a street name but not the building number has given incomplete information — the customer may not be able to find the right place.</p>
+<div class="task" data-task="classify" data-points="5">
+  <p class="task-label"><span>Sort it</span><span class="pts">5 points</span></p>
+  <h4>Click which quality factor is most clearly missing in each scenario.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="detail"><span class="term">A rail company's automated message lists every station's arrival time before giving the one the caller actually wants</span><span class="choices"><button data-choice="acc">Accuracy</button><button data-choice="rel">Relevance</button><button data-choice="age">Age</button><button data-choice="detail">Level of detail</button><button data-choice="comp">Completeness</button></span></div>
+    <div class="classify-item" data-answer="comp"><span class="term">A mechanic gives a street name but leaves out the building number</span><span class="choices"><button data-choice="acc">Accuracy</button><button data-choice="rel">Relevance</button><button data-choice="age">Age</button><button data-choice="detail">Level of detail</button><button data-choice="comp">Completeness</button></span></div>
+    <div class="classify-item" data-answer="age"><span class="term">A shop's stock prediction uses last July's sales data to plan for this December</span><span class="choices"><button data-choice="acc">Accuracy</button><button data-choice="rel">Relevance</button><button data-choice="age">Age</button><button data-choice="detail">Level of detail</button><button data-choice="comp">Completeness</button></span></div>
+    <div class="classify-item" data-answer="rel"><span class="term">A phone's user guide includes instructions for fitting an electrical plug</span><span class="choices"><button data-choice="acc">Accuracy</button><button data-choice="rel">Relevance</button><button data-choice="age">Age</button><button data-choice="detail">Level of detail</button><button data-choice="comp">Completeness</button></span></div>
+    <div class="classify-item" data-answer="acc"><span class="term">A receipt shows $90.30 instead of $903.00 because of a misplaced decimal point</span><span class="choices"><button data-choice="acc">Accuracy</button><button data-choice="rel">Relevance</button><button data-choice="age">Age</button><button data-choice="detail">Level of detail</button><button data-choice="comp">Completeness</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="3">
+  <p class="task-label"><span>Worked example</span><span class="pts">3 points</span></p>
+  <h4>Answer each question about information quality.</h4>
+  <div class="sub-q">
+    <label>a) Name the five factors that can affect the quality of information covered on this page.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Accuracy, relevance, age, level of detail, and completeness</div>
+    <div class="self-mark"><input type="checkbox" id="sm-5"><label for="sm-5">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>b) Why can having too much detail in information still be a quality problem?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Because it becomes difficult to find the exact information actually required</div>
+    <div class="self-mark"><input type="checkbox" id="sm-6"><label for="sm-6">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>c) Give one example of information that could be considered out of date.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Any reasonable example, e.g. using an old census to estimate a town's current population, or an old sports score</div>
+    <div class="self-mark"><input type="checkbox" id="sm-7"><label for="sm-7">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="0"><p class="q">1. Why is 'meet me at the shopping centre' lower quality than 'meet me outside Zara at 17:00'?</p><div class="opts"><button class="opt" data-idx="0">It lacks the detail needed to actually locate each other</button><button class="opt" data-idx="1">It is grammatically incorrect</button><button class="opt" data-idx="2">It is too long</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">2. What quality factor is missing if a form is only partially filled in?</p><div class="opts"><button class="opt" data-idx="0">Completeness</button><button class="opt" data-idx="1">Age</button><button class="opt" data-idx="2">Relevance</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">3. Why might 40-year-old census data be a poor source for today's town population?</p><div class="opts"><button class="opt" data-idx="0">Its age means the information is likely out of date</button><button class="opt" data-idx="1">Census data is never accurate</button><button class="opt" data-idx="2">It was never relevant in the first place</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+<div class="panel" id="panel-encryption">
+  <h2 class="section-title">Encryption <span class="tag">1.3</span></h2>
+  <p><strong>Encryption</strong> is the process of encoding data so that it can't be understood or used by anyone who isn't authorised to access it. Encrypted data is called <strong>cipher text</strong>, and unencrypted data is called <strong>plain text</strong>. If a hacker intercepts encrypted data, it will appear meaningless to them unless they can decrypt it, so encryption doesn't prevent data from being intercepted — it just stops that data being of any use to an unauthorised person.</p>
+
+  <h3>Symmetric encryption</h3>
+  <p>In <strong>symmetric encryption</strong>, the same key is used to encrypt and decrypt the data. This key must be known by both the sender and the receiver.</p>
+<div class="block">
+  <ol>
+    <li>The data (plain text) is encrypted using the key, turning it into cipher text</li>
+    <li>The cipher text is sent to the receiver</li>
+    <li>The receiver decrypts the cipher text using the same key, turning it back into plain text</li>
+  </ol>
+</div>
+
+  <p>A weakness of symmetric encryption is that the key itself has to be shared between sender and receiver at some point, and if that key is intercepted while being shared, an unauthorised person could use it to decrypt the data too.</p>
+
+  <h3>Asymmetric encryption</h3>
+  <p><strong>Asymmetric encryption</strong> uses two keys: a <strong>public key</strong> and a <strong>private key</strong>. The public key can be shared with anyone and is used to encrypt data; the private key is kept secret by its owner and is used to decrypt data.</p>
+<div class="block">
+  <ol>
+    <li>The receiver generates a public key and a private key, and shares the public key with anyone who may want to send them data (the private key is never shared)</li>
+    <li>The sender uses the receiver's public key to encrypt the data</li>
+    <li>The cipher text is sent to the receiver</li>
+    <li>The receiver uses their own private key to decrypt the cipher text back into plain text</li>
+  </ol>
+</div>
+
+  <p>Because the private key is never shared or transmitted, asymmetric encryption avoids the key-sharing weakness of symmetric encryption — even if the public key is intercepted, it can only be used to encrypt data, not decrypt it.</p>
+
+  <h3>Comparing symmetric and asymmetric encryption</h3>
+<div class="table-scroll">
+<table>
+<tr><th></th><th>Symmetric</th><th>Asymmetric</th></tr>
+<tr><td>Number of keys</td><td>One key, shared by sender and receiver</td><td>Two keys: a public key and a private key</td></tr>
+<tr><td>Speed</td><td>Faster, since only one key is used</td><td>Slower, since two keys are involved in the process</td></tr>
+<tr><td>Key sharing risk</td><td>The single key must be shared, risking interception</td><td>The private key is never shared, so it can't be intercepted</td></tr>
+<tr><td>Typical use</td><td>Encrypting large amounts of data quickly</td><td>Securely exchanging a symmetric key, or authenticating a sender</td></tr>
+</table>
+</div>
+<div class="task" data-task="classify" data-points="5">
+  <p class="task-label"><span>Sort it</span><span class="pts">5 points</span></p>
+  <h4>Click whether each statement describes symmetric or asymmetric encryption.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="asym"><span class="term">Uses a public key to encrypt and a separate private key to decrypt</span><span class="choices"><button data-choice="sym">Symmetric</button><button data-choice="asym">Asymmetric</button></span></div>
+    <div class="classify-item" data-answer="sym"><span class="term">The same single key is used for both encryption and decryption</span><span class="choices"><button data-choice="sym">Symmetric</button><button data-choice="asym">Asymmetric</button></span></div>
+    <div class="classify-item" data-answer="asym"><span class="term">The private key is never shared with anyone else</span><span class="choices"><button data-choice="sym">Symmetric</button><button data-choice="asym">Asymmetric</button></span></div>
+    <div class="classify-item" data-answer="sym"><span class="term">Is generally faster, since only one key is involved</span><span class="choices"><button data-choice="sym">Symmetric</button><button data-choice="asym">Asymmetric</button></span></div>
+    <div class="classify-item" data-answer="sym"><span class="term">The key must be shared between sender and receiver, risking interception</span><span class="choices"><button data-choice="sym">Symmetric</button><button data-choice="asym">Asymmetric</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="4">
+  <p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p>
+  <h4>Answer each question about encryption.</h4>
+  <div class="sub-q">
+    <label>a) What is encrypted data called?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Cipher text</div>
+    <div class="self-mark"><input type="checkbox" id="sm-8"><label for="sm-8">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>b) What is unencrypted, readable data called?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Plain text</div>
+    <div class="self-mark"><input type="checkbox" id="sm-9"><label for="sm-9">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>c) Why doesn't encryption stop data being intercepted?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>It only makes the data meaningless to anyone without the key to decrypt it — the data itself can still be intercepted</div>
+    <div class="self-mark"><input type="checkbox" id="sm-10"><label for="sm-10">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>d) Which type of encryption avoids the risk of the decryption key being intercepted while it's shared?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Asymmetric encryption, because the private key used to decrypt is never shared</div>
+    <div class="self-mark"><input type="checkbox" id="sm-11"><label for="sm-11">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="0"><p class="q">1. What is the main weakness of symmetric encryption?</p><div class="opts"><button class="opt" data-idx="0">The single shared key could be intercepted while being shared</button><button class="opt" data-idx="1">It cannot be used on large files</button><button class="opt" data-idx="2">It never actually encrypts the data</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">2. In asymmetric encryption, which key is used to encrypt data before sending it?</p><div class="opts"><button class="opt" data-idx="0">The receiver's public key</button><button class="opt" data-idx="1">The receiver's private key</button><button class="opt" data-idx="2">The sender's private key</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">3. Why is asymmetric encryption generally slower than symmetric encryption?</p><div class="opts"><button class="opt" data-idx="0">It uses two keys in the process instead of one</button><button class="opt" data-idx="1">It only works on text files</button><button class="opt" data-idx="2">It does not use a key at all</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+<div class="panel" id="panel-accuracy">
+  <h2 class="section-title">Checking the accuracy of data <span class="tag">1.4</span></h2>
+
+  <h3>Validation</h3>
+  <p><strong>Validation</strong> is the process of checking that data matches acceptable rules, to make sure it's sensible. <strong>Valid</strong> data meets the rules and is stored; <strong>invalid</strong> data doesn't meet the rules and is rejected.</p>
+  <p>For example, a registration form could use a check to stop a user leaving the email address field blank, forcing them to enter something. Despite this, validation never guarantees data is actually correct — it can make sure an email address field isn't blank, but it can't check that what was entered is a real, working email address.</p>
+<div class="activity"><span class="a-label">Unplugged activity 1.03</span><p>Create a flowchart to describe the process of validation. It should include: Start; End; input of data; an error message; data accepted; data rejected; and the validation decision itself.</p></div>
+
+  <p>There are several different validation checks — different types of rule — that can be used to decide whether data is acceptable.</p>
+
+  <h3>Presence check</h3>
+  <p>A <strong>presence check</strong> makes sure data is entered at all. If data is entered, it's accepted; if not, the user sees an error message asking them to enter it. Fields marked with an asterisk (*) on a form are often required this way.</p>
+<div class="worked"><span class="w-label">Worked example 1.01</span><p>On a ‘contact us’ form, an email address is required. A presence check would accept any of these: <code>a</code>, <code>a@b</code>, <code>abc@bc.com</code>, <code>@</code>, <code>372823</code>. Not all of these are real email addresses, but they all pass the rule that <em>something</em> must be present.</p></div>
+
+  <h3>Range check</h3>
+  <p>A <strong>range check</strong> makes sure data falls within a defined range. A <strong>limit check</strong> has a single boundary — either the highest or the lowest allowed value. A range check has two boundaries: a lower and an upper one. The symbols &gt;, &lt;, &gt;= and &lt;= are used to compare against these boundaries.</p>
+<div class="worked"><span class="w-label">Worked example 1.02</span><ol><li>To join a club you must be over 18. The lower boundary is 18, with no upper boundary, so this is a limit check: <code>Age &gt;= 18</code>.</li><li>Exam grades must be the letters A to E. The lower boundary is A and the upper is E (the grade must be less than F), so this is a range check: <code>A &lt; Grade &lt; F</code>.</li></ol><p>Data within the boundaries is valid, but valid data may still not be correct — a grade of C could be entered when A should have been, and C is still valid even though it's wrong.</p></div>
+
+  <h3>Type check</h3>
+  <p>A <strong>type check</strong> makes sure data is of a defined data type — for example, an age must be an integer, a grade must be text with no numbers, a price must be numerical, and a date of birth must be a date. Data of the correct type still isn't guaranteed to be correct: a date of birth of 28/12/2087 is a valid date, but clearly wrong, since that year hasn't happened yet.</p>
+
+  <h3>Length check</h3>
+  <p>A <strong>length check</strong> makes sure data is a defined length, or within a range of lengths — often used with text. For example, a password must be at least six characters, a grade must be exactly one character, or a product code must be four to six characters. Data of the right length still isn't guaranteed to be correct: a six-letter code like <code>WWDDWW</code> would pass a length check, even if it isn't an actual product code the business sells.</p>
+
+  <h3>Format check</h3>
+  <p>A <strong>format check</strong> (sometimes called a picture check or input mask) makes sure data matches a defined pattern.</p>
+<div class="worked"><span class="w-label">Worked example 1.03</span><p>An email address must include an @ symbol, preceded by at least one character and followed by more characters. <code>john@bldef.co</code>, <code>a@b.dek</code> and <code>fdc@jb</code> would all be valid by this rule. Valid data still isn't guaranteed to be correct — <code>fdc@jb</code> meets the pattern but isn't a genuine address.</p></div>
+
+  <h3>Lookup check</h3>
+  <p>A <strong>lookup check</strong> tests whether data exists in a list. For example, a qualification might be graded pass (P), merit (M), distinction (D) or fail (F), so a validation rule could check that only P, M, D or F is entered.</p>
+
+  <h3>Consistency check</h3>
+  <p>A <strong>consistency check</strong> compares data in one field against data already held in another field in the same record, to see whether the two are consistent with each other.</p>
+<div class="worked"><span class="w-label">Worked example 1.04</span><p>A system that records store discounts won't let a discount be entered unless the same record already shows that person has a store membership number.</p></div>
+
+  <h3>Check digit</h3>
+  <p>A <strong>check digit</strong> is a number (or letter) added to the end of an identification number. It's a form of <strong>redundancy check</strong>, because the digit itself isn't needed for the identification number — it only exists for validation. Check digits are commonly used in barcodes, seen on price labels, car parts and invoices.</p>
+  <p>When an identification number is first created, an algorithm (a series of calculations) generates its check digit. When the number is later entered, the same algorithm runs again, and the result should match the stored check digit. If it matches, the data is valid; if it doesn't, the data is invalid. Different systems use different calculations, but the same calculation must always be used both to create and to check a given check digit.</p>
+<div class="worked"><span class="w-label">Worked example 1.05 — the UPC/ISBN check digit algorithm</span><p>The algorithm for a 13-digit barcode works like this:</p><ol><li>Add all the digits in even-numbered positions together.</li><li>Multiply that result by 3.</li><li>Add all the digits in odd-numbered positions together.</li><li>Add the results of steps 2 and 3 together.</li><li>Divide that result by 10.</li><li>Take the remainder (modulo 10) of that division.</li><li>Subtract that remainder from 10.</li></ol><p><strong>Valid example:</strong> the ISBN 978095734041‑1 has a check digit of 1. Running the algorithm on 978095734041: even-position digits <span class="calc">7+0+5+3+0+1 = 16</span>; <span class="calc">16 × 3 = 48</span>; odd-position digits <span class="calc">9+8+9+7+4+4 = 41</span>; <span class="calc">48+41 = 89</span>; <span class="calc">89 ÷ 10 = 8.9</span>; <span class="calc">89 MOD 10 = 9</span>; <span class="calc">10 − 9 = 1</span>. The result, 1, matches the check digit — the ISBN is valid.</p><p><strong>Invalid example:</strong> two digits are accidentally transposed, giving 978095374041‑1. Even-position digits now sum to <span class="calc">7+0+5+7+0+1 = 20</span>; <span class="calc">20 × 3 = 60</span>; odd-position digits sum to <span class="calc">9+8+9+3+4+4 = 37</span>; <span class="calc">60+37 = 97</span>; <span class="calc">97 ÷ 10 = 9.7</span>; <span class="calc">97 MOD 10 = 7</span>; <span class="calc">10 − 7 = 3</span>. The result, 3, does not match the check digit of 1 — the ISBN entered is invalid.</p></div>
+<div class="activity"><span class="a-label">Activity 1.04</span><p>Use a website to generate check digits for product codes. The usual UPC algorithm multiplies the <em>odd</em> digits by 3 rather than the even ones — it's only for 13-character barcodes that the even digits are multiplied by 3. Find out how to calculate a check digit for ten-digit barcodes.</p></div>
+
+  <h3>Verification and validation</h3>
+  <p><strong>Verification</strong> is the process of checking that data entered matches its original source — unlike validation, which only checks data is of the right type or format. For example, when entering a date of birth into a database: verification might ask you to type the date a second time to make sure you typed it correctly; validation would just check that what you typed has a day, a month and a year.</p>
+
+  <h3>Visual checking</h3>
+  <p>A <strong>visual check</strong> needs a person to read both the source data and the newly entered data, and check they match. If they match, the check has passed; if not, it has failed and the data needs re-entering. However, if the original source itself was wrong, visual checking can't catch that — for example, if a sales assistant wrote $500.00 on a paper invoice when they meant $5,000.00, double-checking the computer entry against that same incorrect invoice wouldn't find the mistake.</p>
+
+  <h3>Double data entry</h3>
+  <p>In <strong>double data entry</strong>, data is entered into the system twice, and the computer compares the two entries. If they match, the data is verified; if they differ, one of the entries must have been wrong. This is why changing a password usually asks you to type the new password twice. It's still possible to pass this check with incorrect data — if the same mistake, such as a spelling error, is made both times, the two entries will still match.</p>
+
+  <h3>Hash total</h3>
+  <p>A <strong>hash total</strong> compares the sum of the values in one field against the sum of the same field in the original data. Before data entry, someone manually adds up the values for all the records; once entry is complete, the computer adds up the same field automatically and compares the two totals. If they differ, a mistake was made somewhere — either during entry or in the manual calculation.</p>
+<div class="worked"><span class="w-label">Worked example 1.06 — a hash total catching an error</span><p>Three students' coursework marks are 74, 38 and 82. The hash total calculated by hand beforehand is <span class="calc">74 + 38 + 82 = 194</span>. When entered, the marks are typed as 74, 83 and 82 — a mistake. The computer's total comes to 239, which doesn't match 194, so an error is flagged. The mistake was candidate 18264's mark: 38 was entered as 83.</p></div>
+<div class="worked"><span class="w-label">Worked example 1.07 — a hash total missing an error</span><p>The same three marks (74, 38, 82) give a hash total of 194. This time they're mistakenly entered as 73, 39 and 82. The computer's total is still <span class="calc">73 + 39 + 82 = 194</span> — matching the expected total, even though two of the three marks were entered incorrectly. The errors cancelled each other out, so the hash total didn't catch them.</p></div>
+
+  <h3>Control total</h3>
+  <p>A <strong>control total</strong> works the same way as a hash total, but — unlike a hash total, which can be calculated from any field and may have no real meaning on its own — a control total has a genuinely useful meaning, such as the total number of items in a stock order, or the total value of items on an order.</p>
+
+  <h3>Parity check</h3>
+  <p>A <strong>parity check</strong> finds errors introduced while transmitting data. Taking a single byte as an example: one bit is used as the <strong>parity bit</strong>, and the other seven bits carry the actual data. There are two kinds: <strong>even parity</strong>, where the total number of 1s in the byte must come out even, and <strong>odd parity</strong>, where it must come out odd. The parity bit itself is set to whichever value (0 or 1) makes that true.</p>
+<div class="worked"><span class="w-label">Worked example 1.08 — even parity</span><p>The 7 data bits <span class="calc">1 0 0 1 1 0 0</span> contain three 1s — an odd number. For even parity, the parity bit is set to 1, giving <span class="calc">1 0 0 1 1 0 0 1</span>. The receiver adds up the 1s in the byte received; if the total is even, the data is accepted.</p></div>
+<div class="worked"><span class="w-label">Worked example 1.09 — odd parity catching an error</span><p>The same 7 bits, <span class="calc">1 0 0 1 1 0 0</span>, again contain three 1s — already odd — so for odd parity the parity bit is set to 0, giving <span class="calc">1 0 0 1 1 0 0 0</span>. Suppose the byte actually received is <span class="calc">1 1 0 1 1 0 0 0</span>: that has four 1s, an even number. Since odd parity was expected, the system knows an error occurred — here, the second bit was flipped from 0 to 1 in transmission.</p></div>
+
+  <p>A parity check only detects that an error occurred — it doesn't correct it, so the data has to be sent again. It can reliably catch a single flipped bit, but not every error.</p>
+<div class="worked"><span class="w-label">Worked example 1.10 — a parity check missing an error</span><p>The 8-bit byte <span class="calc">1 0 0 1 1 0 0 1</span> is sent using even parity. It's received as <span class="calc">0 1 0 1 1 0 0 1</span> — the first two bits were both flipped. Because two bits changed, the total number of 1s is still even, so the even parity check accepts the data without noticing the error.</p></div>
+
+  <h3>Checksum</h3>
+  <p>A <strong>checksum</strong> is the result of a calculation performed on an entire file's contents, used to check whether that file was transmitted or copied correctly — and to check a hacker hasn't disguised a malicious file as a genuine one, since any slight change to a file produces a different checksum. A checksum is usually shown as hexadecimal digits (0–9 and A–F), with two hex digits representing one byte. Popular checksum algorithms include SHA-256, SHA-1 and MD5. If the checksum calculated before sending a file doesn't match the one calculated after, a transmission error occurred.</p>
+  <p>Although rare, MD5 and SHA-1 have been known to produce <strong>collisions</strong> — the same checksum generated for two different files — which could in theory let a hacker disguise a malicious file as a genuine one. This is very unlikely to happen by chance, so MD5 and SHA-1 remain suitable for catching ordinary transmission errors. No collisions have been reported for SHA-256, which is currently considered the safest of the three.</p>
+<div class="activity"><span class="a-label">Activity 1.05</span><p>Copy a file to a different folder, and compare the checksums of the original and the copy using an online checker — what do you notice? Now make a change to the copied file and compare the checksums again — what changes this time?</p></div>
+
+  <h3>The need for both validation and verification</h3>
+  <p>It's possible to enter valid data that is still incorrect, and it's possible to verify data that is incorrect. Using both validation and verification together reduces the chance of incorrect data being stored: if invalid-but-plausible data slips past a validation check, a verification check is more likely to catch it.</p>
+<div class="worked"><span class="w-label">Worked example 1.11</span><p>A test result must be a single letter: F, P, M or D. The letter N is entered — this passes validation (it's a single letter) but isn't an accepted grade. When verified by double entry, the user types N the first time and M the second time; since they don't match, verification catches the problem. However, if the user had typed N both times, both validation and verification would have failed to catch the error.</p></div>
+<div class="discussion"><span class="d-label">Reflection</span><p>How will you remember the different methods used for validation and for verification of data?</p></div>
+<div class="activity"><span class="a-label">Unplugged activity 1.06</span><p>Carry out a visual verification check on two sentences that should be identical, then use a validation-style check to count how many spelling, capitalisation or punctuation errors you can spot in the second one versus the first.</p></div>
+
+  <h3>Advantages and disadvantages of validation and verification</h3>
+<div class="table-scroll">
+<table>
+<tr><th></th><th>Validation</th><th>Verification</th></tr>
+<tr><td>Checks data entered is of the right type</td><td>Yes</td><td>No</td></tr>
+<tr><td>Checks data entered is correct</td><td>No</td><td>Yes</td></tr>
+<tr><td>Ensures data entered is correct</td><td>No</td><td>No</td></tr>
+<tr><td>Allows data to be stored in the same format</td><td>No</td><td>Yes</td></tr>
+<tr><td>Takes additional time to enter data</td><td>No</td><td>Yes</td></tr>
+<tr><td>Needs useful error messages if data is not accepted</td><td>Yes</td><td>Yes</td></tr>
+</table>
+</div>
+<div class="task" data-task="classify" data-points="8">
+  <p class="task-label"><span>Sort it</span><span class="pts">8 points</span></p>
+  <h4>Click which check is being used in each scenario.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="length"><span class="term">A password must contain at least six characters</span><span class="choices"><button data-choice="presence">Presence check</button><button data-choice="range">Range/limit check</button><button data-choice="type">Type check</button><button data-choice="length">Length check</button><button data-choice="format">Format check</button><button data-choice="lookup">Lookup check</button><button data-choice="consistency">Consistency check</button><button data-choice="checkdigit">Check digit</button></span></div>
+    <div class="classify-item" data-answer="checkdigit"><span class="term">A barcode's last digit is recalculated and compared against the one printed on the label</span><span class="choices"><button data-choice="presence">Presence check</button><button data-choice="range">Range/limit check</button><button data-choice="type">Type check</button><button data-choice="length">Length check</button><button data-choice="format">Format check</button><button data-choice="lookup">Lookup check</button><button data-choice="consistency">Consistency check</button><button data-choice="checkdigit">Check digit</button></span></div>
+    <div class="classify-item" data-answer="lookup"><span class="term">A grade can only be entered if it is one of the letters already listed as P, M, D or F</span><span class="choices"><button data-choice="presence">Presence check</button><button data-choice="range">Range/limit check</button><button data-choice="type">Type check</button><button data-choice="length">Length check</button><button data-choice="format">Format check</button><button data-choice="lookup">Lookup check</button><button data-choice="consistency">Consistency check</button><button data-choice="checkdigit">Check digit</button></span></div>
+    <div class="classify-item" data-answer="type"><span class="term">A date of birth field must contain a day, a month and a year</span><span class="choices"><button data-choice="presence">Presence check</button><button data-choice="range">Range/limit check</button><button data-choice="type">Type check</button><button data-choice="length">Length check</button><button data-choice="format">Format check</button><button data-choice="lookup">Lookup check</button><button data-choice="consistency">Consistency check</button><button data-choice="checkdigit">Check digit</button></span></div>
+    <div class="classify-item" data-answer="presence"><span class="term">An email field cannot be left blank</span><span class="choices"><button data-choice="presence">Presence check</button><button data-choice="range">Range/limit check</button><button data-choice="type">Type check</button><button data-choice="length">Length check</button><button data-choice="format">Format check</button><button data-choice="lookup">Lookup check</button><button data-choice="consistency">Consistency check</button><button data-choice="checkdigit">Check digit</button></span></div>
+    <div class="classify-item" data-answer="consistency"><span class="term">A discount cannot be entered unless the same record already shows a membership number</span><span class="choices"><button data-choice="presence">Presence check</button><button data-choice="range">Range/limit check</button><button data-choice="type">Type check</button><button data-choice="length">Length check</button><button data-choice="format">Format check</button><button data-choice="lookup">Lookup check</button><button data-choice="consistency">Consistency check</button><button data-choice="checkdigit">Check digit</button></span></div>
+    <div class="classify-item" data-answer="range"><span class="term">An age must be between 18 and 65 inclusive</span><span class="choices"><button data-choice="presence">Presence check</button><button data-choice="range">Range/limit check</button><button data-choice="type">Type check</button><button data-choice="length">Length check</button><button data-choice="format">Format check</button><button data-choice="lookup">Lookup check</button><button data-choice="consistency">Consistency check</button><button data-choice="checkdigit">Check digit</button></span></div>
+    <div class="classify-item" data-answer="format"><span class="term">An email address must contain an @ symbol with characters on both sides</span><span class="choices"><button data-choice="presence">Presence check</button><button data-choice="range">Range/limit check</button><button data-choice="type">Type check</button><button data-choice="length">Length check</button><button data-choice="format">Format check</button><button data-choice="lookup">Lookup check</button><button data-choice="consistency">Consistency check</button><button data-choice="checkdigit">Check digit</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="4">
+  <p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p>
+  <h4>Answer each question about validation and verification.</h4>
+  <div class="sub-q">
+    <label>a) What is the key difference between validation and verification?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Validation checks that data follows defined rules (such as type or format); verification checks that data entered matches its original source</div>
+    <div class="self-mark"><input type="checkbox" id="sm-12"><label for="sm-12">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>b) Why can a hash total sometimes fail to detect an error?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>If two or more entry mistakes happen to cancel each other out, the total can still match the expected hash total even though individual values are wrong</div>
+    <div class="self-mark"><input type="checkbox" id="sm-13"><label for="sm-13">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>c) What is the key difference between a hash total and a control total?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>A control total has a genuinely useful meaning (e.g. total items on an order), whereas a hash total can be calculated from any field and may have no meaning of its own</div>
+    <div class="self-mark"><input type="checkbox" id="sm-14"><label for="sm-14">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>d) Why might SHA-256 be considered safer than MD5 for checking a file hasn't been tampered with?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>No collisions (two different files producing the same checksum) have been reported for SHA-256, whereas MD5 and SHA-1 have occasionally been known to produce them</div>
+    <div class="self-mark"><input type="checkbox" id="sm-15"><label for="sm-15">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="6">
+  <p class="task-label"><span>Extended answer</span><span class="pts">6 points</span></p>
+  <h4>Explain, using examples, why validation and verification do not guarantee that data is correct. (6 marks)</h4>
+  <div class="sub-q mp" data-max="6">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 6)</span>
+      <label class="mp-item"><input type="checkbox"><span>Validation only checks that data follows a defined rule, not that it is actually true</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Example: a range check for grades A to E would accept a C when the correct grade was actually A</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Example: a type check would accept a date of birth of 28/12/2087, even though that year hasn't happened yet</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Verification only checks that two entries of data match each other, not that either is correct</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Example: visual checking against an incorrect original source (e.g. a wrongly written invoice) would still 'pass' even though the figure is wrong</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Example: double data entry would still match if the same mistake was typed identically both times</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Using both together reduces, but does not remove, the risk of incorrect data being accepted</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 6 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="4">
+  <p class="task-label"><span>Quick check</span><span class="pts">4 points</span></p>
+  <div class="mcq" data-answer="0"><p class="q">1. What does a presence check actually guarantee?</p><div class="opts"><button class="opt" data-idx="0">That something was entered in the field, not that it is correct</button><button class="opt" data-idx="1">That the data entered is definitely true</button><button class="opt" data-idx="2">That the data is the correct length</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">2. Why is a check digit described as a form of redundancy check?</p><div class="opts"><button class="opt" data-idx="0">It isn't needed for the identification number itself, and exists only for validation</button><button class="opt" data-idx="1">It must always be entered twice</button><button class="opt" data-idx="2">It removes unnecessary digits from a number</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">3. What is the main limitation of a parity check?</p><div class="opts"><button class="opt" data-idx="0">It can miss errors where more than one bit has changed</button><button class="opt" data-idx="1">It can only be used with text data</button><button class="opt" data-idx="2">It corrects errors automatically once found</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">4. Which best describes a checksum collision?</p><div class="opts"><button class="opt" data-idx="0">Two different files producing the same checksum value</button><button class="opt" data-idx="1">A file that cannot be checksummed at all</button><button class="opt" data-idx="2">A checksum that is always exactly 256 bits long</button></div><p class="mcq-feedback"></p></div>
+</div>
+</div>
+<div class="panel" id="panel-processing">
+  <h2 class="section-title">Data processing <span class="tag">1.5</span></h2>
+  <p><strong>Data processing</strong> is any activity that manipulates or carries out operations on data, including collection and storage, editing and updating, sorting and searching, and output and sharing. There are three types of processing: <strong>batch</strong>, <strong>online</strong> and <strong>real-time</strong>.</p>
+
+  <h3>Batch processing</h3>
+  <p>In <strong>batch processing</strong>, operations or transactions are stored in a long queue rather than processed immediately. The whole batch is processed automatically, all at once, at a later time — typically when immediate processing isn't needed. For example, a hard disk backup can run overnight, or employee wages can be processed at midnight. This avoids using CPU resources during busy periods, keeping the system responsive for other users at peak times. It suits systems where processing doesn't need to happen immediately for the business to keep running — similar to only running a washing machine once there's a full load, overnight when electricity may be cheaper.</p>
+  <p>Other examples of batch processing include preparing utility bills, updating credit and debit card accounts, updating customer account information, preparing a weekly weather forecast, and preparing and installing software updates.</p>
+
+  <h3>Master and transaction files</h3>
+  <p>A <strong>master file</strong> usually stores data about a person, place or object — for example, a table of employee or customer records. A <strong>transaction file</strong> stores data about an event, such as an order, electricity usage, or travel expenses, and is used to update a master file.</p>
+<div class="worked"><span class="w-label">Worked example 1.12 — 1.14</span><p>A business stores each customer's name, address and total spend in a master file, with one record per customer. Whenever a customer orders something, that order is recorded separately in a transaction file.</p><p>At regular intervals, the whole batch in the transaction file is processed: it's first validated (invalid transactions move to an errors file), then sorted into the same order as the master file (e.g. by Customer_Id). The batch process then works through the transaction file, finding the matching master file record for each transaction by its Customer_Id, generating invoices and delivery notes, and updating that customer's Total_Spent field in the master file — continuing until every transaction has updated the new version of the master file.</p></div>
+
+  <p>One way of describing the transaction processing as an algorithm:</p>
+<div class="worked"><span class="w-label">Algorithm — batch transaction processing</span><pre style="font-family:var(--mono); font-size:13.5px; white-space:pre-wrap; margin:0;">For each line in transaction file
+   Repeat
+      Read next record in master file
+   Until transaction file ID matches master file ID
+   master file total for current record = master file total + transaction file value
+Next line in transaction file</pre></div>
+
+  <h3>Advantages and disadvantages of batch processing</h3>
+<div class="proscons">
+  <div class="pc pro"><p class="pc-title">Advantages</p><ul><li>A single automated process, needing little human involvement, which can reduce costs</li><li>Can be scheduled for times of low demand on computer resources, such as overnight</li><li>Being automated, it avoids the transcription and update errors a human operator might introduce</li><li>Fewer repetitive tasks for human operators</li></ul></div>
+  <div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>There's a delay, since data isn't processed until the scheduled time</li><li>Only data of the same type can be processed, since the same automated process is applied to all of it</li><li>Errors can't be corrected until the whole batch process has finished</li></ul></div>
+</div>
+<div class="activity"><span class="a-label">Activity 1.07</span><p>Use presentation or flowchart software to describe how batch processing works, highlighting its advantages and disadvantages.</p></div>
+
+  <h3>Online processing</h3>
+  <p>We use <strong>online processing</strong> every day, whenever we search the internet or buy something online. It's also used to transfer money between bank accounts — for example, making a payment through a mobile banking app — and to pay for goods bought online, where a customer's debit card details are processed and payment moves from their account to the retailer's.</p>
+  <p>One method of online processing deals with data as individual <strong>transactions</strong>: a small amount of data is input, processed, and only then does the next transaction begin. An airline booking system, for example, collects all the data about a customer, flight and seat in one transaction, processes it, and issues a ticket as output. Because each transaction is processed in turn, a seat can't be double-booked — once allocated, it can't be booked again, since transactions are handled strictly in order. Concert ticket booking systems work the same way.</p>
+  <p>Electricity usage needs regular meter readings so accurate bills can be calculated. These can be taken interactively — an employee reading the meter with a handheld device, a homeowner entering the reading on the electricity company's website, or phoning it in — or automatically, using a smart meter that needs no user interaction at all.</p>
+
+  <h3>Electronic funds transfer</h3>
+  <p><strong>Electronic funds transfer</strong> is the electronic transfer of money to or from a bank account.</p>
+<div class="table-scroll">
+<table>
+<tr><th>Method</th><th>How it works</th></tr>
+<tr><td>Direct payments</td><td>Money is sent from one bank account to another, either immediately or within a given time frame. A time-framed transfer is usually processed overnight as a batch of direct payments.</td></tr>
+<tr><td>ATMs (automated teller machines)</td><td>Used to withdraw cash. The ATM looks up the customer's account, and if there are enough funds, allows the withdrawal and deducts it from the balance.</td></tr>
+<tr><td>Debit cards</td><td>Linked to a bank account. The customer confirms the card is theirs with a PIN, or via contactless payment (without a PIN, up to a transaction limit). The bank checks the balance is sufficient, confirms funds are available to the retailer, then creates the transaction: subtracting the amount from the customer's account and adding it to the retailer's.</td></tr>
+<tr><td>Direct debits</td><td>Used for regular payments, such as utility bills that vary each month. The account holder authorises an organisation to take payments automatically.</td></tr>
+</table>
+</div>
+
+  <h3>Automatic stock control</h3>
+  <p>A <strong>stock control system</strong> keeps a shop's stock within set limits, using a database that stores data about each product, its supplier, and the quantity left in stock, including a <strong>reorder level</strong> (the stock level that triggers a new order) and a <strong>reorder amount</strong> (how much to order each time).</p>
+  <p>Each purchase at the till scans a barcode; the system looks the product up in the database and reduces its stock level by one. When stock reaches the reorder level, the system automatically orders the reorder amount. When that stock arrives, the database is updated with the quantity received.</p>
+<div class="worked"><span class="w-label">Worked example 1.15</span><p>Stock data shows four black polo shirts in stock, with a reorder level of three. The next time one is sold, stock drops to three, triggering a reorder of ten more. Separately, only one pair of casual trainers is in stock — already below its reorder level — so four pairs are presumably already on order; when they arrive, the stock figure increases by four.</p></div>
+
+  <p>Real stock control systems are more complex: they track stock both in the shop and in an on-site stockroom, adjust quantities when unsold perishable items are removed from sale, and account for stock lost to damage or theft. Shops carry out regular stocktakes, comparing the physical stock against the database so any discrepancies can be corrected.</p>
+
+  <h3>Electronic data interchange (EDI) and B2B</h3>
+  <p><strong>Electronic data interchange (EDI)</strong> is a standardised format for exchanging data between organisations — for example, a school submitting coursework marks and estimated grades to an awarding body. <strong>Application program interfaces (APIs)</strong> give a standard way for different software to import and export data; accounts software, for instance, may use an API to send tax data to the government.</p>
+  <p>A traditional, paper-based way of ordering stock from a supplier: the buyer creates and posts a paper purchase order; the supplier enters it into their system, prints a delivery note to send with the stock, and prints an invoice to send to the buyer; the buyer receives the stock and invoice and arranges payment.</p>
+  <p><strong>Business-to-business (B2B) EDI</strong> replaces this with an electronic order sent directly into the supplier's ordering system, which can give immediate electronic confirmation, receipt and updates. An electronic invoice is matched against the original order, and payment can be made by electronic funds transfer once the buyer confirms the goods arrived — saving time and money, with no printing or posting needed, and letting both sides see exactly what's happening to the order at any point.</p>
+
+  <h3>Online shopping</h3>
+  <p>Online stores use an interactive system where customers add products to a virtual shopping basket and pay using electronic funds transfer. The store typically sends a confirmation email, and may follow up with text messages updating the customer on delivery.</p>
+<div class="discussion"><span class="d-label">Question 13</span><p>Describe how a telephone company might make use of both batch and online processing methods, including the use of master and transaction files.</p></div>
+<div class="activity"><span class="a-label">Unplugged activity 1.08</span><p>List the advantages and disadvantages of online processing.</p></div>
+
+  <h3>Real-time processing</h3>
+  <p>A <strong>real-time processing</strong> system processes data as soon as it's input, generating output instantly — used whenever data needs to be updated immediately.</p>
+
+  <h3>Microprocessor-controlled / computer-controlled systems</h3>
+  <p>Many such systems use their own outputs as inputs, forming a continuous <strong>feedback loop</strong> that lets the system monitor the effect of its own actions and adapt as conditions change.</p>
+<div class="table-scroll">
+<table>
+<tr><th>System</th><th>Real-time processing</th><th>How output affects input</th></tr>
+<tr><td>Greenhouses</td><td>Sensors detect temperature or soil moisture.</td><td>Inputs trigger outputs such as lights, watering or heaters; the system then monitors the result of those outputs.</td></tr>
+<tr><td>Central heating</td><td>A processor detects the temperature.</td><td>Turning the heater on raises the temperature, which is then monitored as a new input, so the system doesn't let it get too hot.</td></tr>
+<tr><td>Air conditioning</td><td>A processor detects the temperature.</td><td>Turning the air conditioning on lowers the temperature, which is monitored as a new input, so it doesn't get too cold.</td></tr>
+<tr><td>Burglar alarms</td><td>Sensors (laser beams, motion, temperature) detect entry.</td><td>A changed sensor reading can indicate an intruder, triggering an alarm as the output.</td></tr>
+<tr><td>Smart motorways</td><td>Cameras monitor traffic flow.</td><td>Heavy traffic may lower the speed limit; the effect of that new limit is then measured as a further input.</td></tr>
+<tr><td>Car park barriers</td><td>Sensors detect cars entering and leaving.</td><td>Each entry reduces the spaces available; each exit frees one up, letting another car in.</td></tr>
+<tr><td>Traffic lights</td><td>Motion or pressure sensors detect waiting cars.</td><td>Detecting waiting traffic changes the lights from red to green to manage flow.</td></tr>
+</table>
+</div>
+
+  <h3>Wireless sensor and actuator networks</h3>
+  <p>Sensors can also be wireless, transmitting data straight to a microprocessor with no physical connection — useful where cabling could be damaged, or where weight needs to be saved, since cables can be heavy. They can control <strong>actuators</strong> (motors that move or operate another device) as outputs, in the same way as a wired system. Examples include smart homes, guidance systems and autonomous vehicles.</p>
+
+  <p><strong>Smart homes</strong> — a householder might set their heating to switch on if the temperature falls below 20°C. The system constantly monitors the temperature; when it falls below 20°C the boiler turns on, generating heat that raises the temperature — the output (heat) affecting the input (temperature) — and once it rises back above 20°C, the boiler turns off again, and the cycle repeats as a continuous feedback loop.</p>
+<div class="activity"><span class="a-label">Unplugged activity 1.09</span><p>Draw a feedback loop diagram to show how an air-conditioning system would work, in the same way as the central heating example above.</p></div>
+
+  <p><strong>Guidance systems for space rockets</strong> — the delay in sending data to a ground control centre, and waiting for a response, can be far too long for a rocket's guidance needs, so real-time processing lets the rocket react immediately to its own sensors — for example, cutting thrust if an engine overheats, or adjusting course if its direction is wrong — while still transmitting data back for people to monitor. Wireless sensors let sensors be placed in places cables might be damaged, such as near engines or inside fuel tanks.</p>
+  <p><strong>Autonomous vehicles</strong> — self-driving cars, aircraft, drones and ships all rely on real-time processing to react immediately to hazards such as other vehicles, pedestrians, animals or weather; any delay would put them at risk of an accident. Wireless sensors let the vehicle measure things like height, speed, traffic and fuel, feeding directly into the microprocessor's calculations, while also letting people monitor the vehicle remotely.</p>
+<div class="discussion"><span class="d-label">Unplugged activity 1.10</span><p>List the advantages and disadvantages of real-time processing. Think about why we wouldn't make every processing system real-time, and what the impact would be if we did.</p></div>
+<div class="discussion"><span class="d-label">Question 14</span><p>Explain why real-time processing is required for a Microsoft Teams, Zoom or Google Meet video call.</p></div>
+<div class="task" data-task="classify" data-points="6">
+  <p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p>
+  <h4>Click which type of processing each scenario describes.</h4>
+  <div class="classify-list">
+    <div class="classify-item" data-answer="realtime"><span class="term">A central heating system constantly adjusts the boiler based on the current temperature</span><span class="choices"><button data-choice="batch">Batch processing</button><button data-choice="online">Online processing</button><button data-choice="realtime">Real-time processing</button></span></div>
+    <div class="classify-item" data-answer="batch"><span class="term">Utility bills are generated for every customer overnight, once a month</span><span class="choices"><button data-choice="batch">Batch processing</button><button data-choice="online">Online processing</button><button data-choice="realtime">Real-time processing</button></span></div>
+    <div class="classify-item" data-answer="online"><span class="term">An airline booking system processes one customer's flight and seat booking at a time, in order</span><span class="choices"><button data-choice="batch">Batch processing</button><button data-choice="online">Online processing</button><button data-choice="realtime">Real-time processing</button></span></div>
+    <div class="classify-item" data-answer="realtime"><span class="term">An autonomous car reacts instantly to a pedestrian stepping into the road</span><span class="choices"><button data-choice="batch">Batch processing</button><button data-choice="online">Online processing</button><button data-choice="realtime">Real-time processing</button></span></div>
+    <div class="classify-item" data-answer="batch"><span class="term">Payroll for every employee is calculated together at midnight once a week</span><span class="choices"><button data-choice="batch">Batch processing</button><button data-choice="online">Online processing</button><button data-choice="realtime">Real-time processing</button></span></div>
+    <div class="classify-item" data-answer="online"><span class="term">A customer pays for an online purchase and the payment is authorised before checkout completes</span><span class="choices"><button data-choice="batch">Batch processing</button><button data-choice="online">Online processing</button><button data-choice="realtime">Real-time processing</button></span></div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="4">
+  <p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p>
+  <h4>Answer each question about data processing.</h4>
+  <div class="sub-q">
+    <label>a) What is the key difference between a master file and a transaction file?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>A master file stores data about a thing, such as a person or object (e.g. a customer); a transaction file stores data about an event (e.g. an order) and is used to update the master file</div>
+    <div class="self-mark"><input type="checkbox" id="sm-16"><label for="sm-16">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>b) What is a 'reorder level' in a stock control system?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>The stock level at which more of that product will automatically be ordered</div>
+    <div class="self-mark"><input type="checkbox" id="sm-17"><label for="sm-17">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>c) What is a feedback loop?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>A system using its own output as a new input, letting it continuously monitor and adapt to the effect of its own actions</div>
+    <div class="self-mark"><input type="checkbox" id="sm-18"><label for="sm-18">My answer was close enough — award myself the point</label></div>
+  </div>
+  <div class="sub-q">
+    <label>d) Why can't batch processing correct an error partway through?</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Because the whole batch is processed as one automated run, so errors can't be fixed until that batch process has finished</div>
+    <div class="self-mark"><input type="checkbox" id="sm-19"><label for="sm-19">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="6">
+  <p class="task-label"><span>Extended answer</span><span class="pts">6 points</span></p>
+  <h4>Describe how a telephone company might make use of both batch and online processing, including master and transaction files. (6 marks)</h4>
+  <div class="sub-q mp" data-max="6">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 6)</span>
+      <label class="mp-item"><input type="checkbox"><span>A master file could store each customer's account details, such as name, address and tariff</span></label>
+      <label class="mp-item"><input type="checkbox"><span>A transaction file could store each individual call, text or data usage event as it happens</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Online processing could be used to connect a call, or authorise data usage, in real time as the customer uses their phone</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Batch processing could be used to generate monthly bills for every customer at once, overnight</span></label>
+      <label class="mp-item"><input type="checkbox"><span>The batch process would merge the transaction file (calls/usage) with the master file to calculate each customer's bill</span></label>
+      <label class="mp-item"><input type="checkbox"><span>The master file would then be updated, e.g. resetting usage counters or updating the amount owed</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 6 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="4">
+  <p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p>
+  <h4>Explain why real-time processing is required for a video call such as Microsoft Teams or Zoom. (4 marks)</h4>
+  <div class="sub-q mp" data-max="4">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 4)</span>
+      <label class="mp-item"><input type="checkbox"><span>Audio and video must be processed and displayed the instant they are received</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Any noticeable delay would make conversation difficult, with people talking over each other</span></label>
+      <label class="mp-item"><input type="checkbox"><span>The system has no use for a batch or scheduled approach, since the data is only useful in that exact moment</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Both sides need an immediate, continuous exchange of data for the call to work at all</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="mcq" data-points="3">
+  <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+  <div class="mcq" data-answer="0"><p class="q">1. Why might a company choose batch processing over online processing for payroll?</p><div class="opts"><button class="opt" data-idx="0">Payroll doesn't need to be processed immediately, and can run when the system is otherwise quiet</button><button class="opt" data-idx="1">Online processing cannot handle numbers</button><button class="opt" data-idx="2">Batch processing is always cheaper to set up</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">2. What makes a feedback loop 'continuous'?</p><div class="opts"><button class="opt" data-idx="0">The system's output becomes a new input, so monitoring and adjusting never stops</button><button class="opt" data-idx="1">The system only checks itself once a day</button><button class="opt" data-idx="2">It requires no sensors at all</button></div><p class="mcq-feedback"></p></div>
+  <div class="mcq" data-answer="0"><p class="q">3. Why is real-time processing essential for an autonomous car?</p><div class="opts"><button class="opt" data-idx="0">It must react immediately to hazards like pedestrians or other vehicles</button><button class="opt" data-idx="1">It reduces the cost of the vehicle's sensors</button><button class="opt" data-idx="2">It only matters when the car is parked</button></div><p class="mcq-feedback"></p></div>
+</div>
+
+  <h2 class="section-title">End-of-chapter practice questions</h2>
+  <p class="note">These cover the whole chapter, matching the official mark allocations from the coursebook.</p>
+<div class="task" data-task="open" data-points="1">
+  <p class="task-label"><span>Worked example</span><span class="pts">1 point</span></p>
+  <h4>Practice question 1 (2 marks)</h4>
+  <div class="sub-q">
+    <label>a) Using an example, define the term ‘information’.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>Information is data that has been given context and meaning — for example, the data ‘359’ becomes information once we know it's the price, in dollars, of a mobile phone cover</div>
+    <div class="self-mark"><input type="checkbox" id="sm-20"><label for="sm-20">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="4">
+  <p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p>
+  <h4>Practice question 2a: Users pay for premium services on a website using their credit card. Explain why the website uses HTTPS at the beginning of its address instead of HTTP. (4 marks)</h4>
+  <div class="sub-q mp" data-max="4">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 4)</span>
+      <label class="mp-item"><input type="checkbox"><span>HTTPS encrypts data sent between the user's browser and the website</span></label>
+      <label class="mp-item"><input type="checkbox"><span>This protects sensitive data, such as credit card details, from being read if intercepted</span></label>
+      <label class="mp-item"><input type="checkbox"><span>HTTPS authenticates the website using a digital certificate, giving users confidence it's genuine</span></label>
+      <label class="mp-item"><input type="checkbox"><span>HTTP sends data as plain text, which could be read by anyone who intercepts it</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="2">
+  <p class="task-label"><span>Extended answer</span><span class="pts">2 points</span></p>
+  <h4>Practice question 2b: Explain symmetric encryption. (2 marks)</h4>
+  <div class="sub-q mp" data-max="2">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 2)</span>
+      <label class="mp-item"><input type="checkbox"><span>The same key is used to both encrypt and decrypt the data</span></label>
+      <label class="mp-item"><input type="checkbox"><span>This key must be shared between the sender and receiver, which risks it being intercepted</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 2 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="2">
+  <p class="task-label"><span>Extended answer</span><span class="pts">2 points</span></p>
+  <h4>Practice question 2c: Journalists working for the website encrypt their emails. Describe how asymmetric encryption is used with emails. (2 marks)</h4>
+  <div class="sub-q mp" data-max="2">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 2)</span>
+      <label class="mp-item"><input type="checkbox"><span>The sender encrypts the email using the recipient's public key</span></label>
+      <label class="mp-item"><input type="checkbox"><span>The recipient decrypts it using their own private key, which is never shared</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 2 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="1">
+  <p class="task-label"><span>Worked example</span><span class="pts">1 point</span></p>
+  <h4>Practice question 2d (1 mark)</h4>
+  <div class="sub-q">
+    <label>a) When users subscribe to premium features, they have to choose a password. Suggest how verification can be used when entering the password.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>The user could be asked to enter the password a second time (double data entry), and the system checks both entries match before accepting it</div>
+    <div class="self-mark"><input type="checkbox" id="sm-21"><label for="sm-21">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="1">
+  <p class="task-label"><span>Worked example</span><span class="pts">1 point</span></p>
+  <h4>Practice question 3a (1 mark)</h4>
+  <div class="sub-q">
+    <label>a) State the purpose of validation.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>To check that data entered follows defined, acceptable rules, so only sensible data is stored</div>
+    <div class="self-mark"><input type="checkbox" id="sm-22"><label for="sm-22">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="3">
+  <p class="task-label"><span>Extended answer</span><span class="pts">3 points</span></p>
+  <h4>Practice question 3b: Using an example related to submitting a news story, identify and describe one method of validation. (3 marks)</h4>
+  <div class="sub-q mp" data-max="3">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 3)</span>
+      <label class="mp-item"><input type="checkbox"><span>Identifies a specific validation check, e.g. a presence check</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Applies it to the scenario, e.g. making sure the headline or story text field isn't left blank</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Describes what happens if the check fails, e.g. an error message is shown asking the user to enter the missing data</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 3 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="4">
+  <p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p>
+  <h4>Practice question 4: Describe the difference between an online and a real-time processing system. (4 marks)</h4>
+  <div class="sub-q mp" data-max="4">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 4)</span>
+      <label class="mp-item"><input type="checkbox"><span>Online processing handles data as individual transactions, each fully processed before the next begins</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Real-time processing processes data the instant it's input, generating output instantly</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Online processing doesn't need to update continuously, e.g. a ticket booking system</span></label>
+      <label class="mp-item"><input type="checkbox"><span>Real-time processing is used when instant, continuous updating is essential, e.g. a feedback loop in a control system</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="open" data-points="1">
+  <p class="task-label"><span>Worked example</span><span class="pts">1 point</span></p>
+  <h4>Practice question 5 (2 marks)</h4>
+  <div class="sub-q">
+    <label>a) Define the term ‘master file’.</label>
+    <textarea placeholder="Type your answer here…"></textarea>
+    <div class="row"><button class="check-btn">Check answer</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="answer-reveal"><span class="lbl">Answer</span>A file that stores data about a thing, such as a person, place or object (e.g. a customer or employee record), which is updated using a transaction file</div>
+    <div class="self-mark"><input type="checkbox" id="sm-23"><label for="sm-23">My answer was close enough — award myself the point</label></div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="6">
+  <p class="task-label"><span>Extended answer</span><span class="pts">6 points</span></p>
+  <h4>Practice question 6: Describe three characteristics of a stock control system. (6 marks)</h4>
+  <div class="sub-q mp" data-max="6">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 6)</span>
+      <label class="mp-item"><input type="checkbox"><span>It uses a database storing data about each product, its supplier and the quantity in stock</span></label>
+      <label class="mp-item"><input type="checkbox"><span>It stores a reorder level — the stock level that triggers a new order</span></label>
+      <label class="mp-item"><input type="checkbox"><span>It stores a reorder amount — how much stock to order each time</span></label>
+      <label class="mp-item"><input type="checkbox"><span>It automatically reduces stock when a barcode is scanned at the till</span></label>
+      <label class="mp-item"><input type="checkbox"><span>It automatically places an order once stock reaches the reorder level</span></label>
+      <label class="mp-item"><input type="checkbox"><span>It updates stock figures again once a new delivery arrives</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 6 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+<div class="task" data-task="points" data-points="4">
+  <p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p>
+  <h4>Practice question 7: Describe how a stock control system maintains stock levels automatically. (4 marks)</h4>
+  <div class="sub-q mp" data-max="4">
+    <textarea placeholder="Write your full answer here…" style="min-height:120px;"></textarea>
+    <div class="row"><button class="check-btn">Show mark points</button></div>
+    <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+    <div class="markpoints">
+      <span class="lbl">Mark points — tick each one your answer covered (up to 4)</span>
+      <label class="mp-item"><input type="checkbox"><span>Each sale scans the product's barcode, which the system looks up in the database</span></label>
+      <label class="mp-item"><input type="checkbox"><span>The stock level for that product is automatically reduced by one</span></label>
+      <label class="mp-item"><input type="checkbox"><span>When stock falls to the reorder level, the system automatically orders the reorder amount</span></label>
+      <label class="mp-item"><input type="checkbox"><span>When the new stock arrives, the database is updated with the quantity received</span></label>
+      <div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+
+<footer>
+  Cambridge AS &amp; A Level IT · Data, Information and Knowledge — built for revision, points are just for you.
+</footer>
+
+<script>
+(function(){
+  const scoreValEl = document.getElementById('score-val');
+  const scoreMaxEl = document.getElementById('score-max');
+  let score = 0;
+  function addScore(n){
+    score += n;
+    if(score < 0) score = 0;
+    scoreValEl.textContent = score;
+  }
+
+  let max = 0;
+  document.querySelectorAll('.self-mark input[type=checkbox]').forEach(function(cb){
+    max += parseInt(cb.dataset.points || '1', 10);
+  });
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    max += parseInt(sq.dataset.max, 10);
+  });
+  max += document.querySelectorAll('.classify-item').length;
+  max += document.querySelectorAll('.mcq').length;
+  scoreMaxEl.textContent = max;
+
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  document.querySelectorAll('.sub-q:not(.mp)').forEach(function(sq){
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const reveal = sq.querySelector('.answer-reveal');
+    const mark = sq.querySelector('.self-mark');
+    const checkbox = mark ? mark.querySelector('input[type=checkbox]') : null;
+    if(!btn || !reveal || !mark) return;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        reveal.classList.remove('show');
+        mark.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      reveal.classList.add('show');
+      mark.classList.add('show');
+    });
+
+    if(checkbox){
+      checkbox.addEventListener('change', function(){
+        const pts = parseInt(checkbox.dataset.points || '1', 10);
+        addScore(checkbox.checked ? pts : -pts);
+      });
+    }
+  });
+
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    const cap = parseInt(sq.dataset.max, 10);
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const panel = sq.querySelector('.markpoints');
+    const note = sq.querySelector('.mp-note');
+    const count = sq.querySelector('.mp-count');
+    const boxes = panel.querySelectorAll('input[type=checkbox]');
+    let awarded = 0;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        panel.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      panel.classList.add('show');
+    });
+
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if(cb.checked){
+          if(awarded >= cap){
+            cb.checked = false;
+            note.textContent = "That's already full marks (" + cap + "). Untick a point first to swap it.";
+            return;
+          }
+          awarded += 1;
+          addScore(1);
+        } else {
+          awarded -= 1;
+          addScore(-1);
+        }
+        note.textContent = '';
+        count.textContent = awarded + ' / ' + cap + ' marks';
+      });
+    });
+  });
+
+  document.querySelectorAll('.classify-item').forEach(function(item){
+    const answer = item.dataset.answer;
+    const buttons = item.querySelectorAll('.choices button');
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){
+        buttons.forEach(function(other){ other.disabled = true; });
+        if(b.dataset.choice === answer){
+          b.classList.add('correct');
+          addScore(1);
+        } else {
+          b.classList.add('incorrect');
+          buttons.forEach(function(other){
+            if(other.dataset.choice === answer) other.classList.add('correct');
+          });
+        }
+      });
+    });
+  });
+
+  document.querySelectorAll('.mcq').forEach(function(mcq){
+    const correctIdx = mcq.dataset.answer;
+    const opts = mcq.querySelectorAll('.opt');
+    const feedback = mcq.querySelector('.mcq-feedback');
+    opts.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        opts.forEach(function(o){ o.disabled = true; });
+        if(opt.dataset.idx === correctIdx){
+          opt.classList.add('correct');
+          feedback.textContent = 'Correct.';
+          feedback.className = 'mcq-feedback ok';
+          addScore(1);
+        } else {
+          opt.classList.add('incorrect');
+          opts.forEach(function(o){
+            if(o.dataset.idx === correctIdx) o.classList.add('correct');
+          });
+          feedback.textContent = 'Not quite — the correct answer is highlighted above.';
+          feedback.className = 'mcq-feedback bad';
+        }
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
