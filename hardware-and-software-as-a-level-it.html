@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hardware and Software — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --bg-deep:#090d18;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#04141a;}
+
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 24px 120px; }
+
+  nav.theory-nav{
+    max-width:760px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:44px 24px 34px; max-width:760px; margin:0 auto; border-bottom:1px solid var(--trace);
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,38px);
+    line-height:1.15; margin:0 0 14px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
+
+  nav.tabs{
+    max-width:760px; margin:0 auto; padding:14px 24px; display:flex; gap:6px;
+    overflow-x:auto; border-bottom:1px solid var(--trace); position:sticky; top:0;
+    background:rgba(13,18,32,.95); backdrop-filter: blur(4px); z-index:30;
+  }
+  nav.tabs button{
+    font-family:var(--mono); font-size:12.5px; white-space:nowrap; background:transparent;
+    border:1px solid var(--trace); color:var(--paper-dim); padding:8px 13px;
+    border-radius:var(--radius); cursor:pointer; flex-shrink:0;
+  }
+  nav.tabs button:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  nav.tabs button.active{ background:var(--signal); color:#04141a; border-color:var(--signal); font-weight:500; }
+
+  .panel{ display:none; padding:40px 0 8px; }
+  .panel.active{ display:block; }
+
+  h2.section-title{
+    font-family:var(--mono); font-size:22px; color:var(--signal-bright);
+    margin:0 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2.section-title .tag{
+    font-size:12px; color:var(--sage); border:1px solid var(--trace);
+    padding:2px 7px; border-radius:var(--radius);
+  }
+  h3{ font-family:var(--mono); font-size:16px; color:var(--gold); margin:26px 0 8px; font-weight:500; }
+  p{margin:10px 0;}
+  ul, ol{padding-left:22px; margin:10px 0;}
+  li{margin:4px 0;}
+  strong{color:var(--paper); font-weight:600;}
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0 8px; font-size:15px; }
+  th,td{ border:1px solid var(--trace); padding:8px 10px; text-align:left; vertical-align:top; }
+  th{ font-family:var(--mono); font-size:12px; color:var(--sage); font-weight:500; background:rgba(134,201,160,0.06); }
+  .table-scroll{ overflow-x:auto; }
+  .note{ color:var(--paper-dim); font-size:14.5px; }
+
+  .block{ border-left:2px solid var(--trace); padding-left:18px; margin:18px 0; }
+  .block ul, .block ol{ margin:0; padding-left:20px; }
+
+  .proscons{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 8px; }
+  .pc{ border:1px solid var(--trace); border-radius:var(--radius); background:var(--bg-raised); padding:2px 14px 12px; }
+  .pc.pro{ border-top:2px solid var(--sage); }
+  .pc.con{ border-top:2px solid var(--brick); }
+  .pc-title{ font-family:var(--mono); font-size:12.5px; font-weight:500; margin:12px 0 4px; }
+  .pc.pro .pc-title{ color:var(--sage); }
+  .pc.con .pc-title{ color:var(--brick); }
+  .pc ul{ padding-left:18px; margin:6px 0 0; font-size:15px; }
+  @media (max-width:600px){ .proscons{ grid-template-columns:1fr; } }
+
+  details.fold{ border:1px solid var(--trace); border-radius:var(--radius); margin:12px 0; background:var(--bg-raised); }
+  details.fold summary{ font-family:var(--mono); font-size:13.5px; color:var(--gold); padding:11px 14px; cursor:pointer; }
+  details.fold[open] summary{ border-bottom:1px solid var(--trace); }
+  details.fold .fold-body{ padding:2px 14px 12px; }
+
+  .diagram-box{
+    background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius);
+    padding:14px 10px; margin:18px 0 6px; text-align:center;
+  }
+  .diagram-box svg{ width:100%; height:auto; max-width:460px; }
+  .diagram-box svg.wide{ max-width:600px; }
+  .diagram-caption{ font-family:var(--mono); font-size:12px; color:var(--paper-dim); margin-top:6px; }
+  .signal-caption{ font-family: var(--mono); font-size:12.5px; color:var(--paper-dim); margin-top:8px; text-align:center; }
+
+  .task{ margin:32px 0; border:1px solid var(--trace); border-radius:var(--radius); background: var(--bg-raised); padding:20px 20px 22px; }
+  .task-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .task-label .pts{color:var(--sage);}
+  .task h4{ margin:0 0 12px; font-family:var(--serif); font-weight:600; font-size:16.5px; color:var(--paper); }
+  .task .sub-q{margin:18px 0;}
+  .task .sub-q:first-child{margin-top:0;}
+  .sub-q label{ display:block; font-family:var(--serif); font-size:15.5px; margin-bottom:8px; color:var(--paper); }
+
+  textarea{
+    width:100%; min-height:52px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-radius:var(--radius); color:var(--paper); font-family:var(--serif);
+    font-size:15.5px; padding:10px 12px; resize:vertical;
+  }
+  textarea:focus, button:focus-visible, .opt:focus-visible, summary:focus-visible, input[type=checkbox]:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:1px; }
+  .row{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+
+  button{
+    font-family:var(--mono); font-size:13px; background:var(--signal); color:#04141a;
+    border:none; padding:9px 15px; border-radius:var(--radius); cursor:pointer; font-weight:500;
+  }
+  button:hover{background:var(--signal-bright);}
+  button.ghost{ background:transparent; border:1px solid var(--trace); color:var(--paper-dim); }
+  button.ghost:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  button:disabled{opacity:.5; cursor:default;}
+
+  .error-msg{ color:var(--brick); font-family:var(--mono); font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show{display:block;}
+
+  .answer-reveal{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .answer-reveal.show{display:block;}
+  .answer-reveal .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:5px; }
+
+  .self-mark{ display:none; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:13px; color:var(--paper-dim); }
+  .self-mark.show{display:flex;}
+  .self-mark input[type=checkbox]{ width:17px; height:17px; accent-color: var(--gold); cursor:pointer; }
+  .self-mark label{cursor:pointer; margin:0; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+
+  .markpoints{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .markpoints.show{display:block;}
+  .markpoints .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:6px; }
+  .markpoints .mp-item{
+    display:flex; gap:10px; align-items:flex-start; margin:0; padding:7px 0;
+    border-bottom:1px solid var(--trace-dim); font-size:15px; font-weight:400; cursor:pointer;
+  }
+  .markpoints .mp-item:last-of-type{border-bottom:none;}
+  .markpoints .mp-item input{ width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--gold); cursor:pointer; }
+  .mp-foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; font-family:var(--mono); font-size:13px; }
+  .mp-count{ color:var(--gold); }
+  .mp-note{ color:var(--brick); }
+
+  .mcq{margin:20px 0;}
+  .mcq:first-of-type{margin-top:0;}
+  .mcq p.q{ font-family:var(--serif); font-size:15.5px; color:var(--paper); margin:0 0 10px; }
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:10px 13px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer; font-weight:400;
+  }
+  .opt:hover:not(:disabled){border-color:var(--signal); background:var(--bg-deep);}
+  .opt.correct{border-color:var(--sage); background:rgba(134,201,160,0.14);}
+  .opt.incorrect{border-color:var(--brick); background:rgba(224,104,92,0.14);}
+  .opt:disabled{cursor:default;}
+  .mcq-feedback{ font-family:var(--mono); font-size:13px; margin-top:8px; min-height:1.2em; }
+  .mcq-feedback.ok{color:var(--sage);}
+  .mcq-feedback.bad{color:var(--brick);}
+
+  .classify-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 0; border-bottom:1px solid var(--trace-dim); flex-wrap:wrap;
+  }
+  .classify-item:last-child{border-bottom:none;}
+  .classify-item .term{font-size:15px; max-width:60%;}
+  .classify-item .choices{display:flex; gap:8px; flex-wrap:wrap;}
+  .classify-item .choices button{
+    background:transparent; border:1px solid var(--trace); color:var(--paper-dim);
+    font-size:12px; padding:6px 10px;
+  }
+  .classify-item .choices button:hover:not(:disabled){ color:var(--paper); border-color:var(--paper-dim); }
+  .classify-item .choices button.correct{background:rgba(134,201,160,0.16); border-color:var(--sage); color:var(--paper);}
+  .classify-item .choices button.incorrect{background:rgba(224,104,92,0.16); border-color:var(--brick); color:var(--paper);}
+  @media (max-width:600px){ .classify-item .term{max-width:100%;} }
+
+  #score-badge{
+    position:fixed; top:14px; right:14px; z-index:50; font-family:var(--mono); font-size:13px;
+    background:var(--bg-raised); border:1px solid var(--signal); color:var(--signal-bright);
+    padding:8px 13px; border-radius:var(--radius); box-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  #score-badge .n{color:var(--gold); font-weight:700;}
+
+  footer{ max-width:760px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    header.hero{padding:36px 20px 26px;}
+    #score-badge{top:auto; bottom:14px; right:14px;}
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+</style>
+</head>
+<body>
+<div id="score-badge">Score: <span class="n" id="score-val">0</span> / <span id="score-max">0</span></div>
+<nav class="theory-nav"><a class="disabled" href="#" aria-disabled="true">← <span class="full">Previous theory</span></a><span class="spacer"></span><a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a></nav>
+<header class="hero"><p class="kicker">Cambridge AS &amp; A Level IT · Hardware and Software</p><h1 class="title">Hardware and Software</h1><p>This page covers the computers that run large organisations and scientific research, the system software that operates a computer, the utilities that maintain it, the choice between custom-written and off-the-shelf software, and the different ways users interact with a system.</p></header>
+<nav class="tabs"><button class="tab-btn active" data-panel="intro">Introduction</button><button class="tab-btn" data-panel="mainframe">Mainframes &amp; supercomputers</button><button class="tab-btn" data-panel="system">System software</button><button class="tab-btn" data-panel="utility">Utility software</button><button class="tab-btn" data-panel="software">Custom &amp; off-the-shelf</button><button class="tab-btn" data-panel="interfaces">User interfaces</button><button class="tab-btn" data-panel="practice">Practice questions</button></nav>
+<div class="wrap">
+<div class="panel active" id="panel-intro"><h2 class="section-title">Hardware and software <span class="tag">Introduction</span></h2>
+<h3>Hardware</h3><p><strong>Hardware devices</strong> are the physical components of a computer, made of electronic components. Examples are the CPU, motherboard, RAM, graphics card, secondary storage, monitor, keyboard and mouse.</p>
+<h3>Software</h3><p>The programs and apps on a computer are called <strong>software</strong> — programs that give instructions to the computer. Examples include word processing, spreadsheet and anti-malware programs. The <strong>operating system</strong>, the specific software that manages the hardware within a computer system, is also software.</p>
+<p>Software programs give instructions to the computer so that it can carry out a task. The instructions are sent to the CPU in <strong>binary</strong>, which is made up of ones and zeros (for example, 10101110 11101101).</p><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">2 points</span></p><div class="mcq" data-answer="1"><p class="q">1. Which of these is hardware?</p><div class="opts"><button class="opt" data-idx="0">Spreadsheet program</button><button class="opt" data-idx="1">Graphics card</button><button class="opt" data-idx="2">Anti-malware program</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. In what form are software instructions sent to the CPU?</p><div class="opts"><button class="opt" data-idx="0">Binary — ones and zeros</button><button class="opt" data-idx="1">High-level code</button><button class="opt" data-idx="2">Menus and icons</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-mainframe"><h2 class="section-title">Mainframe computers and supercomputers <span class="tag">2.1</span></h2>
+<h3>Uses of mainframe computers</h3>
+<p>A <strong>mainframe computer</strong> is a powerful computer serving several terminals. It can serve many thousands of terminals within an organisation. A <strong>terminal</strong> is a computer connected to the mainframe, often with very little processing power and memory of its own, for example a basic computer or an ATM.</p><div class="block"><ul><li>Hosting business databases that businesses and consumers access at the same time through a web interface</li><li>Large-scale transaction processing and batch processing</li><li>Industry statistical analysis, such as analysis of census data, and consumer statistics such as trends and spending analysis</li></ul></div>
+<h3>Uses of supercomputers</h3>
+<p>A <strong>supercomputer</strong> is a large computer with parallel processing, designed to carry out large numbers of complex calculations very quickly. It runs a few programs and executes instructions as quickly as possible for one purpose, using its full power to solve single problems. <strong>Parallel processing</strong> allows many instructions to be executed at the same time.</p><div class="block"><ul><li><strong>Physics simulations</strong> — quantum mechanics is mathematically complex and computationally demanding to simulate. Supercomputers let scientists model these systems with great accuracy and detail.</li><li><strong>Medical science</strong> — simulating the properties of new drugs and materials at the atomic level, supporting more efficient medications and the treatment and identification of current and new diseases.</li><li><strong>Environmental models</strong> — numerical models of the atmosphere, ocean and space, processing billions of observations from weather stations, satellites, balloons, buoys and radar.</li></ul></div><details class="fold"><summary>Did you know?</summary><div class="fold-body"><p>In 2022, the most powerful supercomputer reached 1,102 petaFLOPS — 10<sup>15</sup> floating-point operations per second, more than 1000 times faster than an average home computer.</p></div></details>
+<h3>Characteristics of mainframes and supercomputers</h3>
+<p><strong>Longevity</strong> is how long a mainframe will last before it is replaced. They cost a lot of money, so they are used for many years. Being able to upgrade them with extra processors or memory helps them cope with increasing demand.</p>
+<p><strong>Reliability, availability and serviceability (RAS)</strong> means they are designed to be used 100% of the time:</p><div class="block"><ul><li><strong>Reliability</strong> — hardware components can self-check and recover automatically after a failure. Software is tested extensively and can be updated quickly if problems are found.</li><li><strong>Availability</strong> — the mainframe must be able to operate at all times. Extra components such as storage and power supplies take over automatically if an active one fails. This is <strong>redundancy</strong>: spare components in readiness to take over.</li><li><strong>Serviceability</strong> — a failed component can be replaced without affecting operation. <strong>Hot-swappable</strong> components can be replaced while the system is running. Serviceability also measures how quickly a mainframe can be repaired if it has to be shut down.</li></ul></div>
+<h3>Mainframe security</h3>
+<p>Mainframes service many applications and thousands of users at once, so they need a multi-layer approach to security including identifying users, authentication and access control. Individuals and groups are given permission to access different resources, each with different levels of access. For example, web users can see descriptions, images and prices of active products, but only product managers can see non-active products or change descriptions and prices. Security software also monitors for threats and alerts administrators if one is suspected.</p>
+<h3>Performance metrics</h3>
+<p><strong>MIPS</strong> (millions of instructions per second) is usually used to measure mainframes. It is not considered accurate because these factors affect processing speed:</p><div class="block"><ul><li>A complex instruction can take longer than a simple one. <strong>CISC</strong> (complex instruction set computing) processors have single instructions that do many things; <strong>RISC</strong> (reduced instruction set computing) processors have single instructions that do very little but manage them efficiently</li><li>Workload mix</li><li>Memory and cache sizes</li><li>Amount of input and output activity</li><li>Operating systems and software</li><li>Changes made to hardware</li></ul></div>
+<p>Despite this, the cost of mainframes is generally based on the maximum MIPS they can achieve.</p>
+<p><strong>FLOPS</strong> (floating-point operations per second), or <strong>MFLOPS</strong> (mega FLOPS — one million per second), is used to compare supercomputers, because floating-point instructions are used in scientific computational research. It is more reliable than MIPS, but some processors can do in one floating-point operation what others need several for. For example, the Cray-2 has no divide instruction but the Motorola 68882 has divide, square root, sine and cosine, so the Cray-2 needs several instructions to divide.</p>
+<p>Larger memory and cache sizes can make a significant difference to mainframe performance.</p>
+<h3>Input, output and throughput</h3>
+<p>A batch workload that operates sequentially uses resources efficiently, but online activity such as web access has much more random resource requirements. Lots of input/output activity makes processors less efficient, because tasks are suspended while input/output interruptions are processed. <strong>System assist processors (SAPs)</strong> can handle input/output requests, freeing the main processors from interruptions. Enhancements or bug fixes to operating systems and applications can improve efficiency or have an adverse effect.</p>
+<h3>Operating systems and fault tolerance</h3><div class="block"><ul><li><strong>z/OS</strong> — general purpose, offering a stable, secure and continuous environment</li><li><strong>z/VM</strong> — specialises in virtual machines, each running its own operating system</li><li><strong>z/TPF</strong> — specialises in transaction processing with high volumes of transactions, such as ticket sales</li><li>Most supercomputers run an operating system based on <strong>Linux</strong>, which is open source and so freely available for development</li></ul></div>
+<p>The operating system for a supercomputer or server is more advanced than a desktop one. It must deal with fault tolerance, manage software processes across many more processors and manage computers on a client/server system.</p>
+<p><strong>Fault tolerance</strong> is how far a server is resistant to failure. Hardware failure is dealt with using redundancy. Software and data failure is dealt with by copying data to many different disks or storage devices, so the server can use the back-up disks if the main data store fails.</p>
+<h3>Number of processors and heat</h3>
+<p>The more processors a server has, the more processes it can run at the same time. The number of threads each core can run and the clock speed also matter. A server with more cores will usually run faster.</p>
+<p>Mainframes and supercomputers generate a lot of heat, so cooling is needed:</p><div class="block"><ul><li><strong>Air cooling</strong> — fans blow hot air away and replace it with cooler air. It uses a lot of power, so many data centres are being built in colder parts of the world where natural cold air can be circulated.</li><li><strong>Liquid cooling</strong> — more efficient. A plate on the back of the processor has cool liquid on the other side, transferring heat from the processor to the liquid, which is pumped through a cooling radiator.</li></ul></div>
+<h3>Advantages and disadvantages</h3><div class="proscons"><div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Designed to be reliable, available and serviceable</li><li>Scalable — processors and memory can be added</li><li>Designed to last for at least 10 years</li><li>Can store and process extremely large amounts of data</li><li>More than one operating system can be used at once, which can improve performance</li><li>Hardware failures are notified immediately so replacements are quick</li><li>Terminals only need input and output devices; connected desktops can use their own power for small tasks</li></ul></div><div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>High cost, so only used by large organisations such as governments, banks and corporations; specialist operating systems are also expensive</li><li>A lot of space is needed and the temperature must be controlled</li><li>Specialist support staff are required</li><li>The interface is command driven, which can be hard to understand</li><li>Supercomputers process big data, so they need massive external storage that reads and writes quickly enough</li></ul></div></div><div class="task"><p class="task-label"><span>Worked example</span><span class="pts">5 points</span></p><h4>Answer from the notes.</h4><div class="sub-q"><label>State two purposes of mainframe computers.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: hosting business databases accessed through a web interface; large-scale transaction processing; batch processing; industry statistical analysis such as census data and spending trends</div><div class="self-mark"><input type="checkbox" id="sm-1"><label for="sm-1">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Give two examples of uses of a supercomputer.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: physics (quantum mechanics) simulations; medical science, such as simulating new drugs; environmental models such as weather</div><div class="self-mark"><input type="checkbox" id="sm-2"><label for="sm-2">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>State what is meant by RAS.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Reliability, availability and serviceability</div><div class="self-mark"><input type="checkbox" id="sm-3"><label for="sm-3">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain why colder parts of the world are favoured for data centres.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Natural cold air can be circulated to cool the equipment, which uses less power than air cooling with fans</div><div class="self-mark"><input type="checkbox" id="sm-4"><label for="sm-4">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain why MFLOPS may be used instead of MIPS for supercomputers.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Floating-point instructions are used in scientific computational research, and MFLOPS is a more reliable measure of performance than MIPS</div><div class="self-mark"><input type="checkbox" id="sm-5"><label for="sm-5">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p><h4>Click whether each statement describes a mainframe computer or a supercomputer.</h4><div class="classify-list"><div class="classify-item" data-answer="m"><span class="term">Serves thousands of terminals at once</span><span class="choices"><button data-choice="m">Mainframe</button><button data-choice="s">Supercomputer</button></span></div><div class="classify-item" data-answer="s"><span class="term">Uses parallel processing to solve single, highly complex problems</span><span class="choices"><button data-choice="m">Mainframe</button><button data-choice="s">Supercomputer</button></span></div><div class="classify-item" data-answer="m"><span class="term">Usually measured in MIPS</span><span class="choices"><button data-choice="m">Mainframe</button><button data-choice="s">Supercomputer</button></span></div><div class="classify-item" data-answer="s"><span class="term">Usually measured in FLOPS or MFLOPS</span><span class="choices"><button data-choice="m">Mainframe</button><button data-choice="s">Supercomputer</button></span></div><div class="classify-item" data-answer="m"><span class="term">Large-scale transaction processing for an organisation</span><span class="choices"><button data-choice="m">Mainframe</button><button data-choice="s">Supercomputer</button></span></div><div class="classify-item" data-answer="s"><span class="term">Most run an operating system based on Linux</span><span class="choices"><button data-choice="m">Mainframe</button><button data-choice="s">Supercomputer</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="0"><p class="q">1. What are spare components that take over when an active one fails called?</p><div class="opts"><button class="opt" data-idx="0">Redundancy</button><button class="opt" data-idx="1">Parallel processing</button><button class="opt" data-idx="2">Throughput</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="1"><p class="q">2. What does a hot-swappable component allow?</p><div class="opts"><button class="opt" data-idx="0">Cooling with liquid</button><button class="opt" data-idx="1">Replacement while the system is still running</button><button class="opt" data-idx="2">Faster clock speed</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="1"><p class="q">3. What is the job of a system assist processor (SAP)?</p><div class="opts"><button class="opt" data-idx="0">Cooling the processors</button><button class="opt" data-idx="1">Handling input/output requests so main processors are not interrupted</button><button class="opt" data-idx="2">Providing security</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-system"><h2 class="section-title">System software <span class="tag">2.2</span></h2>
+<p><strong>System software</strong> is the software needed to operate a computer system. The software that operates the hardware is the <strong>operating system</strong>.</p>
+<h3>Operating systems</h3>
+<p>An operating system manages the hardware. When the computer is turned on, the <strong>BIOS</strong> (Basic Input/Output System), stored on ROM on the motherboard, loads first, then loads the operating system. The operating system is the first software to load and links the hardware to applications software, managing communication between the two. It manages hardware by:</p><div class="block"><ul><li>Allocating memory to software</li><li>Sending data and instructions to output devices</li><li>Responding to input devices, such as when a key is pressed</li><li>Opening and closing files on storage devices</li><li>Giving each running task a fair share of processor time</li><li>Sending error or status messages to applications or users</li><li>Dealing with user logons and security</li></ul></div>
+<h3>Device drivers</h3>
+<p>A <strong>device driver</strong> is the software that comes with an external hardware component and sends customised instructions to that specific component. Operating systems often include common drivers, for example for basic graphics or printing. With common drivers, applications can issue generic commands such as 'print' to the operating system without needing the different instructions for every make and model of hardware.</p>
+<h3>Translators</h3>
+<p>A <strong>translator</strong> translates a program written in a high-level programming language into machine code the computer can understand.</p>
+<h3>Compilers</h3>
+<p>A <strong>compiler</strong> translates a high-level language into an <strong>executable file</strong> of machine code (also called the <strong>object file</strong>). The original file is the <strong>source file</strong>. The whole source code is translated at once, and the executable can then be distributed. It only runs on operating systems it was compiled for — a program compiled for Windows will not work on Linux unless compiled again.</p>
+<p>Compilation has three stages:</p>
+<div class="block"><ol><li><strong>Lexical analysis</strong> — white space and comments are removed and the code is broken into <strong>tokens</strong>, each representing a keyword, constant, identifier, string, number, operator or punctuation symbol. Some tokens are replaced by shorter ones (for example ENDWHILE by EW). Errors found are reported to the user.</li><li><strong>Syntax analysis</strong> — the structure is checked against the syntax of the language. A dictionary is created listing the variables used, their data types and the memory location to use.</li><li><strong>Code generation</strong> — the source code is converted into machine code for the target machine type. Different machine types need different machine code.</li></ol></div><div class="table-scroll"><table><tr><th>Token</th><th>Type</th></tr><tr><td>print</td><td>keyword</td></tr><tr><td>( and )</td><td>symbol</td></tr><tr><td>" "</td><td>symbol</td></tr><tr><td>Hello</td><td>string</td></tr><tr><td>+</td><td>operator</td></tr><tr><td>forename</td><td>identifier</td></tr><tr><td>;</td><td>symbol</td></tr></table></div><p class="note">Tokens for <code>print("Hello" + forename);</code></p>
+<h3>Interpreters</h3>
+<p>An <strong>interpreter</strong> translates and executes a high-level program one line at a time, translating each line into an intermediate stage and then executing it, reporting errors as each line is translated. It can be less efficient than a compiler because translating takes time during execution and statements inside loops (FOR, REPEAT, WHILE) are analysed each time round. Interpreters are often used for macros and application-based script languages (such as Visual Basic for Applications), useful when a document needs to be opened on a variety of operating systems, and for testing so that parts of a program can run without compiling the whole thing.</p>
+<p><strong>Java</strong> uses both: source code (.java) is compiled into Java bytecode (.class), an intermediate code. A <strong>Java Virtual Machine</strong> on the computer interprets the bytecode at execution time so the program works on any operating system.</p>
+<h3>Compiler and interpreter differences</h3><div class="table-scroll"><table><tr><th>Compiler</th><th>Interpreter</th></tr><tr><td>Translates all source code at once, before execution</td><td>Translates one line at a time</td></tr><tr><td>Object code only works on the operating system it was compiled for</td><td>Source code can be translated for more than one operating system</td></tr><tr><td>Object code is ready to execute without delay</td><td>Translation adds time to execution</td></tr><tr><td>Compiling can take a long time, which is not suitable for on-the-fly testing</td><td>Only the required code is interpreted, which is efficient for on-the-fly testing</td></tr><tr><td>Errors are reported after compilation has completed</td><td>Errors are reported as they are found</td></tr><tr><td>Source code is optimised to run as efficiently as possible</td><td>—</td></tr></table></div>
+<h3>Cross compilers</h3>
+<p>A normal compiler only creates code for the system it is installed on. A <strong>cross compiler</strong> can make executable code for other systems, so software can be developed for systems with different architectures, such as Android or iOS. It is useful for machines with limited processing power that cannot run a compiler, for example the small CPU in a car's electrical system: the programs are written on a more powerful machine, compiled with a cross compiler and transferred to the car's ECU.</p>
+<h3>Linkers</h3>
+<p>Programs often consist of several <strong>modules</strong>, each compiled into a separate object file. A <strong>linker</strong> (link editor) combines the object files into a single executable file. It can also link modules from a <strong>common library</strong> — code for common tasks such as mathematical functions, memory management, open and save dialogues, progress bars and input/output. A linker can select which modules form part of the executable, as not all are always needed.</p>
+<h3>Advantages and disadvantages of system software</h3><div class="proscons"><div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Many different types of software to choose from for different tasks</li><li>Many companies make software for the same task, giving choice over cost and features (for example Microsoft and Google word processing)</li><li>Software can be removed and updated as needed</li><li>Many devices come with a range of free system software</li><li>A wide range lets you customise your device to your needs</li></ul></div><div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>May be hard to find software that does exactly what you need</li><li>May need a lot of research to find the best software for the right cost</li><li>Needs to be kept updated to stay secure and gain new features</li><li>Can be very expensive</li><li>Free software may lack the support and function you need</li><li>Choosing correctly needs some technical understanding</li></ul></div></div><div class="task"><p class="task-label"><span>Worked example</span><span class="pts">3 points</span></p><h4>Answer from the notes.</h4><div class="sub-q"><label>Identify two functions of an operating system.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: allocating memory; sending data to output devices; responding to input devices; opening and closing files; sharing processor time between tasks; sending error or status messages; user logons and security</div><div class="self-mark"><input type="checkbox" id="sm-6"><label for="sm-6">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Describe the function of a compiler.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>It translates the whole of a high-level source program into an executable file of machine code in one go</div><div class="self-mark"><input type="checkbox" id="sm-7"><label for="sm-7">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Describe two advantages of an interpreter over a compiler.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: source can be translated for more than one operating system; efficient for on-the-fly testing as only the required code is interpreted; errors are reported as they are found; no long compile before testing</div><div class="self-mark"><input type="checkbox" id="sm-8"><label for="sm-8">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p><h4>Click whether each statement describes a compiler or an interpreter.</h4><div class="classify-list"><div class="classify-item" data-answer="c"><span class="term">Translates the whole program at once before it runs</span><span class="choices"><button data-choice="c">Compiler</button><button data-choice="i">Interpreter</button></span></div><div class="classify-item" data-answer="i"><span class="term">Translates and executes one line at a time</span><span class="choices"><button data-choice="c">Compiler</button><button data-choice="i">Interpreter</button></span></div><div class="classify-item" data-answer="c"><span class="term">Errors are reported after compilation has completed</span><span class="choices"><button data-choice="c">Compiler</button><button data-choice="i">Interpreter</button></span></div><div class="classify-item" data-answer="i"><span class="term">Errors are reported as each line is translated</span><span class="choices"><button data-choice="c">Compiler</button><button data-choice="i">Interpreter</button></span></div><div class="classify-item" data-answer="i"><span class="term">Good for testing parts of a program without translating all of it</span><span class="choices"><button data-choice="c">Compiler</button><button data-choice="i">Interpreter</button></span></div><div class="classify-item" data-answer="c"><span class="term">Produces an executable file that only works on the operating system it was compiled for</span><span class="choices"><button data-choice="c">Compiler</button><button data-choice="i">Interpreter</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="1"><p class="q">1. What are the three stages of compilation, in order?</p><div class="opts"><button class="opt" data-idx="0">Syntax analysis, lexical analysis, code generation</button><button class="opt" data-idx="1">Lexical analysis, syntax analysis, code generation</button><button class="opt" data-idx="2">Code generation, lexical analysis, syntax analysis</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. What does a linker do?</p><div class="opts"><button class="opt" data-idx="0">Combines object files into a single executable file</button><button class="opt" data-idx="1">Translates one line at a time</button><button class="opt" data-idx="2">Sends customised instructions to a printer</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. Why is a cross compiler useful for a car's ECU?</p><div class="opts"><button class="opt" data-idx="0">The ECU is too limited to run a compiler, so the code is compiled on a more powerful machine</button><button class="opt" data-idx="1">The ECU needs an interpreter</button><button class="opt" data-idx="2">It removes the need for an operating system</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-utility"><h2 class="section-title">Utility software <span class="tag">2.3</span></h2>
+<p><strong>Utility software</strong> is system software that performs maintenance on the computer system. It does not include the operating system, but an operating system may come with utility software pre-installed.</p>
+<h3>Anti-virus</h3>
+<p>Anti-virus software is sometimes called anti-malware software, as it also deals with threats such as adware and spyware. It has two main functions:</p><div class="block"><ul><li><strong>Anti-virus monitor</strong> — continually monitors the system and prevents unusual behaviour or signs of viruses or malware from being executed.</li><li><strong>Scanning</strong> — checks for viruses or malware already on the system. The user can usually choose to disinfect, quarantine or ignore.</li></ul></div><div class="table-scroll"><table><tr><th>Option</th><th>What it does</th></tr><tr><td>Disinfect</td><td>Safest — completely removes the threat, but any affected data or program is deleted</td></tr><tr><td>Quarantine</td><td>The compromise — a safe area where the malware cannot be executed, and the data or program stays isolated until it can be checked</td></tr><tr><td>Ignore</td><td>Very dangerous — the malware may run with unexpected results</td></tr></table></div>
+<h3>Back-up</h3>
+<p>Back-up utilities create a second copy of data and programs in storage. A back-up can be run by the user when asked, or <strong>scheduled</strong> to run automatically at a set time. The user can usually select which folders and files are backed up and where the back-up is stored.</p>
+<h3>Data compression</h3>
+<p>Compression utilities reduce the size of files so they use less storage. It can be done file by file, or for a set of files or folders. A compressed file is slower to open than an uncompressed one, but as it is smaller it uses less storage and transfers more quickly. Compressed files must be uncompressed before they are edited, which takes time and can make the computer appear slower.</p><details class="fold"><summary>Did you know?</summary><div class="fold-body"><p>Compressing files is often called "zipping", because compressed files were stored as <code>.ZIP</code>, for example MySmallFile.zip.</p></div></details>
+<h3>Disk defragmentation</h3>
+<p>A hard disk drive (HDD) has the <strong>device</strong> (the electronics) and the <strong>disk</strong> (the medium that stores data). A read-write head at the end of an access arm magnetises sectors on the disk (platter).</p><div class="block"><ul><li>There is usually more than one platter, with several read-write heads for each side of each platter.</li><li>Each platter has <strong>tracks</strong>, and each track is split into <strong>sectors</strong>.</li><li>Tracks in the same position on each platter form a <strong>cylinder</strong>.</li><li>The computer tries to store data in clusters on a single cylinder, which needs the least access arm movement. Moving the access arm is the slowest part of accessing data, so less movement means quicker access.</li></ul></div>
+<h3>Fragmented files</h3>
+<p>Files are first kept together on the same or adjacent cylinders. When files are deleted, gaps are left. If a file grows, it uses more space. Once all the cylinders are used, the only free space is in the gaps; if the gaps are not big enough, files are split across gaps and become <strong>fragmented</strong>. To open a fragmented file, the access arm must move to different locations to read the whole file, which makes opening it slow.</p>
+<h3>Defragmentation</h3>
+<p>A defragmentation utility reorganises the files so that each file is <strong>contiguous</strong> (kept together). It moves fragmented parts of files and small files into free space, creating space on whole or adjacent cylinders, then moves the files so each is together. This can significantly improve performance, especially if program files have become fragmented.</p>
+<h3>Formatting</h3>
+<p>A new disk must be formatted: the tracks are organised into sectors, where data will be stored. Formatting a used disk loses all its data.</p><div class="table-scroll"><table><tr><th>Low-level formatting</th><th>High-level formatting</th></tr><tr><td>Completely removes the data and recreates the tracks and sectors</td><td>Known as a "quick format"; does not delete all the data</td></tr><tr><td>Takes a long time because it overwrites the file storage system</td><td>Takes less time — it only deletes the old file system and creates a new one</td></tr><tr><td>Also called physical formatting as it makes marks on the disk</td><td>New data can be saved over old because the computer does not know data is stored there</td></tr><tr><td>Data cannot be recovered; often described as resetting to factory configuration</td><td>Old data still exists until overwritten, so it can still be recovered</td></tr></table></div>
+<h3>Partitioning</h3>
+<p>A hard disk can be split into smaller parts — for example a 300 GB disk into three 100 GB sections. Each section is a <strong>partition</strong>, with its own file storage system and a unique drive letter such as G or J. It can create separate stores for different people: a teacher might use the G drive for school policies while students use the S drive for class work, both on the same storage device.</p>
+<h3>File management</h3>
+<p>File management utilities give more control over which files are copied and deleted, and how. For example, copying only word processing documents from a series of folders into a single destination folder. Files can also be <strong>synchronised</strong> across locations or computer systems, so a change in one is updated in all others.</p><div class="block"><ul><li>Some utilities can delete files and folders locked by the operating system.</li><li>Normal deletion leaves the data on the disk, only hidden from the user. Deleting utilities can delete files permanently so they cannot be restored or accessed.</li><li>Some remove temporary files no longer needed, or files left behind after a program is uninstalled or a user profile is removed.</li></ul></div>
+<h3>Disk management software</h3>
+<p>Allows maintenance and operations on storage devices: partitioning and formatting the disk (both high- and low-level), renaming drive letters, scanning for errors and changing the file system.</p><div class="task"><p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p><h4>Answer from the notes.</h4><div class="sub-q"><label>List two types of utility software.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: anti-virus; back-up; data compression; disk defragmentation; formatting; file management; disk management</div><div class="self-mark"><input type="checkbox" id="sm-9"><label for="sm-9">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Describe the role of anti-virus software.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>It monitors the system continually and prevents suspicious behaviour from executing, and scans for viruses or malware already present, letting the user disinfect, quarantine or ignore them</div><div class="self-mark"><input type="checkbox" id="sm-10"><label for="sm-10">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain why a file may become fragmented.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>When all cylinders are used, a file that has grown or a new file is split across gaps that are too small for the whole file</div><div class="self-mark"><input type="checkbox" id="sm-11"><label for="sm-11">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain why a fragmented file is slow to open.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>The access arm has to move to several different locations to read the whole file</div><div class="self-mark"><input type="checkbox" id="sm-12"><label for="sm-12">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p><h4>Click whether each statement describes low-level or high-level formatting.</h4><div class="classify-list"><div class="classify-item" data-answer="h"><span class="term">Known as a "quick format"</span><span class="choices"><button data-choice="l">Low-level</button><button data-choice="h">High-level</button></span></div><div class="classify-item" data-answer="l"><span class="term">Data cannot be recovered afterwards</span><span class="choices"><button data-choice="l">Low-level</button><button data-choice="h">High-level</button></span></div><div class="classify-item" data-answer="h"><span class="term">Only deletes the old file system and creates a new one</span><span class="choices"><button data-choice="l">Low-level</button><button data-choice="h">High-level</button></span></div><div class="classify-item" data-answer="l"><span class="term">Also called physical formatting</span><span class="choices"><button data-choice="l">Low-level</button><button data-choice="h">High-level</button></span></div><div class="classify-item" data-answer="h"><span class="term">Old data remains on the disk until it is overwritten</span><span class="choices"><button data-choice="l">Low-level</button><button data-choice="h">High-level</button></span></div><div class="classify-item" data-answer="l"><span class="term">Takes a long time because it overwrites the file storage system</span><span class="choices"><button data-choice="l">Low-level</button><button data-choice="h">High-level</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="0"><p class="q">1. What are tracks in the same position on each platter called?</p><div class="opts"><button class="opt" data-idx="0">A cylinder</button><button class="opt" data-idx="1">A partition</button><button class="opt" data-idx="2">A sector</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="1"><p class="q">2. Which anti-virus option keeps affected data isolated but not deleted?</p><div class="opts"><button class="opt" data-idx="0">Disinfect</button><button class="opt" data-idx="1">Quarantine</button><button class="opt" data-idx="2">Ignore</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="1"><p class="q">3. What does defragmentation do?</p><div class="opts"><button class="opt" data-idx="0">Compresses files so they take less space</button><button class="opt" data-idx="1">Reorganises files so each is kept together</button><button class="opt" data-idx="2">Deletes locked files</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-software"><h2 class="section-title">Custom-written and off-the-shelf software <span class="tag">2.4</span></h2>
+<h3>Custom-written software</h3>
+<p><strong>Custom-written software</strong> is written to meet the specific requirements of a client. It is customised to the client's needs and would not be useful to other individuals or organisations, as it only carries out that specific task. Examples:</p><div class="block"><ul><li><strong>Robots in manufacturing</strong> — specific software to control custom robots</li><li><strong>Specific scientific experiments</strong> — specialised software to process the experiment's data</li><li><strong>Autonomous vehicles</strong> — software controls vehicles from different manufacturers; Ford software would not work on a Toyota or a Tesla</li></ul></div>
+<h3>Off-the-shelf software</h3>
+<p><strong>Off-the-shelf software</strong> is general purpose software that already exists and is available to a large market, bought online or from a shop for a specified price. Examples are word processing and financial software. Writing documents always uses similar features such as spell checks and changing fonts.</p>
+<h3>Choosing between them</h3><div class="block"><ul><li><strong>Degree of testing</strong> — custom software may be less tested because fewer people use it, so bugs are found more slowly.</li><li><strong>Level of support</strong> — more support is likely for off-the-shelf software because more people buy it, giving the manufacturer more money to spend on support.</li><li><strong>Cost</strong> — custom software costs a lot more because only one client wants it; off-the-shelf costs are shared across many customers.</li><li><strong>Adaptability</strong> — both can be adapted, but custom software more easily, because changes affect a small number of users. Changing off-the-shelf software affects millions of users, so it may take longer.</li></ul></div><div class="table-scroll"><table><tr><th>Custom-written software</th><th>Off-the-shelf software</th></tr><tr><td>The client meets the entire development cost, so it is very expensive</td><td>Development cost is spread across all customers, so it is much cheaper</td></tr><tr><td>Takes a long time to develop, so the client waits</td><td>Immediately available</td></tr><tr><td>Meets the client's requirements precisely, with no unnecessary features</td><td>Some needed tasks may not be possible, and there are many features the customer never uses</td></tr><tr><td>Developers make sure it is compatible with the client's hardware, software and data</td><td>May not be compatible with existing hardware, software and data</td></tr><tr><td>Not used before apart from testing, so bugs are likely to be found as the client uses it</td><td>Used by thousands of customers, so bugs have been found and fixed, with patches released</td></tr><tr><td>Support from the company that developed it</td><td>Support from many sources, including telephone support, discussion forums and online training</td></tr></table></div>
+<h3>Proprietary software</h3>
+<p><strong>Proprietary software</strong> is owned by an individual or organisation who sells it for use under an agreed licence. Only the files needed to run it are provided; the source code stays with the owner. Licences include freeware, shareware, single user, multi-user and site licence. For example, an office suite could be sold for business use on a single computer, or for personal use on up to five devices. Freeware and shareware can often be used free of charge, but some features may be restricted or it may stop working after a trial period until payment is made.</p>
+<h3>Open-source software</h3>
+<p><strong>Open-source software</strong> has its source code freely available — the source code must be distributed with the executable version. It can be freely accessed, used, changed or shared. There is often a community of developers contributing to it. It is often free, but sometimes there is a fee.</p><div class="task"><p class="task-label"><span>Worked example</span><span class="pts">2 points</span></p><h4>Answer from the notes.</h4><div class="sub-q"><label>Describe off-the-shelf software.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>General purpose software that already exists and is available to a large market, bought for a specified price (for example word processing software)</div><div class="self-mark"><input type="checkbox" id="sm-13"><label for="sm-13">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Describe two disadvantages of custom-written software.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: very expensive as the client pays all development costs; takes a long time to develop; likely to contain bugs as it has not been widely used; less testing and support than off-the-shelf software</div><div class="self-mark"><input type="checkbox" id="sm-14"><label for="sm-14">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p><h4>Click whether each statement describes custom-written or off-the-shelf software.</h4><div class="classify-list"><div class="classify-item" data-answer="o"><span class="term">Development cost is shared between many customers</span><span class="choices"><button data-choice="c">Custom-written</button><button data-choice="o">Off-the-shelf</button></span></div><div class="classify-item" data-answer="c"><span class="term">Meets the client's requirements precisely</span><span class="choices"><button data-choice="c">Custom-written</button><button data-choice="o">Off-the-shelf</button></span></div><div class="classify-item" data-answer="o"><span class="term">Bugs have already been found and fixed by thousands of users</span><span class="choices"><button data-choice="c">Custom-written</button><button data-choice="o">Off-the-shelf</button></span></div><div class="classify-item" data-answer="c"><span class="term">Takes a long time to develop, so the client has to wait</span><span class="choices"><button data-choice="c">Custom-written</button><button data-choice="o">Off-the-shelf</button></span></div><div class="classify-item" data-answer="o"><span class="term">May contain features the customer never uses</span><span class="choices"><button data-choice="c">Custom-written</button><button data-choice="o">Off-the-shelf</button></span></div><div class="classify-item" data-answer="c"><span class="term">More easily adapted because changes affect few users</span><span class="choices"><button data-choice="c">Custom-written</button><button data-choice="o">Off-the-shelf</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="1"><p class="q">1. Which licence type lets software be used free, possibly with restricted features or a trial period?</p><div class="opts"><button class="opt" data-idx="0">Single user</button><button class="opt" data-idx="1">Freeware or shareware</button><button class="opt" data-idx="2">Site licence</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. What must be distributed with open-source software?</p><div class="opts"><button class="opt" data-idx="0">The source code</button><button class="opt" data-idx="1">A support contract</button><button class="opt" data-idx="2">A site licence</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="1"><p class="q">3. Why is off-the-shelf software cheaper?</p><div class="opts"><button class="opt" data-idx="0">It has fewer features</button><button class="opt" data-idx="1">Its cost is spread across many customers</button><button class="opt" data-idx="2">It is always open source</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-interfaces"><h2 class="section-title">User interfaces <span class="tag">2.5</span></h2>
+<p>A <strong>user interface</strong> is the way a user communicates with a computer system or piece of software, allowing them to interact with it.</p>
+<h3>Command line interface</h3>
+<p>A command line interface (CLI) lets the user enter text commands, and the system responds with text. For example, the user changes directory (<code>cd logs</code>), lists it (<code>dir</code>) and copies a file (<code>copy directx.log f:</code>), then gets a confirmation message that one file was copied. The only prompt is the currently active directory.</p>
+<p>CLIs use very little memory and are useful in old systems, for maintenance of very small systems such as engine management systems, and for technical users doing complex operations that user-friendly interfaces cannot. However, they are difficult to learn because users must remember all the commands, and errors are easily made.</p>
+<h3>Graphical user interface</h3>
+<p>The most common interface, found on desktops, tablets, phones, televisions, set-top boxes, photocopiers and in-car entertainment. GUI elements are remembered with the acronym <strong>WIMP</strong>:</p><div class="table-scroll"><table><tr><th>Element</th><th>Description</th></tr><tr><td>Windows</td><td>An area of the screen for a specific task, such as an application, a file or a print dialogue box</td></tr><tr><td>Icons</td><td>An image representing a program, file or task, which can be selected to open it</td></tr><tr><td>Menus</td><td>Words on screen representing a list of options that can expand into sub-menus</td></tr><tr><td>Pointers</td><td>Represents movement from a pointing device such as a mouse or a finger on a touch screen, and selects and manipulates objects</td></tr></table></div>
+<p>Complex GUIs may need a lot of memory; simple GUIs can be used where memory is limited, sometimes instead of a CLI in small embedded systems. Simple web-based GUIs are commonly used to maintain routers, switches and printers.</p>
+<p>GUIs are often easy to use because commands are shown as pictures and menus offer selectable options. They can be restrictive for technical users who must navigate menus when they know the command they want. <strong>Shortcuts</strong> — key combinations such as Ctrl+C to copy and Ctrl+V to paste — help solve this.</p>
+<h3>Form controls</h3><div class="table-scroll"><table><tr><th>Control</th><th>Description</th></tr><tr><td>Labels</td><td>Prompts or instructions to enter data. They are text and cannot be edited by the user.</td></tr><tr><td>Text boxes</td><td>An area to enter text such as a surname or credit card number. Errors are easily made, such as misspelling.</td></tr><tr><td>Tick boxes</td><td>Also called check boxes. The user can choose as many options as apply, for example collating and printing on both sides.</td></tr><tr><td>Option buttons</td><td>Also called radio buttons. Only one option in a group can be selected at once.</td></tr><tr><td>Drop-down boxes</td><td>Choose one option from a list. The user can usually type to find it faster. Better than option buttons when there are many options, as they take less space.</td></tr><tr><td>Buttons</td><td>Navigate forwards and backwards, confirm that inputs are complete, clear inputs, get help and access other areas of an interface.</td></tr></table></div>
+<h3>Dialogue interface</h3>
+<p>Users speak to the computer and it carries out the command, perhaps responding with a synthesised voice. Popular on mobile phones and in-car systems (for example 'Temperature 20', 'Call home', 'What is the time?'). Some automated telephone systems recognise a user's voice, so the keypad is not needed. No physical interface is needed, so it suits home automation (lights, entertainment systems, shutters), and anybody in the room can control a television without a remote. Words can often be spoken faster than typed.</p>
+<p>The main problem is recognising the voice: accents, different voices, language and background noise (such as a car's engine) all make it hard. Users must also know which commands are understood, so some systems prompt with options. Systems cannot understand requests in any format.</p>
+<h3>Gesture-based interface</h3>
+<p>Recognises human motion, such as tracking eyes and lips, hand signals or whole-body movement. The original Nintendo Wii mimicked hand movements with a handheld controller; Microsoft's Xbox can track whole body movement without devices being held or worn. Hand gestures on mobile devices can control objects on screen, such as a swipe to close a program or a pinch to zoom out. Avoiding screen contact helps control infection, for example in an operating theatre. Gestures can be essential for users with physical disabilities — someone with no control from the neck down could control a computer with their eyes.</p>
+<p>The biggest problem is accuracy: it needs highly accurate cameras or sensors, which is why many virtual reality applications still use sensors attached to the body. Controlling a pointer with a finger in mid-air is also difficult.</p>
+<h3>Advantages and disadvantages</h3><div class="table-scroll"><table><tr><th>Interface</th><th>Advantages</th><th>Disadvantages</th></tr><tr><td>Command line</td><td>Very quick to use; simple and cheap to design; very low demand on resources as it prints text</td><td>Needs specialist knowledge; difficult to know what to do; format and layout difficult to design well</td></tr><tr><td>Graphical user</td><td>Clear and easy to follow; suits people with low digital skills; colours and layout help show what is happening</td><td>Can take a long time to design; uses more resources (for example a graphics card)</td></tr><tr><td>Dialogue</td><td>Simple to use; natural language; no specific commands to learn</td><td>May not recognise certain voices or languages; user needs training; may be no screen to show what is happening; less suitable for users with disabilities</td></tr><tr><td>Gesture-based</td><td>Simple to use; body movement is easy to learn; no specific commands to learn</td><td>May not recognise certain movements; user needs training; gestures can be difficult and many may need learning; less suitable for users with disabilities; may need calibration</td></tr></table></div><div class="task"><p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p><h4>Answer from the notes.</h4><div class="sub-q"><label>Give two reasons why a command line interface might be used instead of a GUI.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: uses very little memory; useful in old systems or for maintaining very small systems; useful for technical users doing complex operations; very quick to use; cheap to design</div><div class="self-mark"><input type="checkbox" id="sm-15"><label for="sm-15">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Give two disadvantages of a command line interface.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: users must learn and remember the commands; errors are easily made; needs specialist knowledge; layout is difficult to design well</div><div class="self-mark"><input type="checkbox" id="sm-16"><label for="sm-16">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Define the acronym WIMP.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Windows, icons, menus, pointers</div><div class="self-mark"><input type="checkbox" id="sm-17"><label for="sm-17">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain two advantages of dialogue interfaces.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: simple to use; uses natural language so no specific commands to learn; no physical interface needed so they suit home automation; words are often spoken faster than typed; hands-free in cars</div><div class="self-mark"><input type="checkbox" id="sm-18"><label for="sm-18">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p><h4>Click which form control each description matches.</h4><div class="classify-list"><div class="classify-item" data-answer="t"><span class="term">Several options can be selected at once</span><span class="choices"><button data-choice="t">Tick box</button><button data-choice="o">Option button</button><button data-choice="d">Drop-down box</button></span></div><div class="classify-item" data-answer="o"><span class="term">Only one option in a group can be selected, and every option is visible</span><span class="choices"><button data-choice="t">Tick box</button><button data-choice="o">Option button</button><button data-choice="d">Drop-down box</button></span></div><div class="classify-item" data-answer="d"><span class="term">Best when there are many options, as it takes less space</span><span class="choices"><button data-choice="t">Tick box</button><button data-choice="o">Option button</button><button data-choice="d">Drop-down box</button></span></div><div class="classify-item" data-answer="t"><span class="term">Also known as a check box</span><span class="choices"><button data-choice="t">Tick box</button><button data-choice="o">Option button</button><button data-choice="d">Drop-down box</button></span></div><div class="classify-item" data-answer="o"><span class="term">Also known as a radio button</span><span class="choices"><button data-choice="t">Tick box</button><button data-choice="o">Option button</button><button data-choice="d">Drop-down box</button></span></div><div class="classify-item" data-answer="d"><span class="term">The user can start typing to find the option more quickly</span><span class="choices"><button data-choice="t">Tick box</button><button data-choice="o">Option button</button><button data-choice="d">Drop-down box</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="0"><p class="q">1. What does the P in WIMP stand for?</p><div class="opts"><button class="opt" data-idx="0">Pointers</button><button class="opt" data-idx="1">Programs</button><button class="opt" data-idx="2">Partitions</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="2"><p class="q">2. Which interface may need calibration to detect movements accurately?</p><div class="opts"><button class="opt" data-idx="0">Command line</button><button class="opt" data-idx="1">Graphical user</button><button class="opt" data-idx="2">Gesture-based</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. What is the main problem with a dialogue interface?</p><div class="opts"><button class="opt" data-idx="0">Recognising the user's voice</button><button class="opt" data-idx="1">It needs a lot of typing</button><button class="opt" data-idx="2">It cannot be used in cars</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-practice"><h2 class="section-title">Practice questions <span class="tag">Exam style</span></h2><p>Write each answer in full first, then compare it with the mark points and tick the ones you covered.</p><h3>Question 1</h3><p>A regional government uses a mainframe computer to host its databases and web-enabled applications.</p><div class="task"><p class="task-label"><span>Part a</span><span class="pts">1 points</span></p><h4></h4><div class="sub-q"><label>State one measurement of processor speed used for mainframe computers or supercomputers. [1]</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>MIPS (millions of instructions per second) or FLOPS / MFLOPS</div><div class="self-mark"><input type="checkbox" id="sm-19"><label for="sm-19">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">6 points</span></p><h4>Explain the importance of reliability, availability and serviceability for mainframe computers. (6 marks)</h4><div class="sub-q mp" data-max="6"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 6)</span><label class="mp-item"><input type="checkbox"><span>Mainframes are designed to be used 100% of the time</span></label><label class="mp-item"><input type="checkbox"><span>Hardware components can self-check and recover automatically after failure (reliability)</span></label><label class="mp-item"><input type="checkbox"><span>Software is tested extensively and can be updated quickly if problems are found</span></label><label class="mp-item"><input type="checkbox"><span>Extra components such as storage and power supplies take over automatically if one fails (redundancy), so it stays available</span></label><label class="mp-item"><input type="checkbox"><span>Failed components can be replaced without affecting operation, for example hot-swappable parts (serviceability)</span></label><label class="mp-item"><input type="checkbox"><span>Serviceability measures how quickly it can be repaired if shut down; mainframes run for many years without downtime</span></label><div class="mp-foot"><span class="mp-count">0 / 6 marks</span><span class="mp-note"></span></div></div></div></div><h3>Question 2</h3><p>The accounts department has a new printer.</p><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">2 points</span></p><h4>Explain why the accounts administrator needs a device driver for the new printer. (2 marks)</h4><div class="sub-q mp" data-max="2"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 2)</span><label class="mp-item"><input type="checkbox"><span>A device driver sends customised instructions to the specific make and model of hardware</span></label><label class="mp-item"><input type="checkbox"><span>It lets the operating system and applications issue generic commands such as "print" without needing the printer's specific instructions</span></label><div class="mp-foot"><span class="mp-count">0 / 2 marks</span><span class="mp-note"></span></div></div></div></div><h3>Question 3</h3><p>The administrator's laptop is running more slowly than usual. Disk defragmentation software shows the hard disk is 70% fragmented.</p><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p><h4>Explain how data is stored on a hard disk. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Each platter has tracks, and each track is split into sectors</span></label><label class="mp-item"><input type="checkbox"><span>A read-write head on an access arm magnetises the sectors on the platter</span></label><label class="mp-item"><input type="checkbox"><span>There are usually several platters, with read-write heads for each side of each platter</span></label><label class="mp-item"><input type="checkbox"><span>Tracks in the same position on each platter form a cylinder; the computer tries to store data in clusters on one cylinder to reduce access arm movement</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p><h4>Explain how the data on the laptop's hard disk may have become fragmented. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Files are first stored together on the same or adjacent cylinders</span></label><label class="mp-item"><input type="checkbox"><span>When files are deleted, gaps are left on the disk</span></label><label class="mp-item"><input type="checkbox"><span>Files may increase in size and need more space</span></label><label class="mp-item"><input type="checkbox"><span>Once all cylinders are used, the only space is in the gaps</span></label><label class="mp-item"><input type="checkbox"><span>If the gaps are too small, files are split across several gaps so they are fragmented</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><h3>Question 4</h3><p>The waste collection department needs new software. The software will link to the government's website, allowing residents and businesses to log problems such as missed waste collections.</p><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">6 points</span></p><h4>Evaluate the use of a custom-written software solution for this purpose. (6 marks)</h4><div class="sub-q mp" data-max="6"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 6)</span><label class="mp-item"><input type="checkbox"><span>Meets the department's requirements precisely, with no unnecessary features</span></label><label class="mp-item"><input type="checkbox"><span>Developers ensure it is compatible with the existing hardware, software and data</span></label><label class="mp-item"><input type="checkbox"><span>Can be adapted more easily, as changes affect a small number of users</span></label><label class="mp-item"><input type="checkbox"><span>Very expensive, as the department meets the entire development cost</span></label><label class="mp-item"><input type="checkbox"><span>Takes a long time to develop, so the department must wait before using it</span></label><label class="mp-item"><input type="checkbox"><span>Likely to contain bugs as it has not been used before apart from testing</span></label><label class="mp-item"><input type="checkbox"><span>Support comes from the company that developed it, but with less testing and less support than off-the-shelf software</span></label><div class="mp-foot"><span class="mp-count">0 / 6 marks</span><span class="mp-note"></span></div></div></div></div><h3>Question 5</h3><p>The waste management software will use a Graphical User Interface (GUI).</p><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">6 points</span></p><h4>Identify and describe three different form controls that could be used in the GUI, giving examples of how they could be used. (6 marks)</h4><div class="sub-q mp" data-max="6"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 6)</span><label class="mp-item"><input type="checkbox"><span>Text box — an area to enter text, for example the resident's address or a description of the problem</span></label><label class="mp-item"><input type="checkbox"><span>Tick box — choose as many options as apply, for example the types of waste affected</span></label><label class="mp-item"><input type="checkbox"><span>Option button — only one option in a group, for example choosing one collection day</span></label><label class="mp-item"><input type="checkbox"><span>Drop-down box — choose one option from a list, for example selecting a street or area from many</span></label><label class="mp-item"><input type="checkbox"><span>Button — to confirm inputs are complete, clear inputs or navigate, for example "Submit"</span></label><label class="mp-item"><input type="checkbox"><span>Label — a prompt or instruction that cannot be edited, for example "Enter your postcode"</span></label><div class="mp-foot"><span class="mp-count">0 / 6 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Part b</span><span class="pts">1 points</span></p><h4></h4><div class="sub-q"><label>Identify two other types of user interface. [2]</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: command line interface; dialogue interface; gesture-based interface (2 marks — tick the box only if you named both)</div><div class="self-mark"><input type="checkbox" id="sm-20"><label for="sm-20">My answer was close enough — award myself the point</label></div></div></div><h3>Question 6</h3><p>The software development team uses an interpreter for testing during development and a compiler to translate the final version to machine code for government officials.</p><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p><h4>Describe two differences between a compiler and an interpreter. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>A compiler translates all the source code at once; an interpreter translates one line at a time</span></label><label class="mp-item"><input type="checkbox"><span>A compiler's object code is ready to run with no delay; an interpreter adds translation time to execution</span></label><label class="mp-item"><input type="checkbox"><span>Compiled code only works on the operating system it was compiled for; interpreted source can be translated for more than one</span></label><label class="mp-item"><input type="checkbox"><span>A compiler reports errors after compilation has completed; an interpreter reports them as found</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div></div>
+</div>
+<footer>Cambridge AS &amp; A Level IT · Hardware and Software — built for revision, points are just for you.</footer>
+<script>
+(function(){
+  const scoreValEl = document.getElementById('score-val');
+  const scoreMaxEl = document.getElementById('score-max');
+  let score = 0;
+  function addScore(n){
+    score += n;
+    if(score < 0) score = 0;
+    scoreValEl.textContent = score;
+  }
+
+  // Work out the maximum score from what is actually on the page
+  let max = 0;
+  document.querySelectorAll('.self-mark input[type=checkbox]').forEach(function(cb){
+    max += parseInt(cb.dataset.points || '1', 10);
+  });
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    max += parseInt(sq.dataset.max, 10);
+  });
+  max += document.querySelectorAll('.classify-item').length;
+  max += document.querySelectorAll('.mcq').length;
+  scoreMaxEl.textContent = max;
+
+  // Tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // Written questions with one self-marked point each
+  document.querySelectorAll('.sub-q:not(.mp)').forEach(function(sq){
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const reveal = sq.querySelector('.answer-reveal');
+    const mark = sq.querySelector('.self-mark');
+    const checkbox = mark ? mark.querySelector('input[type=checkbox]') : null;
+    if(!btn || !reveal || !mark) return;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        reveal.classList.remove('show');
+        mark.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      reveal.classList.add('show');
+      mark.classList.add('show');
+    });
+
+    if(checkbox){
+      checkbox.addEventListener('change', function(){
+        const pts = parseInt(checkbox.dataset.points || '1', 10);
+        addScore(checkbox.checked ? pts : -pts);
+      });
+    }
+  });
+
+  // Extended answers: tick the mark points you covered, capped at the maximum
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    const cap = parseInt(sq.dataset.max, 10);
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const panel = sq.querySelector('.markpoints');
+    const note = sq.querySelector('.mp-note');
+    const count = sq.querySelector('.mp-count');
+    const boxes = panel.querySelectorAll('input[type=checkbox]');
+    let awarded = 0;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        panel.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      panel.classList.add('show');
+    });
+
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if(cb.checked){
+          if(awarded >= cap){
+            cb.checked = false;
+            note.textContent = "That's already full marks (" + cap + "). Untick a point first to swap it.";
+            return;
+          }
+          awarded += 1;
+          addScore(1);
+        } else {
+          awarded -= 1;
+          addScore(-1);
+        }
+        note.textContent = '';
+        count.textContent = awarded + ' / ' + cap + ' marks';
+      });
+    });
+  });
+
+  // Sort-it tasks
+  document.querySelectorAll('.classify-item').forEach(function(item){
+    const answer = item.dataset.answer;
+    const buttons = item.querySelectorAll('.choices button');
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){
+        buttons.forEach(function(other){ other.disabled = true; });
+        if(b.dataset.choice === answer){
+          b.classList.add('correct');
+          addScore(1);
+        } else {
+          b.classList.add('incorrect');
+          buttons.forEach(function(other){
+            if(other.dataset.choice === answer) other.classList.add('correct');
+          });
+        }
+      });
+    });
+  });
+
+  // Quick checks
+  document.querySelectorAll('.mcq').forEach(function(mcq){
+    const correctIdx = mcq.dataset.answer;
+    const opts = mcq.querySelectorAll('.opt');
+    const feedback = mcq.querySelector('.mcq-feedback');
+    opts.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        opts.forEach(function(o){ o.disabled = true; });
+        if(opt.dataset.idx === correctIdx){
+          opt.classList.add('correct');
+          feedback.textContent = 'Correct.';
+          feedback.className = 'mcq-feedback ok';
+          addScore(1);
+        } else {
+          opt.classList.add('incorrect');
+          opts.forEach(function(o){
+            if(o.dataset.idx === correctIdx) o.classList.add('correct');
+          });
+          feedback.textContent = 'Not quite — the correct answer is highlighted above.';
+          feedback.className = 'mcq-feedback bad';
+        }
+      });
+    });
+  });
+
+  })();
+</script>
+</body>
+</html>
