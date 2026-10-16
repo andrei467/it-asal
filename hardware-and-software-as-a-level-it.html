@@ -501,10 +501,8 @@
   });
 
   })();
-</script>
-<script>
 (function(){
-  var STORE_KEY = 'ict-lesson-progress::' + location.pathname + '::' + document.title;
+    var STORE_KEY = 'ict-lesson-progress::' + location.pathname + '::' + document.title;
 
   function load(){
     try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
@@ -515,15 +513,14 @@
       var s = load();
       mutator(s);
       localStorage.setItem(STORE_KEY, JSON.stringify(s));
-    } catch(e){ /* storage unavailable or full: fail silently */ }
+    } catch(e){ /* storage unavailable or full — fail silently */ }
   }
-  function all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
 
-  // This page has no data-task attributes, so find things by their own classes
-  var subQs      = all('.sub-q:not(.mp)');   // short written answers (self-marked)
-  var mpQs       = all('.sub-q.mp');         // extended answers (mark points)
-  var classifyIt = all('.classify-item');
-  var mcqs       = all('.mcq');
+  var subQs      = Array.prototype.slice.call(document.querySelectorAll('.task[data-task="open"] .sub-q'));
+  var classifyIt = Array.prototype.slice.call(document.querySelectorAll('.classify-item'));
+  var mcqs       = Array.prototype.slice.call(document.querySelectorAll('.mcq'));
+  var orderTasks = Array.prototype.slice.call(document.querySelectorAll('.task[data-task="order"]'));
+  var selectTasks= Array.prototype.slice.call(document.querySelectorAll('.task[data-task="select"]'));
 
   // ---- SAVE: listen alongside the page's own handlers ----
 
@@ -532,6 +529,7 @@
     var ta = sq.querySelector('textarea');
     var btn = sq.querySelector('.check-btn');
     var cb = sq.querySelector('.self-mark input[type=checkbox]');
+
     if(ta) ta.addEventListener('input', function(){
       save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
     });
@@ -547,36 +545,9 @@
     });
   });
 
-  mpQs.forEach(function(sq, i){
-    var key = 'mp-' + i;
-    var ta = sq.querySelector('textarea');
-    var btn = sq.querySelector('.check-btn');
-    var boxes = all_in(sq, '.markpoints input[type=checkbox]');
-    if(ta) ta.addEventListener('input', function(){
-      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
-    });
-    if(btn) btn.addEventListener('click', function(){
-      save(function(s){
-        s[key] = s[key] || {};
-        s[key].text = ta ? ta.value : '';
-        s[key].shown = !!(ta && ta.value.trim());
-      });
-    });
-    boxes.forEach(function(cb){
-      cb.addEventListener('change', function(){
-        save(function(s){
-          s[key] = s[key] || {};
-          var ticked = [];
-          boxes.forEach(function(b, bi){ if(b.checked) ticked.push(bi); });
-          s[key].ticked = ticked;
-        });
-      });
-    });
-  });
-  function all_in(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); }
-
   classifyIt.forEach(function(item, i){
-    all_in(item, '.choices button').forEach(function(b, bi){
+    var buttons = item.querySelectorAll('.choices button');
+    buttons.forEach(function(b, bi){
       b.addEventListener('click', function(){
         save(function(s){ s['classify-' + i] = bi; });
       });
@@ -584,10 +555,35 @@
   });
 
   mcqs.forEach(function(mcq, i){
-    all_in(mcq, '.opt').forEach(function(o, oi){
+    var opts = mcq.querySelectorAll('.opt');
+    opts.forEach(function(o, oi){
       o.addEventListener('click', function(){
         save(function(s){ s['mcq-' + i] = oi; });
       });
+    });
+  });
+
+  orderTasks.forEach(function(task, ti){
+    var items = task.querySelectorAll('.order-item');
+    items.forEach(function(item){
+      item.addEventListener('click', function(){
+        save(function(s){
+          var key = 'order-' + ti;
+          s[key] = s[key] || [];
+          s[key].push(item.dataset.order);
+        });
+      });
+    });
+  });
+
+  selectTasks.forEach(function(task, ti){
+    var btn = task.querySelector('.check-select-btn');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      var items = Array.prototype.slice.call(task.querySelectorAll('.select-item input'));
+      var checkedIdx = [];
+      items.forEach(function(inp, ii){ if(inp.checked) checkedIdx.push(ii); });
+      save(function(s){ s['select-' + ti] = checkedIdx; });
     });
   });
 
@@ -611,22 +607,6 @@
       }
     });
 
-    mpQs.forEach(function(sq, i){
-      var rec = s['mp-' + i];
-      if(!rec) return;
-      var ta = sq.querySelector('textarea');
-      var btn = sq.querySelector('.check-btn');
-      var boxes = all_in(sq, '.markpoints input[type=checkbox]');
-      if(ta && rec.text) ta.value = rec.text;
-      if(rec.shown && btn) btn.click();
-      (rec.ticked || []).forEach(function(bi){
-        if(boxes[bi]){
-          boxes[bi].checked = true;
-          boxes[bi].dispatchEvent(new Event('change'));
-        }
-      });
-    });
-
     classifyIt.forEach(function(item, i){
       var bi = s['classify-' + i];
       if(bi === undefined) return;
@@ -640,6 +620,29 @@
       var opts = mcq.querySelectorAll('.opt');
       if(opts[oi]) opts[oi].click();
     });
+
+    orderTasks.forEach(function(task, ti){
+      var seq = s['order-' + ti];
+      if(!seq) return;
+      seq.forEach(function(orderVal){
+        var items = task.querySelectorAll('.order-item');
+        for(var j = 0; j < items.length; j++){
+          if(items[j].dataset.order === orderVal && !items[j].disabled){
+            items[j].click();
+            break;
+          }
+        }
+      });
+    });
+
+    selectTasks.forEach(function(task, ti){
+      var idxArr = s['select-' + ti];
+      if(!idxArr) return;
+      var items = Array.prototype.slice.call(task.querySelectorAll('.select-item input'));
+      idxArr.forEach(function(ii){ if(items[ii]) items[ii].checked = true; });
+      var btn = task.querySelector('.check-select-btn');
+      if(btn) btn.click();
+    });
   })();
 
   // ---- Small "reset my answers" control ----
@@ -647,10 +650,10 @@
   resetBtn.textContent = 'Reset my answers';
   resetBtn.setAttribute('type', 'button');
   resetBtn.style.cssText = 'position:fixed;bottom:14px;left:14px;z-index:50;font-family:JetBrains Mono,monospace;'
-    + 'font-size:11px;padding:7px 11px;background:var(--bg-raised);border:1px solid var(--trace);'
-    + 'color:var(--paper-dim);border-radius:3px;cursor:pointer;';
-  resetBtn.addEventListener('mouseenter', function(){ resetBtn.style.color = 'var(--paper)'; });
-  resetBtn.addEventListener('mouseleave', function(){ resetBtn.style.color = 'var(--paper-dim)'; });
+    + 'font-size:11px;padding:7px 11px;background:#141b2e;border:1px solid #40557d;'
+    + 'color:#9ba4bc;border-radius:3px;cursor:pointer;';
+  resetBtn.addEventListener('mouseenter', function(){ resetBtn.style.color = '#e7e9f1'; });
+  resetBtn.addEventListener('mouseleave', function(){ resetBtn.style.color = '#9ba4bc'; });
   resetBtn.addEventListener('click', function(){
     if(confirm('Clear all your saved answers on this page?')){
       try { localStorage.removeItem(STORE_KEY); } catch(e){}
@@ -658,6 +661,7 @@
     }
   });
   document.body.appendChild(resetBtn);
+})();
 })();
 </script>
 </body>
