@@ -255,13 +255,13 @@
 <div id="score-badge">Score: <span class="n" id="score-val">0</span> / <span id="score-max">0</span></div>
 
 <nav class="theory-nav">
-  <a class="disabled" href="#" aria-disabled="true">← <span class="full">Previous theory</span></a>
+  <a href="hardware-and-software-as-a-level-it.html">← <span class="full">Previous theory</span></a>
   <span class="spacer"></span>
   <a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a>
 </nav>
 
 <header class="hero">
-  <p class="kicker">Cambridge AS &amp; A Level IT · Monitoring and Control</p>
+  <p class="kicker">Cambridge AS &amp; A Level IT · Chapter 3</p>
   <h1 class="title">Monitoring and Control</h1>
   <p>Computers can watch the physical world through sensors, and act on it through actuators. This page covers how monitoring systems measure and record, why sensors need calibrating, and how control systems keep greenhouses, heating, car parks and smart homes running by themselves.</p>
 </header>
@@ -839,24 +839,24 @@
   <p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p>
   <h4>Click whether each example is monitoring or control.</h4>
   <div class="classify-list">
-    <div class="classify-item" data-answer="mon"><span class="term">Recording temperature readings over time and showing them as a graph</span><span class="choices"><button data-choice="mon">Monitoring</button><button data-choice="con">Control</button></span></div>
-    <div class="classify-item" data-answer="con"><span class="term">Switching a heater on when the room falls below the pre-set temperature</span><span class="choices"><button data-choice="mon">Monitoring</button><button data-choice="con">Control</button></span></div>
     <div class="classify-item" data-answer="mon"><span class="term">A weather station working out the highest and lowest daily temperature</span><span class="choices"><button data-choice="mon">Monitoring</button><button data-choice="con">Control</button></span></div>
-    <div class="classify-item" data-answer="con"><span class="term">Opening a greenhouse window motor when it gets too hot</span><span class="choices"><button data-choice="mon">Monitoring</button><button data-choice="con">Control</button></span></div>
+    <div class="classify-item" data-answer="con"><span class="term">Switching a heater on when the room falls below the pre-set temperature</span><span class="choices"><button data-choice="mon">Monitoring</button><button data-choice="con">Control</button></span></div>
     <div class="classify-item" data-answer="mon"><span class="term">Sounding a warning if conditions in a nuclear reactor become critical</span><span class="choices"><button data-choice="mon">Monitoring</button><button data-choice="con">Control</button></span></div>
+    <div class="classify-item" data-answer="mon"><span class="term">Recording temperature readings over time and showing them as a graph</span><span class="choices"><button data-choice="mon">Monitoring</button><button data-choice="con">Control</button></span></div>
     <div class="classify-item" data-answer="con"><span class="term">Opening a sprinkler valve when the soil is too dry</span><span class="choices"><button data-choice="mon">Monitoring</button><button data-choice="con">Control</button></span></div>
+    <div class="classify-item" data-answer="con"><span class="term">Opening a greenhouse window motor when it gets too hot</span><span class="choices"><button data-choice="mon">Monitoring</button><button data-choice="con">Control</button></span></div>
   </div>
 </div>
 <div class="task" data-task="classify" data-points="6">
   <p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p>
   <h4>Click which control system each description belongs to.</h4>
   <div class="classify-list">
+    <div class="classify-item" data-answer="park"><span class="term">A ticket with a barcode is checked at the exit before the barrier lifts</span><span class="choices"><button data-choice="green">Greenhouse</button><button data-choice="burg">Burglar alarm</button><button data-choice="park">Car park barrier</button><button data-choice="tl">Traffic lights</button></span></div>
     <div class="classify-item" data-answer="burg"><span class="term">A pressure sensor under a rug detects the weight of someone treading on it</span><span class="choices"><button data-choice="green">Greenhouse</button><button data-choice="burg">Burglar alarm</button><button data-choice="park">Car park barrier</button><button data-choice="tl">Traffic lights</button></span></div>
-    <div class="classify-item" data-answer="park"><span class="term">An induction loop detects the car, and a light beam keeps the barrier up until the vehicle has passed</span><span class="choices"><button data-choice="green">Greenhouse</button><button data-choice="burg">Burglar alarm</button><button data-choice="park">Car park barrier</button><button data-choice="tl">Traffic lights</button></span></div>
     <div class="classify-item" data-answer="tl"><span class="term">Vehicles in each direction are counted, and the timings change to suit the traffic</span><span class="choices"><button data-choice="green">Greenhouse</button><button data-choice="burg">Burglar alarm</button><button data-choice="park">Car park barrier</button><button data-choice="tl">Traffic lights</button></span></div>
     <div class="classify-item" data-answer="green"><span class="term">A moisture sensor triggers a sprinkler valve when the soil is dry</span><span class="choices"><button data-choice="green">Greenhouse</button><button data-choice="burg">Burglar alarm</button><button data-choice="park">Car park barrier</button><button data-choice="tl">Traffic lights</button></span></div>
+    <div class="classify-item" data-answer="park"><span class="term">An induction loop detects the car, and a light beam keeps the barrier up until the vehicle has passed</span><span class="choices"><button data-choice="green">Greenhouse</button><button data-choice="burg">Burglar alarm</button><button data-choice="park">Car park barrier</button><button data-choice="tl">Traffic lights</button></span></div>
     <div class="classify-item" data-answer="burg"><span class="term">Infra-red sensors detect the body heat of an intruder</span><span class="choices"><button data-choice="green">Greenhouse</button><button data-choice="burg">Burglar alarm</button><button data-choice="park">Car park barrier</button><button data-choice="tl">Traffic lights</button></span></div>
-    <div class="classify-item" data-answer="park"><span class="term">A ticket with a barcode is checked at the exit before the barrier lifts</span><span class="choices"><button data-choice="green">Greenhouse</button><button data-choice="burg">Burglar alarm</button><button data-choice="park">Car park barrier</button><button data-choice="tl">Traffic lights</button></span></div>
   </div>
 </div>
 <div class="task" data-task="points" data-points="6">
@@ -1051,7 +1051,7 @@
 
 })();
   (function(){
-  var STORE_KEY = 'ict-lesson-progress::' + location.pathname + '::' + document.title;
+    var STORE_KEY = 'ict-lesson-progress::' + location.pathname + '::' + document.title;
 
   function load(){
     try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
@@ -1199,17 +1199,18 @@
   resetBtn.textContent = 'Reset my answers';
   resetBtn.setAttribute('type', 'button');
   resetBtn.style.cssText = 'position:fixed;bottom:14px;left:14px;z-index:50;font-family:JetBrains Mono,monospace;'
-    + 'font-size:11px;padding:7px 11px;background:transparent;border:1px solid #496354;'
-    + 'color:#a9a294;border-radius:3px;cursor:pointer;';
-  resetBtn.addEventListener('mouseenter', function(){ resetBtn.style.color = '#e9e4d6'; });
-  resetBtn.addEventListener('mouseleave', function(){ resetBtn.style.color = '#a9a294'; });
+    + 'font-size:11px;padding:7px 11px;background:#141b2e;border:1px solid #40557d;'
+    + 'color:#9ba4bc;border-radius:3px;cursor:pointer;';
+  resetBtn.addEventListener('mouseenter', function(){ resetBtn.style.color = '#e7e9f1'; });
+  resetBtn.addEventListener('mouseleave', function(){ resetBtn.style.color = '#9ba4bc'; });
   resetBtn.addEventListener('click', function(){
     if(confirm('Clear all your saved answers on this page?')){
-      localStorage.removeItem(STORE_KEY);
+      try { localStorage.removeItem(STORE_KEY); } catch(e){}
       location.reload();
     }
   });
   document.body.appendChild(resetBtn);
+})();
 })();
 </script>
 </body>
