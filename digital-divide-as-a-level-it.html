@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Digital Divide — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --bg-deep:#090d18;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#04141a;}
+
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 24px 120px; }
+
+  nav.theory-nav{
+    max-width:760px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:44px 24px 34px; max-width:760px; margin:0 auto; border-bottom:1px solid var(--trace);
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,38px);
+    line-height:1.15; margin:0 0 14px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
+
+  nav.tabs{
+    max-width:760px; margin:0 auto; padding:14px 24px; display:flex; gap:6px;
+    overflow-x:auto; border-bottom:1px solid var(--trace); position:sticky; top:0;
+    background:rgba(13,18,32,.95); backdrop-filter: blur(4px); z-index:30;
+  }
+  nav.tabs button{
+    font-family:var(--mono); font-size:12.5px; white-space:nowrap; background:transparent;
+    border:1px solid var(--trace); color:var(--paper-dim); padding:8px 13px;
+    border-radius:var(--radius); cursor:pointer; flex-shrink:0;
+  }
+  nav.tabs button:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  nav.tabs button.active{ background:var(--signal); color:#04141a; border-color:var(--signal); font-weight:500; }
+
+  .panel{ display:none; padding:40px 0 8px; }
+  .panel.active{ display:block; }
+
+  h2.section-title{
+    font-family:var(--mono); font-size:22px; color:var(--signal-bright);
+    margin:0 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2.section-title .tag{
+    font-size:12px; color:var(--sage); border:1px solid var(--trace);
+    padding:2px 7px; border-radius:var(--radius);
+  }
+  h3{ font-family:var(--mono); font-size:16px; color:var(--gold); margin:26px 0 8px; font-weight:500; }
+  p{margin:10px 0;}
+  ul, ol{padding-left:22px; margin:10px 0;}
+  li{margin:4px 0;}
+  strong{color:var(--paper); font-weight:600;}
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0 8px; font-size:15px; }
+  th,td{ border:1px solid var(--trace); padding:8px 10px; text-align:left; vertical-align:top; }
+  th{ font-family:var(--mono); font-size:12px; color:var(--sage); font-weight:500; background:rgba(134,201,160,0.06); }
+  .table-scroll{ overflow-x:auto; }
+  .note{ color:var(--paper-dim); font-size:14.5px; }
+
+  .block{ border-left:2px solid var(--trace); padding-left:18px; margin:18px 0; }
+  .block ul, .block ol{ margin:0; padding-left:20px; }
+
+  .proscons{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 8px; }
+  .pc{ border:1px solid var(--trace); border-radius:var(--radius); background:var(--bg-raised); padding:2px 14px 12px; }
+  .pc.pro{ border-top:2px solid var(--sage); }
+  .pc.con{ border-top:2px solid var(--brick); }
+  .pc-title{ font-family:var(--mono); font-size:12.5px; font-weight:500; margin:12px 0 4px; }
+  .pc.pro .pc-title{ color:var(--sage); }
+  .pc.con .pc-title{ color:var(--brick); }
+  .pc ul{ padding-left:18px; margin:6px 0 0; font-size:15px; }
+  @media (max-width:600px){ .proscons{ grid-template-columns:1fr; } }
+
+  details.fold{ border:1px solid var(--trace); border-radius:var(--radius); margin:12px 0; background:var(--bg-raised); }
+  details.fold summary{ font-family:var(--mono); font-size:13.5px; color:var(--gold); padding:11px 14px; cursor:pointer; }
+  details.fold[open] summary{ border-bottom:1px solid var(--trace); }
+  details.fold .fold-body{ padding:2px 14px 12px; }
+
+  .diagram-box{
+    background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius);
+    padding:14px 10px; margin:18px 0 6px; text-align:center;
+  }
+  .diagram-box svg{ width:100%; height:auto; max-width:460px; }
+  .diagram-box svg.wide{ max-width:600px; }
+  .diagram-caption{ font-family:var(--mono); font-size:12px; color:var(--paper-dim); margin-top:6px; }
+  .signal-caption{ font-family: var(--mono); font-size:12.5px; color:var(--paper-dim); margin-top:8px; text-align:center; }
+
+  .task{ margin:32px 0; border:1px solid var(--trace); border-radius:var(--radius); background: var(--bg-raised); padding:20px 20px 22px; }
+  .task-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .task-label .pts{color:var(--sage);}
+  .task h4{ margin:0 0 12px; font-family:var(--serif); font-weight:600; font-size:16.5px; color:var(--paper); }
+  .task .sub-q{margin:18px 0;}
+  .task .sub-q:first-child{margin-top:0;}
+  .sub-q label{ display:block; font-family:var(--serif); font-size:15.5px; margin-bottom:8px; color:var(--paper); }
+
+  textarea{
+    width:100%; min-height:52px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-radius:var(--radius); color:var(--paper); font-family:var(--serif);
+    font-size:15.5px; padding:10px 12px; resize:vertical;
+  }
+  textarea:focus, button:focus-visible, .opt:focus-visible, summary:focus-visible, input[type=checkbox]:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:1px; }
+  .row{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+
+  button{
+    font-family:var(--mono); font-size:13px; background:var(--signal); color:#04141a;
+    border:none; padding:9px 15px; border-radius:var(--radius); cursor:pointer; font-weight:500;
+  }
+  button:hover{background:var(--signal-bright);}
+  button.ghost{ background:transparent; border:1px solid var(--trace); color:var(--paper-dim); }
+  button.ghost:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  button:disabled{opacity:.5; cursor:default;}
+
+  .error-msg{ color:var(--brick); font-family:var(--mono); font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show{display:block;}
+
+  .answer-reveal{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .answer-reveal.show{display:block;}
+  .answer-reveal .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:5px; }
+
+  .self-mark{ display:none; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:13px; color:var(--paper-dim); }
+  .self-mark.show{display:flex;}
+  .self-mark input[type=checkbox]{ width:17px; height:17px; accent-color: var(--gold); cursor:pointer; }
+  .self-mark label{cursor:pointer; margin:0; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+
+  .markpoints{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .markpoints.show{display:block;}
+  .markpoints .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:6px; }
+  .markpoints .mp-item{
+    display:flex; gap:10px; align-items:flex-start; margin:0; padding:7px 0;
+    border-bottom:1px solid var(--trace-dim); font-size:15px; font-weight:400; cursor:pointer;
+  }
+  .markpoints .mp-item:last-of-type{border-bottom:none;}
+  .markpoints .mp-item input{ width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--gold); cursor:pointer; }
+  .mp-foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; font-family:var(--mono); font-size:13px; }
+  .mp-count{ color:var(--gold); }
+  .mp-note{ color:var(--brick); }
+
+  .mcq{margin:20px 0;}
+  .mcq:first-of-type{margin-top:0;}
+  .mcq p.q{ font-family:var(--serif); font-size:15.5px; color:var(--paper); margin:0 0 10px; }
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:10px 13px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer; font-weight:400;
+  }
+  .opt:hover:not(:disabled){border-color:var(--signal); background:var(--bg-deep);}
+  .opt.correct{border-color:var(--sage); background:rgba(134,201,160,0.14);}
+  .opt.incorrect{border-color:var(--brick); background:rgba(224,104,92,0.14);}
+  .opt:disabled{cursor:default;}
+  .mcq-feedback{ font-family:var(--mono); font-size:13px; margin-top:8px; min-height:1.2em; }
+  .mcq-feedback.ok{color:var(--sage);}
+  .mcq-feedback.bad{color:var(--brick);}
+
+  .classify-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 0; border-bottom:1px solid var(--trace-dim); flex-wrap:wrap;
+  }
+  .classify-item:last-child{border-bottom:none;}
+  .classify-item .term{font-size:15px; max-width:60%;}
+  .classify-item .choices{display:flex; gap:8px; flex-wrap:wrap;}
+  .classify-item .choices button{
+    background:transparent; border:1px solid var(--trace); color:var(--paper-dim);
+    font-size:12px; padding:6px 10px;
+  }
+  .classify-item .choices button:hover:not(:disabled){ color:var(--paper); border-color:var(--paper-dim); }
+  .classify-item .choices button.correct{background:rgba(134,201,160,0.16); border-color:var(--sage); color:var(--paper);}
+  .classify-item .choices button.incorrect{background:rgba(224,104,92,0.16); border-color:var(--brick); color:var(--paper);}
+  @media (max-width:600px){ .classify-item .term{max-width:100%;} }
+
+  #score-badge{
+    position:fixed; top:14px; right:14px; z-index:50; font-family:var(--mono); font-size:13px;
+    background:var(--bg-raised); border:1px solid var(--signal); color:var(--signal-bright);
+    padding:8px 13px; border-radius:var(--radius); box-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  #score-badge .n{color:var(--gold); font-weight:700;}
+
+  footer{ max-width:760px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    header.hero{padding:36px 20px 26px;}
+    #score-badge{top:auto; bottom:14px; right:14px;}
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+
+  .diagram-box img{ max-width:100%; height:auto; background:#fff; border-radius:3px; padding:8px; }
+  pre{ background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius); padding:12px 14px; overflow-x:auto; font-family:var(--mono); font-size:13.5px; line-height:1.55; margin:14px 0; color:var(--paper); }
+  code{ font-family:var(--mono); font-size:.9em; color:var(--signal-bright); }
+  pre code{ color:inherit; }
+</style>
+</head>
+<body>
+<div id="score-badge">Score: <span class="n" id="score-val">0</span> / <span id="score-max">0</span></div>
+<nav class="theory-nav"><a class="disabled" href="#" aria-disabled="true">← <span class="full">Previous theory</span></a><span class="spacer"></span><a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a></nav>
+<header class="hero"><p class="kicker">Cambridge AS &amp; A Level IT · The Digital Divide</p><h1 class="title">The Digital Divide</h1><p>This page covers what the digital divide is, what causes it, and how it affects different groups — by age, location, education, income, accessibility and how industrially developed a country is — along with the ways it can be reduced.</p></header>
+<nav class="tabs"><button class="tab-btn active" data-panel="what">6.1 What is the digital divide?</button><button class="tab-btn" data-panel="causes">6.2 Causes and effects</button><button class="tab-btn" data-panel="groups">6.3 Groups affected</button><button class="tab-btn" data-panel="practice">Practice questions</button></nav>
+<div class="wrap">
+<div class="panel active" id="panel-what"><h2 class="section-title">What is the digital divide? <span class="tag">6.1</span></h2>
+<p>The <strong>digital divide</strong> is the difference in ability to access modern technology. It refers to the differences in people's ability to access technology, such as smart phones, personal computers, tablets, laptops and TV, and the information and communications services they provide. A digital divide exists between those who have full access to technology and those who have restricted or no access.</p>
+<p>There can be a digital divide between countries, between different <strong>demographic</strong> groups (particular sections of the population) and between different <strong>economic</strong> areas (areas defined by their production and consumption of goods and services). It can be judged by several factors, such as a person's <strong>age, income and location</strong>. The digital divide is a complex and growing issue.</p>
+<h3>Why it matters</h3>
+<p>Information technology generally brings many benefits. You can interact with your bank account from a smart phone, place orders for goods using a computer and the internet, and access knowledge and learning from a wide range of places using the internet. A lack of access to technology is seen as a disadvantage. It may lead to inequality: people who cannot access technology may miss out on opportunities, both in their personal lives and in the workplace.</p>
+<p>For a country, the digital divide may describe the difference between those who have regular access to modern technology and those who do not. At an international level, it may describe the difference between countries with access to the latest technology and those with less access.</p>
+<h3>Challenges of technology</h3>
+<p>Digital technology also has challenges, and some people may choose to avoid it. For example, some people might not trust the development of <strong>artificial intelligence (AI)</strong> — the use of computer programs that can simulate human intelligence. Other people might experience a negative effect on their health because of social media.</p><div class="task"><p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p><h4>Answer from the notes.</h4><div class="sub-q"><label>Define the term digital divide.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>The difference in ability to access modern technology; the gap between those who have full access to technology and those who have restricted or no access</div><div class="self-mark"><input type="checkbox" id="sm-1"><label for="sm-1">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Give three factors by which the digital divide can be judged.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>A person's age, income and location</div><div class="self-mark"><input type="checkbox" id="sm-2"><label for="sm-2">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Between which groups can a digital divide exist?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Between countries, between different demographic groups and between different economic areas</div><div class="self-mark"><input type="checkbox" id="sm-3"><label for="sm-3">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Why may a lack of access to technology lead to inequality?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>People who cannot access technology may miss out on opportunities in both their personal lives and the workplace</div><div class="self-mark"><input type="checkbox" id="sm-4"><label for="sm-4">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p><h4>Click whether each statement is a benefit of technology or a challenge of technology.</h4><div class="classify-list"><div class="classify-item" data-answer="b"><span class="term">Interacting with your bank account from a smart phone</span><span class="choices"><button data-choice="b">Benefit</button><button data-choice="c">Challenge</button></span></div><div class="classify-item" data-answer="b"><span class="term">Accessing knowledge and learning from a wide range of places</span><span class="choices"><button data-choice="b">Benefit</button><button data-choice="c">Challenge</button></span></div><div class="classify-item" data-answer="c"><span class="term">Some people do not trust the development of artificial intelligence</span><span class="choices"><button data-choice="b">Benefit</button><button data-choice="c">Challenge</button></span></div><div class="classify-item" data-answer="c"><span class="term">A negative effect on health because of social media</span><span class="choices"><button data-choice="b">Benefit</button><button data-choice="c">Challenge</button></span></div><div class="classify-item" data-answer="b"><span class="term">Placing orders for goods using a computer and the internet</span><span class="choices"><button data-choice="b">Benefit</button><button data-choice="c">Challenge</button></span></div><div class="classify-item" data-answer="c"><span class="term">Some people choose to avoid modern technology because of these issues</span><span class="choices"><button data-choice="b">Benefit</button><button data-choice="c">Challenge</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="0"><p class="q">1. Which of these is a factor used to judge the digital divide?</p><div class="opts"><button class="opt" data-idx="0">A person's income</button><button class="opt" data-idx="1">A person's favourite app</button><button class="opt" data-idx="2">The colour of a device</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. What does the term demographic describe?</p><div class="opts"><button class="opt" data-idx="0">A particular section of a population</button><button class="opt" data-idx="1">A type of device</button><button class="opt" data-idx="2">An area's weather</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. What may happen to people who cannot access technology?</p><div class="opts"><button class="opt" data-idx="0">They may miss out on opportunities</button><button class="opt" data-idx="1">They gain more opportunities</button><button class="opt" data-idx="2">Nothing changes</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-causes"><h2 class="section-title">Causes and effects of the digital divide <span class="tag">6.2</span></h2>
+<p>The digital divide describes the gap between people who have the latest technology and those who do not. There are many causes.</p>
+<h3>Access to electricity</h3>
+<p>Technology requires electricity. Devices can run on battery or directly from mains electricity, but even a battery needs recharging. It is difficult and expensive to install electrical cables in remote parts of the world, many hundreds of miles from power stations, such as deserts, mountains and remote villages or towns. Solar power can help reduce the impact of being in a remote place, but it is expensive to install. Without electricity, people cannot use digital devices effectively.</p>
+<h3>Cost of technology</h3>
+<p>New technology is very expensive. Old technology is cheaper but will not perform the same functions, access new programs or be as reliable. People from poorer areas may not be able to afford new technology, the electricity to power it, or repairs if it breaks. Cost can also create a digital divide in big cities: cities have shops that sell new technology, but people in low-paid jobs may not be able to afford to buy or rent it.</p>
+<h3>Ability to repair devices</h3>
+<p>Digital devices often need repairing or upgrading — for example adding storage or updating software. If a person cannot find a way to repair their device, such as a local computer or phone technician, they cannot use it. A person with a particular brand of mobile device may not be able to get it repaired locally, which may mean they need to buy a new device.</p>
+<h3>Access to the internet and wireless connections</h3>
+<p>Many services are only available using the internet, such as video conferencing, email/messaging apps and websites. Things like using word processing apps and printing may not need the internet. Remote places make it difficult to install internet connections:</p><div class="block"><ul><li>Mobile phone networks and satellites remove the need for physical connections</li><li><strong>Satellite</strong> connections cost a lot to use, and can be slow and unreliable — the signals travel through the atmosphere into space and back, so they can be disrupted by weather such as thunderstorms</li><li>Mobile phone networks only have a limited range and may not reach remote locations</li></ul></div>
+<p>Very slow connections, or a total lack of connection, add to the digital divide. Lack of internet is probably one of the biggest factors.</p>
+<h3>Availability of technology</h3>
+<p>Availability refers to how many digital devices there are compared with how many people want them. For example, if 10 000 people can afford a device, have internet access and can use it, but only 5000 devices are available, then 5000 people still cannot access a digital device.</p><div class="block"><ul><li>The COVID-19 pandemic disrupted manufacturing. Prices of digital devices increased significantly, because the microchips needed were not produced in the numbers needed.</li><li>New technology may need new manufacturing processes or better robots to build, which may limit the quantity of high-performance technology available and increase its price.</li></ul></div><div class="task"><p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p><h4>Answer from the notes.</h4><div class="sub-q"><label>Why can it be difficult to give remote places access to electricity?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>It is difficult and expensive to install electrical cables hundreds of miles from power stations, for example in deserts, mountains and remote villages</div><div class="self-mark"><input type="checkbox" id="sm-5"><label for="sm-5">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Why does the cost of technology create a digital divide, even in big cities?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Cities have shops that sell new technology, but people in low-paid jobs may not be able to afford to buy or rent it</div><div class="self-mark"><input type="checkbox" id="sm-6"><label for="sm-6">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Give two problems with satellite internet connections.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: they cost a lot to use; they can be slow and unreliable; signals can be disrupted by weather such as thunderstorms</div><div class="self-mark"><input type="checkbox" id="sm-7"><label for="sm-7">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>What is meant by the availability of technology?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>How many digital devices there are compared with how many people want them</div><div class="self-mark"><input type="checkbox" id="sm-8"><label for="sm-8">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">10 points</span></p><h4>Click which cause of the digital divide each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="i"><span class="term">Mobile phone networks have a limited range and may not reach remote locations</span><span class="choices"><button data-choice="e">Electricity</button><button data-choice="c">Cost</button><button data-choice="r">Repair</button><button data-choice="i">Internet</button><button data-choice="a">Availability</button></span></div><div class="classify-item" data-answer="i"><span class="term">Satellite signals can be disrupted by thunderstorms</span><span class="choices"><button data-choice="e">Electricity</button><button data-choice="c">Cost</button><button data-choice="r">Repair</button><button data-choice="i">Internet</button><button data-choice="a">Availability</button></span></div><div class="classify-item" data-answer="a"><span class="term">Only 5000 devices exist for 10 000 people who want one</span><span class="choices"><button data-choice="e">Electricity</button><button data-choice="c">Cost</button><button data-choice="r">Repair</button><button data-choice="i">Internet</button><button data-choice="a">Availability</button></span></div><div class="classify-item" data-answer="r"><span class="term">There is no local technician for a particular brand of mobile device</span><span class="choices"><button data-choice="e">Electricity</button><button data-choice="c">Cost</button><button data-choice="r">Repair</button><button data-choice="i">Internet</button><button data-choice="a">Availability</button></span></div><div class="classify-item" data-answer="c"><span class="term">Low-paid workers cannot afford to buy or rent new technology</span><span class="choices"><button data-choice="e">Electricity</button><button data-choice="c">Cost</button><button data-choice="r">Repair</button><button data-choice="i">Internet</button><button data-choice="a">Availability</button></span></div><div class="classify-item" data-answer="e"><span class="term">Cables are expensive to install hundreds of miles from power stations</span><span class="choices"><button data-choice="e">Electricity</button><button data-choice="c">Cost</button><button data-choice="r">Repair</button><button data-choice="i">Internet</button><button data-choice="a">Availability</button></span></div><div class="classify-item" data-answer="c"><span class="term">Old technology is cheaper but is not as reliable</span><span class="choices"><button data-choice="e">Electricity</button><button data-choice="c">Cost</button><button data-choice="r">Repair</button><button data-choice="i">Internet</button><button data-choice="a">Availability</button></span></div><div class="classify-item" data-answer="r"><span class="term">A broken device cannot be used until it can be repaired or upgraded</span><span class="choices"><button data-choice="e">Electricity</button><button data-choice="c">Cost</button><button data-choice="r">Repair</button><button data-choice="i">Internet</button><button data-choice="a">Availability</button></span></div><div class="classify-item" data-answer="a"><span class="term">Microchips were not produced in the numbers needed during the COVID-19 pandemic</span><span class="choices"><button data-choice="e">Electricity</button><button data-choice="c">Cost</button><button data-choice="r">Repair</button><button data-choice="i">Internet</button><button data-choice="a">Availability</button></span></div><div class="classify-item" data-answer="e"><span class="term">Solar power helps remote places but is expensive to install</span><span class="choices"><button data-choice="e">Electricity</button><button data-choice="c">Cost</button><button data-choice="r">Repair</button><button data-choice="i">Internet</button><button data-choice="a">Availability</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="0"><p class="q">1. Which is probably one of the biggest factors in the digital divide?</p><div class="opts"><button class="opt" data-idx="0">Lack of internet</button><button class="opt" data-idx="1">Brand of device</button><button class="opt" data-idx="2">Colour of device</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. Why did device prices increase during the COVID-19 pandemic?</p><div class="opts"><button class="opt" data-idx="0">Microchips were not produced in the numbers needed</button><button class="opt" data-idx="1">Everyone stopped buying devices</button><button class="opt" data-idx="2">Solar power became cheaper</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. What do devices need even if they run on battery?</p><div class="opts"><button class="opt" data-idx="0">Recharging</button><button class="opt" data-idx="1">A satellite</button><button class="opt" data-idx="2">A repair technician</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-groups"><h2 class="section-title">Groups affected by the digital divide <span class="tag">6.3</span></h2>
+<p>The digital divide can be compared between:</p><div class="block"><ul><li>People in different age groups</li><li>People in cities and people in rural areas</li><li>People with differing levels of education</li><li>People in different socio-economic groups</li><li>People with accessibility barriers</li><li>People in more and less industrially developed nations</li></ul></div>
+<h3>Different age groups</h3>
+<p>Technology is developing at great speed, with new technology released every year. People born in the 1960s grew up with very limited information technology: landline telephones, letters typed or handwritten and sent by post or fax machine, and goods bought at the shops. People born in the 1980s saw new technology emerging: simple mobile telephones, short text messages, basic low-speed internet access using telephone lines, simple websites and downloading items from file storage. By the start of the 21st century, wireless technology and almost instant communication arrived — smart phones with instant access to online banking and shopping, booking healthcare appointments, social media, messaging, email and streaming.</p>
+<p>Many people today were taught the IT skills in school or college, and younger people are better able to learn new skills as features are introduced. Some older people may find it hard to learn new skills because the technology works in a very different way from what they grew up with.</p>
+<p>A person's ability to learn about and use technology effectively is called <strong>digital literacy</strong> — the skill level of a person to use digital technology to find and create information and to communicate with others. A lack of digital literacy may prevent a person from benefiting from online services and can affect any age group. An older person in a rural area may lack it because there is no local community college; a younger person may lack it because they cannot afford technology and are less confident using it.</p><details class="fold"><summary>Real-life example: Mohammed</summary><div class="fold-body"><p>Mohammed is a 75-year-old with a mobile phone he only uses to phone his daughter. His hospital used to send letters reminding him of appointments but now sends text messages asking him to confirm by text. He does not know how to send a text, and does not want to bother his busy daughter, so he worries he will lose his appointment.</p></div></details>
+<p><strong>Reducing the divide between age groups.</strong> One of the biggest barriers is fear of new things; people are more comfortable with familiar ways. Some believe they are not clever enough, and older people often feel they 'cannot keep up'. People are more likely to learn when the benefits are greater than the challenge — for example social media can allow communication with family and friends and combat loneliness. Many countries support older people to appreciate and learn technology.</p><details class="fold"><summary>Did you know?</summary><div class="fold-body"><p>In a 2021 survey, 75% of US adults in the 65+ age group said they used the internet, compared with 99% in the 18–29 age group.</p></div></details><div class="block"><ul><li>Retirement villages use sensors to monitor a patient's health, and doctors use high-speed broadband for video-conference check-ins</li><li>Libraries and community centres offer short IT sessions to help people get started with computers, tablets and the internet</li></ul></div>
+<h3>Cities and rural areas</h3>
+<p>Where a person lives affects their access to technology. High-speed and reliable internet is more often found in cities than small villages and towns, because the <strong>infrastructure</strong> (the facilities needed for the operation of a society, such as roads, buildings and utilities) is far more developed in cities. Many people live close together, so there is greater demand and it takes less resource to connect them (for example 300 people with 100 m of cable), which makes it cheaper for providers. In rural areas, a connection over a large distance for a small number of people is not very profitable, so providers may avoid investing there.</p>
+<p>People without high-speed access may struggle to use services such as online shopping and online TV, and may feel isolated if they cannot stream films or TV reliably. In rural locations mobile network connection may be limited or absent.</p><details class="fold"><summary>Real-life example: Sofia</summary><div class="fold-body"><p>Sofia is a furniture designer in a rural area of Spain who works from home and sends designs to clients online. Her internet connection does not allow effective video-conferencing, which puts her at a disadvantage compared with designers who have high-speed internet.</p></div></details>
+<p><strong>Reducing the effects in rural areas.</strong> There are two main issues: access to digital devices and technology, and how they connect to the internet (via the internet or mobile networks). Building infrastructure can be very challenging — a village could be hundreds of kilometres from a city or up in the mountains. One way to provide access is satellite technology, which reduces the infrastructure needed.</p><details class="fold"><summary>Real-life example: BharatNet</summary><div class="fold-body"><p>BharatNet is an Indian government initiative to provide affordable internet in rural India, by increasing fibre optic cabling infrastructure and by delivering access through satellites in approximately 5300 locations.</p></div></details>
+<h3>Differing levels of education</h3>
+<p>Using technology can be complex: different technologies have different interfaces and are used in different ways. Without a certain level of education in how to use it, it can seem challenging. Many businesses have online systems to buy products, book tickets or use services. People who are not educated in using them may find it frustrating and miss out on opportunities. Reasons include no access (so no experience), no interest, or struggling to keep learning and giving up.</p><details class="fold"><summary>Did you know?</summary><div class="fold-body"><p>In the UK, 6.3% of adults said they had never used the internet in 2020 — an estimated 3.4 million people.</p></div></details><details class="fold"><summary>Real-life example: concert tickets</summary><div class="fold-body"><p>A person wants tickets for their favourite band, which are only available online. They usually phone the venue, but that option is unavailable. By the time they work out the online system, the tickets have sold out.</p></div></details>
+<p><strong>Reducing the divide by improving digital literacy.</strong> One effective way is digital literacy teaching through technology courses in local communities, offered by colleges, schools and libraries, free or at a low cost. People learn alongside others of the same skill level, which helps them feel comfortable. Local face-to-face courses have a teacher or leader to help with problems, and people often find them more useful because they may need skills just to access online courses.</p><details class="fold"><summary>Real-life example: a 12-week course</summary><div class="fold-body"><p>A country offered a 12-week course in everyday software, provided by a virtual university, covering basic software use and using the internet for communication. It helped people feel comfortable and confident, and the country believed it made them more competitive in the digital world.</p></div></details>
+<h3>Different socio-economic groups</h3>
+<p>The divide between socio-economic groups often revolves around cost. Richer people can afford higher-speed internet and expensive advancements in technology, which improves their standard of living through better access to information and learning, entertainment, online services such as shopping, and worldwide communication. Lack of access to information tends to have a greater impact on people with lower levels of education. Lack of access to services such as free education can create a greater divide between the rich and the poor, so ensuring access for all to education and information is an important way of improving socio-economic circumstances.</p><details class="fold"><summary>Real-life example: Taliya and Jaz</summary><div class="fold-body"><p>Taliya, a film studies student, has high-quality recording equipment, a 4K monitor and a high-spec computer. Jaz is also a film studies student but only has a low-spec mobile phone to film and edit his projects, and knows he could produce better work with a better computer.</p></div></details>
+<p><strong>Reducing the divide.</strong> Many countries try to provide technology at lower cost (or free) to poorer communities. Large organisations such as Facebook and Google work with internet service providers to build infrastructure to bring internet access to areas that cannot afford it, for example by reducing the costs of installing Wi-Fi access points. They collaborate because more people with internet access may use their services.</p>
+<h3>Accessibility barriers</h3>
+<p>The digital divide can affect people with specific challenges in accessing a technology — for example, someone with vision loss cannot use a digital display effectively. Many devices include support: <strong>screen readers</strong> convert the text on the screen into sound, so a person hears what is on the screen, and <strong>voice input/commands</strong> help those who cannot operate keyboards or touchscreens effectively. Support for people with accessibility barriers is important when digital technology is developed.</p>
+<h3>More and less industrially developed nations</h3>
+<p>The USA, Europe and northern Asia have greater access to modern technology; these areas mostly consist of more industrially developed countries. Access is more restricted in parts of Africa, India and southern Asia, which are less industrially developed. These countries may need to use their financial resources to provide other important services, and the costs of building technology infrastructure are very high. However, lacking technology and the internet could put them at a competitive and economic disadvantage: it may limit trade opportunities, so they fall behind financially, and it may affect the level of education provided and the skill level of citizens, preventing them from competing internationally.</p><details class="fold"><summary>Real-life example: a Kenyan village cooperative</summary><div class="fold-body"><p>A village cooperative in Kenya makes hand-beaded necklaces and sets up an online business to reach a wider market, but poor internet access means it cannot run the website effectively. Communities may create campaigns to the local or national government for better services, possibly with a consultation with government IT specialists, so a plan can balance technology and costs against the impact on the cooperative.</p></div></details>
+<p><strong>Reducing the divide in less industrially developed areas.</strong> The internet has become essential to global infrastructures. Satellite technology may help remote areas. Governments promote the businesses and products they could offer with better infrastructure and are keen for more developed countries to invest and help build it.</p><details class="fold"><summary>Did you know? Starlink</summary><div class="fold-body"><p>Starlink aims to provide high-speed internet to the world using satellites that beam internet signals to Earth, reaching places where cables and other wireless connections cannot. The challenge is that satellite technology is expensive to run, so the cost of access is quite high compared with ground-based access.</p></div></details><details class="fold"><summary>Real-life example: Microsoft Airband Initiative</summary><div class="fold-body"><p>Microsoft aims to close the global digital divide by working with partners to provide internet access to millions of people with limited or no access, using a range of wired and wireless technologies. One part uses Television White Spaces (TVWS), a fixed wireless technology that uses often unused and unlicensed radio frequencies that currently broadcast television, giving access in countries where ground-based infrastructure is very expensive or slow to build.</p></div></details><div class="task"><p class="task-label"><span>Questions from the book</span><span class="pts">6 points</span></p><h4>Answer from the notes.</h4><div class="sub-q"><label>How could a lack of high-speed internet access affect a person's ability to use online learning platforms?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>They may struggle to access the services available on the internet if they cannot connect reliably or consistently</div><div class="self-mark"><input type="checkbox" id="sm-9"><label for="sm-9">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>How could this affect the digital divide between those living in a city and those in a rural location?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>High-speed, reliable internet is more often found in cities, so rural users fall further behind and the divide widens</div><div class="self-mark"><input type="checkbox" id="sm-10"><label for="sm-10">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>How might lack of ability to communicate in certain ways make a person feel?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Isolated</div><div class="self-mark"><input type="checkbox" id="sm-11"><label for="sm-11">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Think of two advantages that people educated in using technology may have.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: can use online systems to buy products, book tickets or use services with confidence; are not frustrated by online systems; do not miss out on opportunities</div><div class="self-mark"><input type="checkbox" id="sm-12"><label for="sm-12">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>How could access to free online learning platforms support people in poorer communities?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Access to services like free education and information helps improve their socio-economic circumstances and reduces the divide between rich and poor</div><div class="self-mark"><input type="checkbox" id="sm-13"><label for="sm-13">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>How could access to high-speed internet for entertainment improve a person's lifestyle?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>It gives better access to entertainment, such as reliably streaming films and TV, which improves their standard of living and helps avoid feeling isolated</div><div class="self-mark"><input type="checkbox" id="sm-14"><label for="sm-14">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">10 points</span></p><h4>Click which group each statement or strategy is about.</h4><div class="classify-list"><div class="classify-item" data-answer="r"><span class="term">Providers avoid investing because a connection over a large distance is not profitable</span><span class="choices"><button data-choice="a">Age</button><button data-choice="r">Rural</button><button data-choice="e">Education</button><button data-choice="s">Socio-economic</button><button data-choice="x">Accessibility</button></span></div><div class="classify-item" data-answer="a"><span class="term">Libraries and community centres offer short IT sessions</span><span class="choices"><button data-choice="a">Age</button><button data-choice="r">Rural</button><button data-choice="e">Education</button><button data-choice="s">Socio-economic</button><button data-choice="x">Accessibility</button></span></div><div class="classify-item" data-answer="r"><span class="term">Satellites and fibre optic cabling are used to reach remote villages</span><span class="choices"><button data-choice="a">Age</button><button data-choice="r">Rural</button><button data-choice="e">Education</button><button data-choice="s">Socio-economic</button><button data-choice="x">Accessibility</button></span></div><div class="classify-item" data-answer="a"><span class="term">Retirement villages use sensors and video-conference calls with doctors</span><span class="choices"><button data-choice="a">Age</button><button data-choice="r">Rural</button><button data-choice="e">Education</button><button data-choice="s">Socio-economic</button><button data-choice="x">Accessibility</button></span></div><div class="classify-item" data-answer="s"><span class="term">Governments provide technology at lower cost or for free</span><span class="choices"><button data-choice="a">Age</button><button data-choice="r">Rural</button><button data-choice="e">Education</button><button data-choice="s">Socio-economic</button><button data-choice="x">Accessibility</button></span></div><div class="classify-item" data-answer="e"><span class="term">Local face-to-face digital literacy courses are offered free or at low cost</span><span class="choices"><button data-choice="a">Age</button><button data-choice="r">Rural</button><button data-choice="e">Education</button><button data-choice="s">Socio-economic</button><button data-choice="x">Accessibility</button></span></div><div class="classify-item" data-answer="x"><span class="term">Screen readers convert text on screen into sound</span><span class="choices"><button data-choice="a">Age</button><button data-choice="r">Rural</button><button data-choice="e">Education</button><button data-choice="s">Socio-economic</button><button data-choice="x">Accessibility</button></span></div><div class="classify-item" data-answer="e"><span class="term">A person cannot use an online ticket system because they lack experience with it</span><span class="choices"><button data-choice="a">Age</button><button data-choice="r">Rural</button><button data-choice="e">Education</button><button data-choice="s">Socio-economic</button><button data-choice="x">Accessibility</button></span></div><div class="classify-item" data-answer="s"><span class="term">Facebook and Google work with providers to reduce the cost of Wi-Fi access points</span><span class="choices"><button data-choice="a">Age</button><button data-choice="r">Rural</button><button data-choice="e">Education</button><button data-choice="s">Socio-economic</button><button data-choice="x">Accessibility</button></span></div><div class="classify-item" data-answer="x"><span class="term">Voice input helps people who cannot operate keyboards or touchscreens</span><span class="choices"><button data-choice="a">Age</button><button data-choice="r">Rural</button><button data-choice="e">Education</button><button data-choice="s">Socio-economic</button><button data-choice="x">Accessibility</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">4 points</span></p><div class="mcq" data-answer="0"><p class="q">1. What is digital literacy?</p><div class="opts"><button class="opt" data-idx="0">The skill level of a person to use digital technology to find and create information and communicate</button><button class="opt" data-idx="1">The number of devices a person owns</button><button class="opt" data-idx="2">The speed of a person's internet connection</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. Why is it cheaper for providers to deliver internet in cities?</p><div class="opts"><button class="opt" data-idx="0">Many people live close together, so connecting them takes less resource</button><button class="opt" data-idx="1">Cities have no demand for internet</button><button class="opt" data-idx="2">Rural areas have too much infrastructure</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. Which does Starlink use to provide internet access?</p><div class="opts"><button class="opt" data-idx="0">Satellites</button><button class="opt" data-idx="1">Fibre optic cables only</button><button class="opt" data-idx="2">Television White Spaces only</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">4. Which technology uses unused radio frequencies that currently broadcast television?</p><div class="opts"><button class="opt" data-idx="0">TVWS</button><button class="opt" data-idx="1">A screen reader</button><button class="opt" data-idx="2">Fax</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-practice"><h2 class="section-title">Practice questions <span class="tag">Exam style</span></h2><p>Write each answer in full first, then compare it with the mark points and tick the ones you covered.</p><div class="task"><p class="task-label"><span>Question 1</span><span class="pts">1 points</span></p><h4></h4><div class="sub-q"><label>Define the term 'digital divide'. [1]</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>The difference in ability to access modern technology; the gap between people who have access to technology and those who do not</div><div class="self-mark"><input type="checkbox" id="sm-15"><label for="sm-15">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">2 points</span></p><h4>Identify two aspects that can create a digital divide. (2 marks)</h4><div class="sub-q mp" data-max="2"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 2)</span><label class="mp-item"><input type="checkbox"><span>Any one aspect, such as age, income, location, access to electricity, cost of technology, ability to repair devices, access to the internet, availability of technology, level of education or digital literacy</span></label><label class="mp-item"><input type="checkbox"><span>A second, different aspect from the same list</span></label><div class="mp-foot"><span class="mp-count">0 / 2 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p><h4>Explain the impact of the digital divide on a person's geographical location. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>High-speed, reliable internet is more often found in cities than in rural areas or small towns</span></label><label class="mp-item"><input type="checkbox"><span>Infrastructure is more developed in cities, and providers avoid rural areas because a long connection for few people is not profitable</span></label><label class="mp-item"><input type="checkbox"><span>People in rural areas may struggle to access online services such as shopping, learning, streaming and video-conferencing</span></label><label class="mp-item"><input type="checkbox"><span>Mobile network connections may be limited or absent, so people may feel isolated and be at a disadvantage (for example Sofia, whose video calls with clients do not work)</span></label><label class="mp-item"><input type="checkbox"><span>Remote places may lack electricity, or have only slow, expensive or unreliable satellite connections</span></label><label class="mp-item"><input type="checkbox"><span>Countries that are less industrially developed have less access, which can limit trade and education</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p><h4>Explain how a person's education can be affected by the digital divide. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>People without access to technology or the internet cannot reach the learning and information available online</span></label><label class="mp-item"><input type="checkbox"><span>Lack of access to services such as free education creates a greater divide between rich and poor</span></label><label class="mp-item"><input type="checkbox"><span>People who are not educated in using technology (low digital literacy) find online systems frustrating and miss out on opportunities</span></label><label class="mp-item"><input type="checkbox"><span>People may not have experience, may not be interested, or may give up when struggling to keep learning</span></label><label class="mp-item"><input type="checkbox"><span>In less industrially developed countries it can affect the level of education provided and the skill level of citizens, preventing them from competing internationally</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p><h4>Explain two strategies that can be implemented to reduce the digital divide. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Digital literacy courses run in local communities by colleges, schools and libraries (free or low cost)</span></label><label class="mp-item"><input type="checkbox"><span>Explanation: people learn with others of the same skill level and with a teacher, so they become confident and can use technology and online services</span></label><label class="mp-item"><input type="checkbox"><span>Satellite technology or improved infrastructure (fibre optic cabling, mobile networks) for rural or remote areas</span></label><label class="mp-item"><input type="checkbox"><span>Explanation: it reduces the infrastructure needed while still providing internet access, so more people can use online services</span></label><label class="mp-item"><input type="checkbox"><span>Governments providing technology at lower cost or for free, or organisations such as Facebook and Google working with providers to build infrastructure</span></label><label class="mp-item"><input type="checkbox"><span>Explanation: it gives poorer communities access to the benefits of technology, such as information, learning and communication</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div></div>
+</div>
+<footer>Cambridge AS &amp; A Level IT · The Digital Divide — built for revision, points are just for you.</footer>
+<script>
+(function(){
+  const scoreValEl = document.getElementById('score-val');
+  const scoreMaxEl = document.getElementById('score-max');
+  let score = 0;
+  function addScore(n){
+    score += n;
+    if(score < 0) score = 0;
+    scoreValEl.textContent = score;
+  }
+
+  // Work out the maximum score from what is actually on the page
+  let max = 0;
+  document.querySelectorAll('.self-mark input[type=checkbox]').forEach(function(cb){
+    max += parseInt(cb.dataset.points || '1', 10);
+  });
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    max += parseInt(sq.dataset.max, 10);
+  });
+  max += document.querySelectorAll('.classify-item').length;
+  max += document.querySelectorAll('.mcq').length;
+  scoreMaxEl.textContent = max;
+
+  // Tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // Written questions with one self-marked point each
+  document.querySelectorAll('.sub-q:not(.mp)').forEach(function(sq){
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const reveal = sq.querySelector('.answer-reveal');
+    const mark = sq.querySelector('.self-mark');
+    const checkbox = mark ? mark.querySelector('input[type=checkbox]') : null;
+    if(!btn || !reveal || !mark) return;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        reveal.classList.remove('show');
+        mark.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      reveal.classList.add('show');
+      mark.classList.add('show');
+    });
+
+    if(checkbox){
+      checkbox.addEventListener('change', function(){
+        const pts = parseInt(checkbox.dataset.points || '1', 10);
+        addScore(checkbox.checked ? pts : -pts);
+      });
+    }
+  });
+
+  // Extended answers: tick the mark points you covered, capped at the maximum
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    const cap = parseInt(sq.dataset.max, 10);
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const panel = sq.querySelector('.markpoints');
+    const note = sq.querySelector('.mp-note');
+    const count = sq.querySelector('.mp-count');
+    const boxes = panel.querySelectorAll('input[type=checkbox]');
+    let awarded = 0;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        panel.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      panel.classList.add('show');
+    });
+
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if(cb.checked){
+          if(awarded >= cap){
+            cb.checked = false;
+            note.textContent = "That's already full marks (" + cap + "). Untick a point first to swap it.";
+            return;
+          }
+          awarded += 1;
+          addScore(1);
+        } else {
+          awarded -= 1;
+          addScore(-1);
+        }
+        note.textContent = '';
+        count.textContent = awarded + ' / ' + cap + ' marks';
+      });
+    });
+  });
+
+  // Sort-it tasks
+  document.querySelectorAll('.classify-item').forEach(function(item){
+    const answer = item.dataset.answer;
+    const buttons = item.querySelectorAll('.choices button');
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){
+        buttons.forEach(function(other){ other.disabled = true; });
+        if(b.dataset.choice === answer){
+          b.classList.add('correct');
+          addScore(1);
+        } else {
+          b.classList.add('incorrect');
+          buttons.forEach(function(other){
+            if(other.dataset.choice === answer) other.classList.add('correct');
+          });
+        }
+      });
+    });
+  });
+
+  // Quick checks
+  document.querySelectorAll('.mcq').forEach(function(mcq){
+    const correctIdx = mcq.dataset.answer;
+    const opts = mcq.querySelectorAll('.opt');
+    const feedback = mcq.querySelector('.mcq-feedback');
+    opts.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        opts.forEach(function(o){ o.disabled = true; });
+        if(opt.dataset.idx === correctIdx){
+          opt.classList.add('correct');
+          feedback.textContent = 'Correct.';
+          feedback.className = 'mcq-feedback ok';
+          addScore(1);
+        } else {
+          opt.classList.add('incorrect');
+          opts.forEach(function(o){
+            if(o.dataset.idx === correctIdx) o.classList.add('correct');
+          });
+          feedback.textContent = 'Not quite — the correct answer is highlighted above.';
+          feedback.className = 'mcq-feedback bad';
+        }
+      });
+    });
+  });
+
+  })();
+</script>
+<script>
+(function(){
+  var STORE_KEY = 'ict-lesson-progress::' + location.pathname + '::' + document.title;
+
+  function load(){
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+    catch(e){ return {}; }
+  }
+  function save(mutator){
+    try {
+      var s = load();
+      mutator(s);
+      localStorage.setItem(STORE_KEY, JSON.stringify(s));
+    } catch(e){ /* storage unavailable or full: fail silently */ }
+  }
+  function all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+
+  // This page has no data-task attributes, so find things by their own classes
+  var subQs      = all('.sub-q:not(.mp)');   // short written answers (self-marked)
+  var mpQs       = all('.sub-q.mp');         // extended answers (mark points)
+  var classifyIt = all('.classify-item');
+  var mcqs       = all('.mcq');
+
+  // ---- SAVE: listen alongside the page's own handlers ----
+
+  subQs.forEach(function(sq, i){
+    var key = 'subq-' + i;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var cb = sq.querySelector('.self-mark input[type=checkbox]');
+    if(ta) ta.addEventListener('input', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+    });
+    if(btn) btn.addEventListener('click', function(){
+      save(function(s){
+        s[key] = s[key] || {};
+        s[key].text = ta ? ta.value : '';
+        s[key].checked = !!(ta && ta.value.trim());
+      });
+    });
+    if(cb) cb.addEventListener('change', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].selfMarked = cb.checked; });
+    });
+  });
+
+  mpQs.forEach(function(sq, i){
+    var key = 'mp-' + i;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var boxes = all_in(sq, '.markpoints input[type=checkbox]');
+    if(ta) ta.addEventListener('input', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+    });
+    if(btn) btn.addEventListener('click', function(){
+      save(function(s){
+        s[key] = s[key] || {};
+        s[key].text = ta ? ta.value : '';
+        s[key].shown = !!(ta && ta.value.trim());
+      });
+    });
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        save(function(s){
+          s[key] = s[key] || {};
+          var ticked = [];
+          boxes.forEach(function(b, bi){ if(b.checked) ticked.push(bi); });
+          s[key].ticked = ticked;
+        });
+      });
+    });
+  });
+  function all_in(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); }
+
+  classifyIt.forEach(function(item, i){
+    all_in(item, '.choices button').forEach(function(b, bi){
+      b.addEventListener('click', function(){
+        save(function(s){ s['classify-' + i] = bi; });
+      });
+    });
+  });
+
+  mcqs.forEach(function(mcq, i){
+    all_in(mcq, '.opt').forEach(function(o, oi){
+      o.addEventListener('click', function(){
+        save(function(s){ s['mcq-' + i] = oi; });
+      });
+    });
+  });
+
+  // ---- RESTORE: replay stored answers as real clicks, so the page's
+  // own scoring logic runs exactly as it did originally ----
+
+  (function restore(){
+    var s = load();
+
+    subQs.forEach(function(sq, i){
+      var rec = s['subq-' + i];
+      if(!rec) return;
+      var ta = sq.querySelector('textarea');
+      var btn = sq.querySelector('.check-btn');
+      var cb = sq.querySelector('.self-mark input[type=checkbox]');
+      if(ta && rec.text) ta.value = rec.text;
+      if(rec.checked && btn) btn.click();
+      if(rec.selfMarked && cb){
+        cb.checked = true;
+        cb.dispatchEvent(new Event('change'));
+      }
+    });
+
+    mpQs.forEach(function(sq, i){
+      var rec = s['mp-' + i];
+      if(!rec) return;
+      var ta = sq.querySelector('textarea');
+      var btn = sq.querySelector('.check-btn');
+      var boxes = all_in(sq, '.markpoints input[type=checkbox]');
+      if(ta && rec.text) ta.value = rec.text;
+      if(rec.shown && btn) btn.click();
+      (rec.ticked || []).forEach(function(bi){
+        if(boxes[bi]){
+          boxes[bi].checked = true;
+          boxes[bi].dispatchEvent(new Event('change'));
+        }
+      });
+    });
+
+    classifyIt.forEach(function(item, i){
+      var bi = s['classify-' + i];
+      if(bi === undefined) return;
+      var buttons = item.querySelectorAll('.choices button');
+      if(buttons[bi]) buttons[bi].click();
+    });
+
+    mcqs.forEach(function(mcq, i){
+      var oi = s['mcq-' + i];
+      if(oi === undefined) return;
+      var opts = mcq.querySelectorAll('.opt');
+      if(opts[oi]) opts[oi].click();
+    });
+  })();
+
+  // ---- Small "reset my answers" control ----
+  var resetBtn = document.createElement('button');
+  resetBtn.textContent = 'Reset my answers';
+  resetBtn.setAttribute('type', 'button');
+  resetBtn.style.cssText = 'position:fixed;bottom:14px;left:14px;z-index:50;font-family:JetBrains Mono,monospace;'
+    + 'font-size:11px;padding:7px 11px;background:#141b2e;border:1px solid #40557d;'
+    + 'color:#9ba4bc;border-radius:3px;cursor:pointer;';
+  resetBtn.addEventListener('mouseenter', function(){ resetBtn.style.color = '#e7e9f1'; });
+  resetBtn.addEventListener('mouseleave', function(){ resetBtn.style.color = '#9ba4bc'; });
+  resetBtn.addEventListener('click', function(){
+    if(confirm('Clear all your saved answers on this page?')){
+      try { localStorage.removeItem(STORE_KEY); } catch(e){}
+      location.reload();
+    }
+  });
+  document.body.appendChild(resetBtn);
+})();
+</script>
+</body>
+</html>
