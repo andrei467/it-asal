@@ -247,7 +247,10 @@
   .exam-bar button,.btn{font-family:var(--mono);font-size:13px;padding:9px 16px;background:transparent;border:1px solid var(--signal);color:var(--signal-bright);border-radius:3px;cursor:pointer;}
   .exam-bar button:hover,.btn:hover{background:var(--bg-deep);color:var(--paper);}
   body.started{padding-top:54px;}
-  .opt.selected{border-color:var(--signal);background:var(--bg-deep);}
+  .opt{touch-action:manipulation;}
+  .opt.selected{border-color:var(--gold);background:#1d2845;box-shadow:inset 4px 0 0 var(--gold);color:var(--paper);}
+  .opt.selected::before{content:'\25CF  ';color:var(--gold);}
+  .q-mcq.has-answer .task-label span:first-child::after{content:'  \2713 answered';color:var(--gold);}
   .q{font-size:16px;margin:0 0 12px;} .expl{font-size:14.5px;color:var(--paper-dim);margin:6px 0 0;}
   #exam{display:none;} #exam.on{display:block;}
   .sec-head{font-family:var(--mono);color:var(--gold);font-size:14px;margin:44px 0 6px;letter-spacing:.04em;}
@@ -318,7 +321,7 @@ function submit(){
   bar.classList.remove('on'); document.body.classList.remove('started');
   mcqs.forEach(function(q,i){
     var opts=$$('.opt',q), ans=+q.dataset.answer, ch=S.mcq[i];
-    opts.forEach(function(o,j){ o.disabled=true; if(j===ans) o.classList.add('correct'); else if(j===ch) o.classList.add('incorrect'); });
+    opts.forEach(function(o,j){ o.disabled=true; o.classList.remove('selected'); if(j===ans) o.classList.add('correct'); else if(j===ch) o.classList.add('incorrect'); });
     var f=$('.mcq-feedback',q); f.className='mcq-feedback '+(ch===ans?'ok':'bad');
     f.textContent= ch===undefined ? 'No answer — 0 marks.' : (ch===ans?'Correct — 1 mark.':'Incorrect — 0 marks.');
     $('.expl',q).textContent='Mark scheme: '+$('.expl-src',q).textContent;
@@ -339,10 +342,10 @@ function upd(q,i){
 mcqs.forEach(function(q,i){
   $$('.opt',q).forEach(function(o,j){ o.addEventListener('click',function(){
     if(S.submitted||!S.end) return;
-    $$('.opt',q).forEach(function(x){x.classList.remove('selected');}); o.classList.add('selected');
+    $$('.opt',q).forEach(function(x){x.classList.remove('selected');}); o.classList.add('selected'); q.classList.add('has-answer');
     S.mcq[i]=j; save(); answered();
   }); });
-  if(S.mcq[i]!==undefined) $$('.opt',q)[S.mcq[i]].classList.add('selected');
+  if(S.mcq[i]!==undefined){ $$('.opt',q)[S.mcq[i]].classList.add('selected'); q.classList.add('has-answer'); }
 });
 ws.forEach(function(q,i){
   var ta=$('textarea',q); if(S.text[i]) ta.value=S.text[i];
