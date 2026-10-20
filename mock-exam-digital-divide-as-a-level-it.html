@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mock exam (50 marks): The Digital Divide — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --bg-deep:#090d18;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#04141a;}
+
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 24px 120px; }
+
+  nav.theory-nav{
+    max-width:760px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:44px 24px 34px; max-width:760px; margin:0 auto; border-bottom:1px solid var(--trace);
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,38px);
+    line-height:1.15; margin:0 0 14px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
+
+  nav.tabs{
+    max-width:760px; margin:0 auto; padding:14px 24px; display:flex; gap:6px;
+    overflow-x:auto; border-bottom:1px solid var(--trace); position:sticky; top:0;
+    background:rgba(13,18,32,.95); backdrop-filter: blur(4px); z-index:30;
+  }
+  nav.tabs button{
+    font-family:var(--mono); font-size:12.5px; white-space:nowrap; background:transparent;
+    border:1px solid var(--trace); color:var(--paper-dim); padding:8px 13px;
+    border-radius:var(--radius); cursor:pointer; flex-shrink:0;
+  }
+  nav.tabs button:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  nav.tabs button.active{ background:var(--signal); color:#04141a; border-color:var(--signal); font-weight:500; }
+
+  .panel{ display:none; padding:40px 0 8px; }
+  .panel.active{ display:block; }
+
+  h2.section-title{
+    font-family:var(--mono); font-size:22px; color:var(--signal-bright);
+    margin:0 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2.section-title .tag{
+    font-size:12px; color:var(--sage); border:1px solid var(--trace);
+    padding:2px 7px; border-radius:var(--radius);
+  }
+  h3{ font-family:var(--mono); font-size:16px; color:var(--gold); margin:26px 0 8px; font-weight:500; }
+  p{margin:10px 0;}
+  ul, ol{padding-left:22px; margin:10px 0;}
+  li{margin:4px 0;}
+  strong{color:var(--paper); font-weight:600;}
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0 8px; font-size:15px; }
+  th,td{ border:1px solid var(--trace); padding:8px 10px; text-align:left; vertical-align:top; }
+  th{ font-family:var(--mono); font-size:12px; color:var(--sage); font-weight:500; background:rgba(134,201,160,0.06); }
+  .table-scroll{ overflow-x:auto; }
+  .note{ color:var(--paper-dim); font-size:14.5px; }
+
+  .block{ border-left:2px solid var(--trace); padding-left:18px; margin:18px 0; }
+  .block ul, .block ol{ margin:0; padding-left:20px; }
+
+  .proscons{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 8px; }
+  .pc{ border:1px solid var(--trace); border-radius:var(--radius); background:var(--bg-raised); padding:2px 14px 12px; }
+  .pc.pro{ border-top:2px solid var(--sage); }
+  .pc.con{ border-top:2px solid var(--brick); }
+  .pc-title{ font-family:var(--mono); font-size:12.5px; font-weight:500; margin:12px 0 4px; }
+  .pc.pro .pc-title{ color:var(--sage); }
+  .pc.con .pc-title{ color:var(--brick); }
+  .pc ul{ padding-left:18px; margin:6px 0 0; font-size:15px; }
+  @media (max-width:600px){ .proscons{ grid-template-columns:1fr; } }
+
+  details.fold{ border:1px solid var(--trace); border-radius:var(--radius); margin:12px 0; background:var(--bg-raised); }
+  details.fold summary{ font-family:var(--mono); font-size:13.5px; color:var(--gold); padding:11px 14px; cursor:pointer; }
+  details.fold[open] summary{ border-bottom:1px solid var(--trace); }
+  details.fold .fold-body{ padding:2px 14px 12px; }
+
+  .diagram-box{
+    background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius);
+    padding:14px 10px; margin:18px 0 6px; text-align:center;
+  }
+  .diagram-box svg{ width:100%; height:auto; max-width:460px; }
+  .diagram-box svg.wide{ max-width:600px; }
+  .diagram-caption{ font-family:var(--mono); font-size:12px; color:var(--paper-dim); margin-top:6px; }
+  .signal-caption{ font-family: var(--mono); font-size:12.5px; color:var(--paper-dim); margin-top:8px; text-align:center; }
+
+  .task{ margin:32px 0; border:1px solid var(--trace); border-radius:var(--radius); background: var(--bg-raised); padding:20px 20px 22px; }
+  .task-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .task-label .pts{color:var(--sage);}
+  .task h4{ margin:0 0 12px; font-family:var(--serif); font-weight:600; font-size:16.5px; color:var(--paper); }
+  .task .sub-q{margin:18px 0;}
+  .task .sub-q:first-child{margin-top:0;}
+  .sub-q label{ display:block; font-family:var(--serif); font-size:15.5px; margin-bottom:8px; color:var(--paper); }
+
+  textarea{
+    width:100%; min-height:52px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-radius:var(--radius); color:var(--paper); font-family:var(--serif);
+    font-size:15.5px; padding:10px 12px; resize:vertical;
+  }
+  textarea:focus, button:focus-visible, .opt:focus-visible, summary:focus-visible, input[type=checkbox]:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:1px; }
+  .row{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+
+  button{
+    font-family:var(--mono); font-size:13px; background:var(--signal); color:#04141a;
+    border:none; padding:9px 15px; border-radius:var(--radius); cursor:pointer; font-weight:500;
+  }
+  button:hover{background:var(--signal-bright);}
+  button.ghost{ background:transparent; border:1px solid var(--trace); color:var(--paper-dim); }
+  button.ghost:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  button:disabled{opacity:.5; cursor:default;}
+
+  .error-msg{ color:var(--brick); font-family:var(--mono); font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show{display:block;}
+
+  .answer-reveal{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .answer-reveal.show{display:block;}
+  .answer-reveal .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:5px; }
+
+  .self-mark{ display:none; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:13px; color:var(--paper-dim); }
+  .self-mark.show{display:flex;}
+  .self-mark input[type=checkbox]{ width:17px; height:17px; accent-color: var(--gold); cursor:pointer; }
+  .self-mark label{cursor:pointer; margin:0; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+
+  .markpoints{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .markpoints.show{display:block;}
+  .markpoints .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:6px; }
+  .markpoints .mp-item{
+    display:flex; gap:10px; align-items:flex-start; margin:0; padding:7px 0;
+    border-bottom:1px solid var(--trace-dim); font-size:15px; font-weight:400; cursor:pointer;
+  }
+  .markpoints .mp-item:last-of-type{border-bottom:none;}
+  .markpoints .mp-item input{ width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--gold); cursor:pointer; }
+  .mp-foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; font-family:var(--mono); font-size:13px; }
+  .mp-count{ color:var(--gold); }
+  .mp-note{ color:var(--brick); }
+
+  .mcq{margin:20px 0;}
+  .mcq:first-of-type{margin-top:0;}
+  .mcq p.q{ font-family:var(--serif); font-size:15.5px; color:var(--paper); margin:0 0 10px; }
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:10px 13px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer; font-weight:400;
+  }
+  .opt:hover:not(:disabled){border-color:var(--signal); background:var(--bg-deep);}
+  .opt.correct{border-color:var(--sage); background:rgba(134,201,160,0.14);}
+  .opt.incorrect{border-color:var(--brick); background:rgba(224,104,92,0.14);}
+  .opt:disabled{cursor:default;}
+  .mcq-feedback{ font-family:var(--mono); font-size:13px; margin-top:8px; min-height:1.2em; }
+  .mcq-feedback.ok{color:var(--sage);}
+  .mcq-feedback.bad{color:var(--brick);}
+
+  .classify-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 0; border-bottom:1px solid var(--trace-dim); flex-wrap:wrap;
+  }
+  .classify-item:last-child{border-bottom:none;}
+  .classify-item .term{font-size:15px; max-width:60%;}
+  .classify-item .choices{display:flex; gap:8px; flex-wrap:wrap;}
+  .classify-item .choices button{
+    background:transparent; border:1px solid var(--trace); color:var(--paper-dim);
+    font-size:12px; padding:6px 10px;
+  }
+  .classify-item .choices button:hover:not(:disabled){ color:var(--paper); border-color:var(--paper-dim); }
+  .classify-item .choices button.correct{background:rgba(134,201,160,0.16); border-color:var(--sage); color:var(--paper);}
+  .classify-item .choices button.incorrect{background:rgba(224,104,92,0.16); border-color:var(--brick); color:var(--paper);}
+  @media (max-width:600px){ .classify-item .term{max-width:100%;} }
+
+  #score-badge{
+    position:fixed; top:14px; right:14px; z-index:50; font-family:var(--mono); font-size:13px;
+    background:var(--bg-raised); border:1px solid var(--signal); color:var(--signal-bright);
+    padding:8px 13px; border-radius:var(--radius); box-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  #score-badge .n{color:var(--gold); font-weight:700;}
+
+  footer{ max-width:760px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    header.hero{padding:36px 20px 26px;}
+    #score-badge{top:auto; bottom:14px; right:14px;}
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+
+  .diagram-box img{ max-width:100%; height:auto; background:#fff; border-radius:3px; padding:8px; }
+  pre{ background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius); padding:12px 14px; overflow-x:auto; font-family:var(--mono); font-size:13.5px; line-height:1.55; margin:14px 0; color:var(--paper); }
+  code{ font-family:var(--mono); font-size:.9em; color:var(--signal-bright); }
+  pre code{ color:inherit; }
+
+  .exam-bar{position:fixed;top:0;left:0;right:0;z-index:60;background:var(--bg-raised);border-bottom:1px solid var(--trace);padding:10px 24px;display:none;align-items:center;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:13px;}
+  .exam-bar.on{display:flex;} .exam-bar .t{color:var(--gold);font-weight:700;font-size:16px;} .exam-bar .t.low{color:var(--brick);}
+  .exam-bar button,.btn{font-family:var(--mono);font-size:13px;padding:9px 16px;background:transparent;border:1px solid var(--signal);color:var(--signal-bright);border-radius:3px;cursor:pointer;}
+  .exam-bar button:hover,.btn:hover{background:var(--bg-deep);color:var(--paper);}
+  body.started{padding-top:54px;}
+  .opt.selected{border-color:var(--signal);background:var(--bg-deep);}
+  .q{font-size:16px;margin:0 0 12px;} .expl{font-size:14.5px;color:var(--paper-dim);margin:6px 0 0;}
+  #exam{display:none;} #exam.on{display:block;}
+  .sec-head{font-family:var(--mono);color:var(--gold);font-size:14px;margin:44px 0 6px;letter-spacing:.04em;}
+  .sec-note{color:var(--paper-dim);font-size:15px;margin:0 0 18px;}
+  #results{display:none;} #results.on{display:block;}
+  .big{font-family:var(--mono);font-size:34px;color:var(--gold);margin:4px 0;} .rows{font-family:var(--mono);font-size:14px;color:var(--paper-dim);line-height:1.9;}
+  .rows b{color:var(--paper);}
+</style></head>
+<body>
+<div class="exam-bar"><span>Time left <span class="t">50:00</span></span><span id="ans-count">0 / 28 answered</span><button id="submit-btn" type="button">Submit exam</button></div>
+<header class="hero"><p class="kicker">Cambridge AS &amp; A Level IT · Mock exam</p><h1 class="title">The Digital Divide</h1><p>A timed practice paper on chapter 6: what the digital divide is, what causes it, and how different groups are affected and supported.</p></header>
+<div class="wrap">
+<div id="intro" class="task" style="margin-top:36px;"><p class="task-label"><span>Instructions</span><span class="pts">50 marks · 50 minutes</span></p>
+<p>Answer all questions. The paper has three parts: <strong>Section A</strong> has 14 multiple-choice questions (1 mark each, 14 marks), <strong>Section B</strong> has 10 short-answer questions (20 marks) and <strong>Section C</strong> has 4 extended questions (16 marks).</p>
+<p>The timer starts when you press Start and the paper is submitted automatically when time runs out. Your answers are saved, so refreshing the page will not lose them. After you submit, multiple-choice questions are marked for you. For written answers the mark scheme appears and you mark yourself by ticking each point your answer covered; your score updates as you tick.</p>
+<p><button id="start-btn" class="btn" type="button">Start exam</button></p></div>
+<div id="results" class="task"><p class="task-label"><span>Your result</span><span class="pts">tick the mark scheme below to update</span></p><p class="big"><span id="r-total">0 / 50</span> <span id="r-pct" style="font-size:18px;color:var(--paper-dim)">0%</span></p>
+<div class="rows" id="rows"></div>
+<p class="sec-note" style="margin-top:12px;">Multiple-choice questions are marked automatically. Scroll down, compare each written answer with its mark scheme and tick the points you covered — be honest, that is how you find what to revise.</p></div>
+<div id="exam">
+<h2 class="sec-head">SECTION A — Multiple choice [14 marks]</h2><p class="sec-note">Choose one answer for each question.</p>
+<div class="task q-mcq" data-i="0" data-answer="1"><p class="task-label"><span>Question 1</span><span class="pts">1 mark</span></p><p class="q">Which statement best describes the digital divide?</p><div class="opts"><button class="opt" data-idx="0">The number of devices a country manufactures</button><button class="opt" data-idx="1">The difference in ability to access modern technology</button><button class="opt" data-idx="2">The speed of a person's internet connection</button><button class="opt" data-idx="3">The cost of repairing a device</button></div><p class="mcq-feedback"></p><p class="expl"></p><span class="expl-src" hidden>The digital divide is the difference in ability to access modern technology, between those with full access and those with restricted or no access.</span></div><div class="task q-mcq" data-i="1" data-answer="0"><p class="task-label"><span>Question 2</span><span class="pts">1 mark</span></p><p class="q">Which of these is a factor by which the digital divide can be judged?</p><div class="opts"><button class="opt" data-idx="0">A person's income</button><button class="opt" data-idx="1">The brand of a person's phone</button><button class="opt" data-idx="2">The colour of a device</button><button class="opt" data-idx="3">The number of apps installed</button></div><p class="mcq-feedback"></p><p class="expl"></p><span class="expl-src" hidden>The digital divide can be judged by factors such as a person's age, income and location.</span></div><div class="task q-mcq" data-i="2" data-answer="2"><p class="task-label"><span>Question 3</span><span class="pts">1 mark</span></p><p class="q">Why is it difficult to give electricity to remote places such as deserts and mountains?</p><div class="opts"><button class="opt" data-idx="0">Devices cannot run on batteries</button><button class="opt" data-idx="1">Solar power is always free</button><button class="opt" data-idx="2">It is expensive to build cables hundreds of miles from power stations</button><button class="opt" data-idx="3">Mains electricity cannot power digital devices</button></div><p class="mcq-feedback"></p><p class="expl"></p><span class="expl-src" hidden>It is expensive to build and install cables in places hundreds of miles from power stations.</span></div><div class="task q-mcq" data-i="3" data-answer="1"><p class="task-label"><span>Question 4</span><span class="pts">1 mark</span></p><p class="q">Which is a disadvantage of satellite internet connections?</p><div class="opts"><button class="opt" data-idx="0">They need physical cables to every home</button><button class="opt" data-idx="1">They can be disrupted by weather conditions such as thunderstorms</button><button class="opt" data-idx="2">They only work in cities</button><button class="opt" data-idx="3">They are always faster than ground-based connections</button></div><p class="mcq-feedback"></p><p class="expl"></p><span class="expl-src" hidden>Satellite signals travel through the atmosphere into space and back, so weather can disrupt them. They also cost a lot and can be slow and unreliable.</span></div><div class="task q-mcq" data-i="4" data-answer="3"><p class="task-label"><span>Question 5</span><span class="pts">1 mark</span></p><p class="q">10 000 people can afford a device and have internet access, but only 5000 devices are available. How many people still cannot access a device?</p><div class="opts"><button class="opt" data-idx="0">2500</button><button class="opt" data-idx="1">10 000</button><button class="opt" data-idx="2">0</button><button class="opt" data-idx="3">5000</button></div><p class="mcq-feedback"></p><p class="expl"></p><span class="expl-src" hidden>Availability is how many devices there are compared with how many people want them: 10 000 − 5000 = 5000 people cannot access one.</span></div><div class="task q-mcq" data-i="5" data-answer="2"><p class="task-label"><span>Question 6</span><span class="pts">1 mark</span></p><p class="q">What is digital literacy?</p><div class="opts"><button class="opt" data-idx="0">The number of digital devices a person owns</button><button class="opt" data-idx="1">How quickly a person can type</button><button class="opt" data-idx="2">The skill level of a person to use digital technology to find and create information and communicate</button><button class="opt" data-idx="3">The speed of a computer</button></div><p class="mcq-feedback"></p><p class="expl"></p><span class="expl-src" hidden>Digital literacy is the skill level of a person to use digital technology to find and create information, and to communicate with others using it.</span></div><div class="task q-mcq" data-i="6" data-answer="0"><p class="task-label"><span>Question 7</span><span class="pts">1 mark</span></p><p class="q">Why is it cheaper for internet providers to deliver high-speed internet in cities?</p><div class="opts"><button class="opt" data-idx="0">Many people live close together, so connecting them takes less resource</button><button class="opt" data-idx="1">Cities have no demand for the internet</button><button class="opt" data-idx="2">Rural areas have too much infrastructure</button><button class="opt" data-idx="3">Cities have fewer people</button></div><p class="mcq-feedback"></p><p class="expl"></p><span class="expl-src" hidden>Many hundreds of people live close together in cities (for example 300 people could be connected with 100 m of cable), so it is cheaper than a long connection for few rural people.</span></div><div class="task q-mcq" data-i="7" data-answer="3"><p class="task-label"><span>Question 8</span><span class="pts">1 mark</span></p><p class="q">What do screen readers do?</p><div class="opts"><button class="opt" data-idx="0">Magnify the screen</button><button class="opt" data-idx="1">Make the screen brighter</button><button class="opt" data-idx="2">Allow people to type with their voice</button><button class="opt" data-idx="3">Convert the text on the screen into sound</button></div><p class="mcq-feedback"></p><p class="expl"></p><span class="expl-src" hidden>A screen reader converts text on the screen into sound so a person can hear what is on the screen, which supports people with vision loss.</span></div><div class="task q-mcq" data-i="8" data-answer="1"><p class="task-label"><span>Question 9</span><span class="pts">1 mark</span></p><p class="q">What is the challenge with Starlink-style satellite internet?</p><div class="opts"><button class="opt" data-idx="0">It cannot reach remote places</button><button class="opt" data-idx="1">Satellite technology is expensive to run, so access costs more than ground-based access</button><button class="opt" data-idx="2">It needs cables to every house</button><button class="opt" data-idx="3">It only works for older people</button></div><p class="mcq-feedback"></p><p class="expl"></p><span class="expl-src" hidden>Starlink can reach places where cables and other wireless connections cannot, but satellite technology is expensive to run, so access is costly compared with ground-based access.</span></div><div class="task q-mcq" data-i="9" data-answer="0"><p class="task-label"><span>Question 10</span><span class="pts">1 mark</span></p><p class="q">What does Television White Spaces (TVWS) technology use to provide internet access?</p><div class="opts"><button class="opt" data-idx="0">Radio frequencies that currently broadcast television and are often unused and unlicensed</button><button class="opt" data-idx="1">Fibre optic cables only</button><button class="opt" data-idx="2">Mobile phone masts only</button><button class="opt" data-idx="3">Landline telephone wires</button></div><p class="mcq-feedback"></p><p class="expl"></p><span class="expl-src" hidden>TVWS is a fixed wireless technology using often unused and unlicensed radio frequencies that currently broadcast television, useful where ground-based infrastructure is very expensive or slow to build.</span></div><div class="task q-mcq" data-i="10" data-answer="3"><p class="task-label"><span>Question 11</span><span class="pts">1 mark</span></p><p class="q">Between which of these can a digital divide exist?</p><div class="opts"><button class="opt" data-idx="0">Only between two neighbouring countries</button><button class="opt" data-idx="1">Only between people of the same age</button><button class="opt" data-idx="2">Only between cities and the sea</button><button class="opt" data-idx="3">Between countries, between demographic groups and between economic areas</button></div><p class="mcq-feedback"></p><p class="expl"></p><span class="expl-src" hidden>A digital divide can exist between countries, between different demographic groups (particular sections of the population) and between different economic areas.</span></div><div class="task q-mcq" data-i="11" data-answer="1"><p class="task-label"><span>Question 12</span><span class="pts">1 mark</span></p><p class="q">Why may some older people find it hard to learn the skills needed for new technology?</p><div class="opts"><button class="opt" data-idx="0">Older people are not allowed to use technology</button><button class="opt" data-idx="1">Technology works in a very different way from the technology they grew up with</button><button class="opt" data-idx="2">New technology is released only every ten years</button><button class="opt" data-idx="3">Older people never have mobile phones</button></div><p class="mcq-feedback"></p><p class="expl"></p><span class="expl-src" hidden>Some older people may find new technology hard to learn because it works in a very different way from the technology they grew up with.</span></div><div class="task q-mcq" data-i="12" data-answer="2"><p class="task-label"><span>Question 13</span><span class="pts">1 mark</span></p><p class="q">What does the Indian government initiative BharatNet aim to do?</p><div class="opts"><button class="opt" data-idx="0">Sell mobile phones in cities</button><button class="opt" data-idx="1">Remove the need for satellites</button><button class="opt" data-idx="2">Provide affordable internet in rural India, using fibre optic cabling and satellites</button><button class="opt" data-idx="3">Build factories for microchips</button></div><p class="mcq-feedback"></p><p class="expl"></p><span class="expl-src" hidden>BharatNet focuses on developing infrastructure in rural India to provide affordable internet, through more fibre optic cabling and satellite access in approximately 5300 locations.</span></div><div class="task q-mcq" data-i="13" data-answer="0"><p class="task-label"><span>Question 14</span><span class="pts">1 mark</span></p><p class="q">Why do organisations such as Facebook and Google work with internet service providers to build infrastructure?</p><div class="opts"><button class="opt" data-idx="0">More people with internet access may use their services</button><button class="opt" data-idx="1">They want to stop people using the internet</button><button class="opt" data-idx="2">They want to sell old technology</button><button class="opt" data-idx="3">They are required to by law</button></div><p class="mcq-feedback"></p><p class="expl"></p><span class="expl-src" hidden>They collaborate because it means more people have access to the internet, so more people may use the services these organisations provide.</span></div>
+<h2 class="sec-head">SECTION B — Short answer [20 marks]</h2><p class="sec-note">Write short, clear answers. The number of marks tells you how many points to make.</p>
+<div class="task q-w" data-i="0" data-sec="B" data-max="1"><p class="task-label"><span>Question 15</span><span class="pts">[1]</span></p><p class="q">Define the term 'digital divide'.</p><textarea placeholder="Write your answer here…" style="min-height:84px;"></textarea><div class="markpoints"><span class="lbl">Mark scheme — tick each point your answer covered (up to 1)</span><label class="mp-item"><input type="checkbox"><span>The difference in ability to access modern technology (the gap between people who have full access to technology and those who have restricted or no access)</span></label><div class="mp-foot"><span class="mp-count">0 / 1 marks</span></div></div></div><div class="task q-w" data-i="1" data-sec="B" data-max="2"><p class="task-label"><span>Question 16</span><span class="pts">[2]</span></p><p class="q">Identify two factors by which the digital divide can be judged.</p><textarea placeholder="Write your answer here…" style="min-height:98px;"></textarea><div class="markpoints"><span class="lbl">Mark scheme — tick each point your answer covered (up to 2)</span><label class="mp-item"><input type="checkbox"><span>Age</span></label><label class="mp-item"><input type="checkbox"><span>Income</span></label><label class="mp-item"><input type="checkbox"><span>Location</span></label><div class="mp-foot"><span class="mp-count">0 / 2 marks</span></div></div></div><div class="task q-w" data-i="2" data-sec="B" data-max="2"><p class="task-label"><span>Question 17</span><span class="pts">[2]</span></p><p class="q">Explain why the cost of technology can create a digital divide in big cities.</p><textarea placeholder="Write your answer here…" style="min-height:98px;"></textarea><div class="markpoints"><span class="lbl">Mark scheme — tick each point your answer covered (up to 2)</span><label class="mp-item"><input type="checkbox"><span>Cities have shops that sell new technology</span></label><label class="mp-item"><input type="checkbox"><span>People in low-paid jobs may not be able to afford to buy or rent it</span></label><label class="mp-item"><input type="checkbox"><span>Old technology is cheaper but cannot perform the same functions or be as reliable</span></label><div class="mp-foot"><span class="mp-count">0 / 2 marks</span></div></div></div><div class="task q-w" data-i="3" data-sec="B" data-max="2"><p class="task-label"><span>Question 18</span><span class="pts">[2]</span></p><p class="q">Describe two problems with satellite internet connections.</p><textarea placeholder="Write your answer here…" style="min-height:98px;"></textarea><div class="markpoints"><span class="lbl">Mark scheme — tick each point your answer covered (up to 2)</span><label class="mp-item"><input type="checkbox"><span>They cost a lot of money to use</span></label><label class="mp-item"><input type="checkbox"><span>They can be slow and unreliable</span></label><label class="mp-item"><input type="checkbox"><span>They can be disrupted by weather conditions such as thunderstorms, because the signals travel through the atmosphere into space and back</span></label><div class="mp-foot"><span class="mp-count">0 / 2 marks</span></div></div></div><div class="task q-w" data-i="4" data-sec="B" data-max="2"><p class="task-label"><span>Question 19</span><span class="pts">[2]</span></p><p class="q">Explain what is meant by digital literacy.</p><textarea placeholder="Write your answer here…" style="min-height:98px;"></textarea><div class="markpoints"><span class="lbl">Mark scheme — tick each point your answer covered (up to 2)</span><label class="mp-item"><input type="checkbox"><span>A person's ability to learn about and use technology effectively</span></label><label class="mp-item"><input type="checkbox"><span>The skill level of a person to use digital technology to find and create information</span></label><label class="mp-item"><input type="checkbox"><span>The skill level of a person to communicate with others using digital technology</span></label><div class="mp-foot"><span class="mp-count">0 / 2 marks</span></div></div></div><div class="task q-w" data-i="5" data-sec="B" data-max="3"><p class="task-label"><span>Question 20</span><span class="pts">[3]</span></p><p class="q">Explain three reasons why internet providers may not invest in high-speed internet in rural areas.</p><textarea placeholder="Write your answer here…" style="min-height:112px;"></textarea><div class="markpoints"><span class="lbl">Mark scheme — tick each point your answer covered (up to 3)</span><label class="mp-item"><input type="checkbox"><span>Providing a connection over a large distance for a small number of people is not very profitable</span></label><label class="mp-item"><input type="checkbox"><span>In cities many people live close together, so connecting them takes less resource and is cheaper</span></label><label class="mp-item"><input type="checkbox"><span>The infrastructure in rural areas is far less developed than in cities</span></label><label class="mp-item"><input type="checkbox"><span>Rural villages may be hundreds of kilometres away or in mountains or remote areas, which is challenging to build for</span></label><label class="mp-item"><input type="checkbox"><span>There is greater demand for high-speed internet in cities</span></label><div class="mp-foot"><span class="mp-count">0 / 3 marks</span></div></div></div><div class="task q-w" data-i="6" data-sec="B" data-max="2"><p class="task-label"><span>Question 21</span><span class="pts">[2]</span></p><p class="q">Explain two reasons why some people choose to avoid modern technology.</p><textarea placeholder="Write your answer here…" style="min-height:98px;"></textarea><div class="markpoints"><span class="lbl">Mark scheme — tick each point your answer covered (up to 2)</span><label class="mp-item"><input type="checkbox"><span>Some people do not trust the development of artificial intelligence (AI)</span></label><label class="mp-item"><input type="checkbox"><span>Some people may experience a negative effect on their health because of social media</span></label><label class="mp-item"><input type="checkbox"><span>Some people prefer to do things in familiar ways, or fear that they are not clever enough to learn new technology</span></label><div class="mp-foot"><span class="mp-count">0 / 2 marks</span></div></div></div><div class="task q-w" data-i="7" data-sec="B" data-max="2"><p class="task-label"><span>Question 22</span><span class="pts">[2]</span></p><p class="q">Explain why a lack of access to electricity creates a digital divide.</p><textarea placeholder="Write your answer here…" style="min-height:98px;"></textarea><div class="markpoints"><span class="lbl">Mark scheme — tick each point your answer covered (up to 2)</span><label class="mp-item"><input type="checkbox"><span>Technology requires electricity, and even battery-powered devices need to be recharged</span></label><label class="mp-item"><input type="checkbox"><span>It is difficult and expensive to install cables in remote places such as deserts, mountains and remote villages</span></label><label class="mp-item"><input type="checkbox"><span>Without electricity people cannot use digital devices effectively</span></label><label class="mp-item"><input type="checkbox"><span>Solar power can help but is expensive to install</span></label><div class="mp-foot"><span class="mp-count">0 / 2 marks</span></div></div></div><div class="task q-w" data-i="8" data-sec="B" data-max="2"><p class="task-label"><span>Question 23</span><span class="pts">[2]</span></p><p class="q">Explain why being unable to repair a device can create a digital divide.</p><textarea placeholder="Write your answer here…" style="min-height:98px;"></textarea><div class="markpoints"><span class="lbl">Mark scheme — tick each point your answer covered (up to 2)</span><label class="mp-item"><input type="checkbox"><span>Digital devices often need repairing or upgrading</span></label><label class="mp-item"><input type="checkbox"><span>If there is no local computer or phone technician the person cannot use the device</span></label><label class="mp-item"><input type="checkbox"><span>A person with a particular brand of mobile device may not be able to get it repaired locally, so may need to buy a new device</span></label><div class="mp-foot"><span class="mp-count">0 / 2 marks</span></div></div></div><div class="task q-w" data-i="9" data-sec="B" data-max="2"><p class="task-label"><span>Question 24</span><span class="pts">[2]</span></p><p class="q">Describe two ways that technology can support people with accessibility barriers.</p><textarea placeholder="Write your answer here…" style="min-height:98px;"></textarea><div class="markpoints"><span class="lbl">Mark scheme — tick each point your answer covered (up to 2)</span><label class="mp-item"><input type="checkbox"><span>Screen readers convert the text on the screen into sound, so a person with vision loss can hear what is on the screen</span></label><label class="mp-item"><input type="checkbox"><span>Voice input/commands help people who cannot operate keyboards or touchscreens effectively</span></label><label class="mp-item"><input type="checkbox"><span>Support is included when digital technology is developed, so many devices have some support built in</span></label><div class="mp-foot"><span class="mp-count">0 / 2 marks</span></div></div></div>
+<h2 class="sec-head">SECTION C — Extended answer [16 marks]</h2><p class="sec-note">Give developed explanations. Each mark is for a point that is clearly explained.</p>
+<div class="task q-w" data-i="10" data-sec="C" data-max="4"><p class="task-label"><span>Question 25</span><span class="pts">[4]</span></p><p class="q">Explain how the digital divide can affect a country that is less industrially developed.</p><textarea placeholder="Write your answer here…" style="min-height:126px;"></textarea><div class="markpoints"><span class="lbl">Mark scheme — tick each point your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Lack of technology and the internet puts the country at a competitive and economic disadvantage</span></label><label class="mp-item"><input type="checkbox"><span>It may limit trade opportunities, so the country falls behind financially compared with more industrially developed countries</span></label><label class="mp-item"><input type="checkbox"><span>It may affect the level of education that can be provided, as citizens cannot access the learning and information on the internet</span></label><label class="mp-item"><input type="checkbox"><span>It can affect the skill level of people and prevent them competing internationally</span></label><label class="mp-item"><input type="checkbox"><span>Businesses cannot run online effectively (for example the Kenyan village cooperative with poor internet access)</span></label><label class="mp-item"><input type="checkbox"><span>The cost of building the infrastructure is very high, so the country may need its money for other important services</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span></div></div></div><div class="task q-w" data-i="11" data-sec="C" data-max="4"><p class="task-label"><span>Question 26</span><span class="pts">[4]</span></p><p class="q">Explain two ways in which the digital divide between age groups can be reduced.</p><textarea placeholder="Write your answer here…" style="min-height:126px;"></textarea><div class="markpoints"><span class="lbl">Mark scheme — tick each point your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Libraries and community centres offer short IT sessions to help people get started</span></label><label class="mp-item"><input type="checkbox"><span>Explanation: this helps older people learn to use computers, tablets and the internet, so they gain digital literacy</span></label><label class="mp-item"><input type="checkbox"><span>Digital literacy courses run locally, free or at low cost, with a teacher or leader and people of the same skill level</span></label><label class="mp-item"><input type="checkbox"><span>Explanation: people feel comfortable learning and gain confidence to use technology and online services</span></label><label class="mp-item"><input type="checkbox"><span>Countries support older people to appreciate the advantages of technology, for example social media to combat loneliness</span></label><label class="mp-item"><input type="checkbox"><span>Explanation: people are more likely to learn when they see the benefits outweigh the challenge of learning</span></label><label class="mp-item"><input type="checkbox"><span>Retirement villages use technology (sensors, video-conference calls) to show how it can benefit their lives</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span></div></div></div><div class="task q-w" data-i="12" data-sec="C" data-max="4"><p class="task-label"><span>Question 27</span><span class="pts">[4]</span></p><p class="q">Explain how a lack of high-speed internet can affect a person living in a rural area.</p><textarea placeholder="Write your answer here…" style="min-height:126px;"></textarea><div class="markpoints"><span class="lbl">Mark scheme — tick each point your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>They may struggle to access online services such as online shopping and online television</span></label><label class="mp-item"><input type="checkbox"><span>They may be unable to stream films or TV reliably, which could make them feel isolated</span></label><label class="mp-item"><input type="checkbox"><span>Mobile network connection may be limited or absent, which affects their ability to communicate</span></label><label class="mp-item"><input type="checkbox"><span>They may be unable to use video-conferencing effectively for work, putting them at a disadvantage compared with people who have high-speed internet (for example Sofia, the furniture designer)</span></label><label class="mp-item"><input type="checkbox"><span>Internet providers may avoid investing in the area because it is not very profitable</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span></div></div></div><div class="task q-w" data-i="13" data-sec="C" data-max="4"><p class="task-label"><span>Question 28</span><span class="pts">[4]</span></p><p class="q">Explain how governments and organisations can help to reduce the digital divide between richer and poorer people.</p><textarea placeholder="Write your answer here…" style="min-height:126px;"></textarea><div class="markpoints"><span class="lbl">Mark scheme — tick each point your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Governments can provide technology at lower cost, or for free, to poorer communities</span></label><label class="mp-item"><input type="checkbox"><span>Explanation: this gives them access to the advantages of technology, such as information, learning and communication</span></label><label class="mp-item"><input type="checkbox"><span>Large organisations such as Facebook and Google work with internet service providers to build infrastructure, for example reducing the cost of installing Wi-Fi access points</span></label><label class="mp-item"><input type="checkbox"><span>Explanation: they do this because more people with internet access may use the services they provide</span></label><label class="mp-item"><input type="checkbox"><span>Providing access to free online education and information helps improve the socio-economic circumstances of poorer people</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span></div></div></div>
+</div>
+</div>
+<script>
+
+(function(){
+var KEY='mock-exam::'+location.pathname+'::'+document.title, DUR=50*60*1000;
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return {};}}
+var S=load(); S.mcq=S.mcq||{}; S.text=S.text||{}; S.ticks=S.ticks||{};
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+var $=function(s,r){return (r||document).querySelector(s);}, $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));};
+var mcqs=$$('.q-mcq'), ws=$$('.q-w'), timer, bar=$('.exam-bar'), tEl=$('.exam-bar .t');
+var MA=mcqs.length, MB=0, MC=0; ws.forEach(function(q){ if(q.dataset.sec==='B') MB+=+q.dataset.max; else MC+=+q.dataset.max; }); var TOT=MA+MB+MC;
+function pad(n){return (n<10?'0':'')+n;}
+function tick(){
+  var left=Math.max(0,S.end-Date.now()), m=Math.floor(left/60000), s=Math.floor(left/1000)%60;
+  tEl.textContent=pad(m)+':'+pad(s); tEl.classList.toggle('low',left<5*60000);
+  if(left<=0){submit();}
+}
+function answered(){
+  var n=Object.keys(S.mcq).length; ws.forEach(function(q,i){ if((S.text[i]||'').trim()) n++; });
+  $('#ans-count').textContent=n+' / '+(mcqs.length+ws.length)+' answered';
+}
+function start(){
+  if(!S.end){ S.end=Date.now()+DUR; save(); }
+  document.body.classList.add('started'); bar.classList.add('on'); $('#exam').classList.add('on'); $('#intro').style.display='none';
+  answered(); if(!S.submitted){ tick(); if(!S.submitted) timer=setInterval(tick,1000); }
+}
+function scores(){
+  var a=0,b=0,c=0;
+  mcqs.forEach(function(q,i){ if(S.mcq[i]===+q.dataset.answer) a++; });
+  ws.forEach(function(q,i){ var t=(S.ticks[i]||[]).length, v=Math.min(t,+q.dataset.max); if(q.dataset.sec==='B') b+=v; else c+=v; });
+  return {a:a,b:b,c:c,t:a+b+c};
+}
+function showResults(){
+  var s=scores(), r=$('#results'); r.classList.add('on');
+  $('#r-total').textContent=s.t+' / '+TOT; $('#r-pct').textContent=Math.round(s.t/TOT*100)+'%';
+  $('#rows').innerHTML='Section A (multiple choice): <b>'+s.a+'</b> / '+MA+'<br>Section B (short answer): <b>'+s.b+'</b> / '+MB+'<br>Section C (extended): <b>'+s.c+'</b> / '+MC;
+}
+function submit(){
+  if(S.submitted && $('#results').classList.contains('on')) return;
+  clearInterval(timer); S.submitted=true; save();
+  bar.classList.remove('on'); document.body.classList.remove('started');
+  mcqs.forEach(function(q,i){
+    var opts=$$('.opt',q), ans=+q.dataset.answer, ch=S.mcq[i];
+    opts.forEach(function(o,j){ o.disabled=true; if(j===ans) o.classList.add('correct'); else if(j===ch) o.classList.add('incorrect'); });
+    var f=$('.mcq-feedback',q); f.className='mcq-feedback '+(ch===ans?'ok':'bad');
+    f.textContent= ch===undefined ? 'No answer — 0 marks.' : (ch===ans?'Correct — 1 mark.':'Incorrect — 0 marks.');
+    $('.expl',q).textContent='Mark scheme: '+$('.expl-src',q).textContent;
+  });
+  ws.forEach(function(q,i){
+    $('textarea',q).disabled=true; $('.markpoints',q).classList.add('show');
+    var boxes=$$('.mp-item input',q), t=S.ticks[i]||[];
+    boxes.forEach(function(b,j){ b.checked=t.indexOf(j)>-1; });
+    upd(q,i);
+  });
+  showResults(); $('#results').scrollIntoView({behavior:'smooth'});
+}
+function upd(q,i){
+  var boxes=$$('.mp-item input',q), t=[]; boxes.forEach(function(b,j){ if(b.checked) t.push(j); });
+  S.ticks[i]=t; save(); var m=+q.dataset.max;
+  $('.mp-count',q).textContent=Math.min(t.length,m)+' / '+m+' marks'; showResults();
+}
+mcqs.forEach(function(q,i){
+  $$('.opt',q).forEach(function(o,j){ o.addEventListener('click',function(){
+    if(S.submitted||!S.end) return;
+    $$('.opt',q).forEach(function(x){x.classList.remove('selected');}); o.classList.add('selected');
+    S.mcq[i]=j; save(); answered();
+  }); });
+  if(S.mcq[i]!==undefined) $$('.opt',q)[S.mcq[i]].classList.add('selected');
+});
+ws.forEach(function(q,i){
+  var ta=$('textarea',q); if(S.text[i]) ta.value=S.text[i];
+  ta.addEventListener('input',function(){ S.text[i]=ta.value; save(); answered(); });
+  $$('.mp-item input',q).forEach(function(b){ b.addEventListener('change',function(){ if(S.submitted) upd(q,i); }); });
+});
+$('#start-btn').addEventListener('click',start);
+$('#submit-btn').addEventListener('click',function(){
+  var open=mcqs.length+ws.length-parseInt($('#ans-count').textContent,10);
+  if(confirm(open>0?('You have '+open+' unanswered question(s). Submit anyway?'):'Submit your exam now?')) submit();
+});
+function reset(){ if(confirm('Clear the exam and start again?')){ try{localStorage.removeItem(KEY);}catch(e){} location.reload(); } }
+$$('.reset-exam').forEach(function(b){ b.addEventListener('click',reset); });
+if(S.end){ if(S.submitted){ start(); submit(); } else if(Date.now()>=S.end){ start(); submit(); } else start(); }
+var rb=document.createElement('button'); rb.textContent='Reset exam'; rb.type='button';
+rb.style.cssText='position:fixed;bottom:14px;left:14px;z-index:50;font-family:JetBrains Mono,monospace;font-size:11px;padding:7px 11px;background:#141b2e;border:1px solid #40557d;color:#9ba4bc;border-radius:3px;cursor:pointer;';
+rb.addEventListener('mouseenter',function(){rb.style.color='#e7e9f1';}); rb.addEventListener('mouseleave',function(){rb.style.color='#9ba4bc';});
+rb.addEventListener('click',reset); document.body.appendChild(rb);
+})();
+
+</script>
+</body></html>
