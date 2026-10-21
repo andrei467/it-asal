@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flashcards — Networks &amp; Network Issues — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#090d18;}
+
+  .wrap{ max-width:640px; margin:0 auto; padding: 0 24px 100px; }
+
+  nav.theory-nav{
+    max-width:640px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:36px 24px 26px; max-width:640px; margin:0 auto; text-align:center;
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,34px);
+    line-height:1.15; margin:0 0 10px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:56ch; margin:0 auto; font-size:16px; }
+
+  .progress-row{
+    max-width:640px; margin:0 auto; padding:18px 24px 0;
+    display:flex; align-items:center; gap:14px; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim);
+  }
+  .progress-bar{ flex:1; height:6px; background:var(--trace-dim); border-radius:4px; overflow:hidden; }
+  .progress-fill{ height:100%; background:var(--sage); width:0%; transition:width .3s ease; }
+  .progress-text{ white-space:nowrap; }
+
+  .controls-row{
+    max-width:640px; margin:0 auto; padding:10px 24px 0;
+    display:flex; justify-content:flex-end; gap:8px;
+  }
+  .controls-row button{
+    font-family:var(--mono); font-size:11.5px; background:transparent; border:1px solid var(--trace);
+    color:var(--paper-dim); padding:6px 11px; border-radius:var(--radius); cursor:pointer;
+  }
+  .controls-row button:hover{ color:var(--paper); border-color:var(--paper-dim); }
+
+  .stage{ max-width:640px; margin:0 auto; padding:28px 24px 0; }
+
+  .card-scene{
+    perspective:1400px;
+    height:320px;
+  }
+  .card{
+    position:relative;
+    width:100%;
+    height:100%;
+    cursor:pointer;
+    transform-style: preserve-3d;
+    transition: transform .5s cubic-bezier(.2,.7,.3,1);
+  }
+  .card.flipped{ transform: rotateY(180deg); }
+  .card-face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border:1px solid var(--trace);
+    border-radius:6px;
+    background:var(--bg-raised);
+    padding:26px;
+    display:flex;
+    flex-direction:column;
+  }
+  .card-face.back{
+    transform: rotateY(180deg);
+    border-color:var(--sage);
+  }
+  .card-topic{
+    font-family:var(--mono); font-size:11px; color:var(--sage);
+    border:1px solid var(--trace); display:inline-block; padding:2px 8px; border-radius:var(--radius);
+    align-self:flex-start; margin-bottom:16px;
+  }
+  .card-face.back .card-topic{ color:var(--signal-bright); border-color:var(--signal); }
+  .card-label{
+    font-family:var(--mono); font-size:11px; color:var(--paper-dim); margin-bottom:10px; letter-spacing:.03em;
+  }
+  .card-text{
+    font-size:20px; line-height:1.5; color:var(--paper); flex:1; display:flex; align-items:center;
+  }
+  .card-hint{
+    font-family:var(--mono); font-size:12px; color:var(--paper-dim); text-align:center; margin-top:auto; opacity:.8;
+  }
+
+  .action-row{
+    display:flex; gap:12px; margin-top:20px;
+  }
+  .action-btn{
+    flex:1; font-family:var(--mono); font-size:14px; padding:14px 10px; border-radius:var(--radius);
+    cursor:pointer; border:1px solid var(--trace); background:var(--bg-raised); color:var(--paper-dim);
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .action-btn:hover{ color:var(--paper); }
+  .action-btn.learning{ border-color:var(--brick); }
+  .action-btn.learning:hover{ background:rgba(224,104,92,0.12); color:var(--paper); }
+  .action-btn.know{ border-color:var(--sage); }
+  .action-btn.know:hover{ background:rgba(134,201,160,0.12); color:var(--paper); }
+  .action-btn kbd{
+    font-family:var(--mono); font-size:10.5px; border:1px solid var(--trace); border-radius:3px; padding:1px 5px; color:var(--paper-dim);
+  }
+
+  .nudge{
+    text-align:center; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim);
+    margin-top:14px; min-height:1.4em;
+  }
+  .nudge.show{ color:var(--signal-bright); }
+
+  .complete-panel{
+    text-align:center; padding:60px 24px; border:1px solid var(--sage); border-radius:6px; background:var(--bg-raised);
+  }
+  .complete-panel h2{ font-family:var(--mono); color:var(--sage); font-size:24px; margin:0 0 12px; }
+  .complete-panel p{ color:var(--paper-dim); margin:0 0 22px; }
+
+  footer{ max-width:640px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); text-align:center; }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    .card-scene{ height:280px; }
+    .card-text{ font-size:18px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .card{ transition:none; }
+  }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+</style>
+</head>
+<body>
+
+<nav class="theory-nav">
+  <a href="data-transmission-as-a-level-it.html">← <span class="full">Previous theory:</span> Data transmission</a>
+  <span class="spacer"></span>
+  <a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a>
+</nav>
+
+<header class="hero">
+  <p class="kicker">Cambridge AS &amp; A Level IT · Flashcards</p>
+  <h1 class="title">Networks &amp; Network Issues</h1>
+  <p>Covers Network Hardware, Wireless Networks, Cloud Computing, Network Environments, Network Types, Data Transfer &amp; Passwords, Authentication, Anti-Malware, Electronic Conferencing, Transmission, Routing, Protocols, Traffic Management and Transmission Methods. Click a card to reveal the answer, then be honest with yourself about whether you actually knew it.</p>
+</header>
+
+<div class="progress-row">
+  <span class="progress-text" id="progress-text">0 mastered · 0 remaining</span>
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  <span class="progress-text" id="progress-total">of 0</span>
+</div>
+
+<div class="controls-row">
+  <button id="reset-link" type="button">↺ Reset progress</button>
+  <button id="shuffle-btn" type="button">🔀 Shuffle remaining</button>
+</div>
+
+<div class="stage" id="stage">
+  <div class="card-scene">
+    <div class="card" id="card">
+      <div class="card-face front">
+        <span class="card-topic" id="topic-front">Topic</span>
+        <span class="card-label">QUESTION</span>
+        <div class="card-text" id="question-text">Loading…</div>
+        <div class="card-hint">Click the card to reveal the answer</div>
+      </div>
+      <div class="card-face back">
+        <span class="card-topic" id="topic-back">Topic</span>
+        <span class="card-label">ANSWER</span>
+        <div class="card-text" id="answer-text"></div>
+        <div class="card-hint">Click again to flip back</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-row">
+    <button class="action-btn learning" id="btn-learning" type="button">← Still learning</button>
+    <button class="action-btn know" id="btn-know" type="button">I know this →</button>
+  </div>
+  <p class="nudge" id="nudge"></p>
+</div>
+
+<div class="stage" id="complete-stage" style="display:none;">
+  <div class="complete-panel">
+    <h2>Deck complete!</h2>
+    <p>You've marked every card as known. Nice work.</p>
+    <button id="restart-btn" type="button">Restart deck</button>
+  </div>
+</div>
+
+<footer>
+  Cambridge AS &amp; A Level IT · Flashcards — your progress is saved automatically on this device.
+</footer>
+
+<script>
+(function(){
+  // ---- Card data: {id, topic, q, a} ----
+  var CARDS = [
+    {"id": "n1", "topic": "Network Hardware", "q": "What is the job of a router?", "a": "Routes data packets between different networks."},
+    {"id": "n2", "topic": "Network Hardware", "q": "What does a router connect together?", "a": "LANs to the wider internet (a WAN)."},
+    {"id": "n3", "topic": "Network Hardware", "q": "Name two other things a router does.", "a": "Manages and prioritises data traffic; assigns IP addresses to devices on the network."},
+    {"id": "n4", "topic": "Network Hardware", "q": "What is a data packet?", "a": "A small 'chunk' of a larger piece of data that has been broken down so it can be transmitted over the internet."},
+    {"id": "n5", "topic": "Network Hardware", "q": "What are the three parts of a data packet?", "a": "Header, payload and trailer."},
+    {"id": "n6", "topic": "Network Hardware", "q": "What does a packet header contain?", "a": "Source IP address, destination IP address, packet number (e.g. 1 of 5) and error checking (checksums)."},
+    {"id": "n7", "topic": "Network Hardware", "q": "What are the payload and the trailer?", "a": "Payload: the actual data being transported. Trailer: end-of-packet notification and (less commonly) extra security information."},
+    {"id": "n8", "topic": "Network Hardware", "q": "What is an IP address?", "a": "A unique identifier given to devices that communicate over the internet (WAN)."},
+    {"id": "n9", "topic": "Network Hardware", "q": "Are IP addresses static or dynamic?", "a": "Dynamic — they can change, e.g. when a device moves to a different network."},
+    {"id": "n10", "topic": "Network Hardware", "q": "Why are IP addresses needed?", "a": "To deliver data to the right device."},
+    {"id": "n11", "topic": "Network Hardware", "q": "How is an IPv4 address written?", "a": "4 blocks of denary numbers between 0 and 255, separated by full stops (4 bytes / 32 bits)."},
+    {"id": "n12", "topic": "Network Hardware", "q": "Why was IPv6 introduced?", "a": "IPv4 only offers just over 4 billion addresses (2^32), which isn't enough for so many people and devices."},
+    {"id": "n13", "topic": "Network Hardware", "q": "How is an IPv6 address written?", "a": "8 blocks of 4 hexadecimal digits, separated by colons (16 bytes / 128 bits)."},
+    {"id": "n14", "topic": "Network Hardware", "q": "What is a NIC and what does it do?", "a": "Network Interface Card: required for a computer to connect to a network (wired or wireless) and to send and receive data."},
+    {"id": "n15", "topic": "Network Hardware", "q": "What is a hub?", "a": "A 'dumb' device connecting multiple devices in a network; it passes anything received on one connection to all other connections."},
+    {"id": "n16", "topic": "Network Hardware", "q": "What is the problem with a hub?", "a": "All data is sent to all devices, causing network inefficiency and security issues."},
+    {"id": "n17", "topic": "Network Hardware", "q": "What is a switch?", "a": "A device connecting multiple devices on a network that only sends data to the device it was intended for."},
+    {"id": "n18", "topic": "Network Hardware", "q": "How does a switch know where to send a packet?", "a": "It checks the destination MAC address against its lookup table, then forwards the packet to the matching device."},
+    {"id": "n19", "topic": "Network Hardware", "q": "Explain the difference between a switch and a hub.", "a": "A switch forwards packets by destination MAC address to only the intended device; a hub broadcasts incoming packets to all connected devices."},
+    {"id": "n20", "topic": "Network Hardware", "q": "What is a MAC address?", "a": "A unique identifier given to devices that communicate over a LAN."},
+    {"id": "n21", "topic": "Network Hardware", "q": "Are MAC addresses static or dynamic?", "a": "Static — they never change, even if the device moves to a different network."},
+    {"id": "n22", "topic": "Network Hardware", "q": "When is a MAC address assigned?", "a": "During manufacturing, to any device containing a NIC."},
+    {"id": "n23", "topic": "Network Hardware", "q": "How is a MAC address written?", "a": "12 hexadecimal digits (48 bits), usually grouped in pairs."},
+    {"id": "n24", "topic": "Network Hardware", "q": "What do the two halves of a MAC address identify?", "a": "First three pairs: manufacturer ID (OUI). Last three pairs: serial number of the NIC."},
+    {"id": "n25", "topic": "Network Hardware", "q": "Compare IP and MAC addresses.", "a": "IP: dynamic, used over the internet (WAN), can change. MAC: static, used on a LAN, assigned at manufacture and never changes."},
+    {"id": "n26", "topic": "Network Hardware", "q": "What is a bridge?", "a": "A device that connects two LANs together to create one larger network."},
+    {"id": "n27", "topic": "Network Hardware", "q": "How does a bridge differ from a switch or hub?", "a": "A bridge only connects local area networks together."},
+    {"id": "n28", "topic": "Wireless Networks", "q": "What is a wireless network?", "a": "A network where connections are made using radio waves to transmit data through the air."},
+    {"id": "n29", "topic": "Wireless Networks", "q": "Name the two most common wireless connections.", "a": "Wi-Fi and Bluetooth."},
+    {"id": "n30", "topic": "Wireless Networks", "q": "What is Wi-Fi?", "a": "A common standard for wireless networks, used to connect laptops, tablets and smartphones via a hotspot or WAP."},
+    {"id": "n31", "topic": "Wireless Networks", "q": "What is a WAP?", "a": "Wireless access point — standalone, or built into a router or switch."},
+    {"id": "n32", "topic": "Wireless Networks", "q": "When is Wi-Fi preferred over Bluetooth?", "a": "When high-speed transfer, long range or many simultaneous connections are needed."},
+    {"id": "n33", "topic": "Wireless Networks", "q": "Give advantages of Wi-Fi.", "a": "Portability, lower cost to set up and add devices, and compatibility (most devices have a built-in adapter)."},
+    {"id": "n34", "topic": "Wireless Networks", "q": "Give disadvantages of Wi-Fi.", "a": "Slower and less secure than Ethernet; range relies on signal strength to the WAP and can be obstructed (up to 100 m)."},
+    {"id": "n35", "topic": "Wireless Networks", "q": "What is Bluetooth typically used for?", "a": "A direct connection between two devices, e.g. headphones, controllers, keyboards and mice."},
+    {"id": "n36", "topic": "Wireless Networks", "q": "What happens when two Bluetooth devices pair?", "a": "They exchange a cryptographic key, used to generate a secret shared key that encrypts the data, creating a WPAN."},
+    {"id": "n37", "topic": "Wireless Networks", "q": "What is FHSS?", "a": "Frequency hopping spread spectrum: devices continuously change transmitting frequency between 79 channels to avoid interference."},
+    {"id": "n38", "topic": "Wireless Networks", "q": "Give advantages of Bluetooth.", "a": "Ideal for personal devices and ad-hoc connections; very low power consumption."},
+    {"id": "n39", "topic": "Wireless Networks", "q": "Give disadvantages of Bluetooth.", "a": "Very slow transfer speeds, data can be intercepted by anyone in range, and short range (30 m)."},
+    {"id": "n40", "topic": "Wireless Networks", "q": "Bluetooth vs Wi-Fi: maximum connections?", "a": "Bluetooth 7; Wi-Fi 30."},
+    {"id": "n41", "topic": "Wireless Networks", "q": "Bluetooth vs Wi-Fi: frequency?", "a": "Bluetooth 2.4 GHz; Wi-Fi 2.4 GHz and 5 GHz."},
+    {"id": "n42", "topic": "Wireless Networks", "q": "Bluetooth vs Wi-Fi: range and speed?", "a": "Bluetooth 30 m, ~3 MB/s. Wi-Fi 100 m (depending on obstructions), ~75 MB/s."},
+    {"id": "n43", "topic": "Wireless Networks", "q": "A school must connect students' tablets: Wi-Fi or Bluetooth?", "a": "Wi-Fi: much faster transfers and wider coverage, so students can access resources anywhere. Bluetooth is easy and cheap to set up but limited, so Wi-Fi is preferred."},
+    {"id": "n44", "topic": "Cloud Computing", "q": "What is cloud storage?", "a": "Long-term (secondary) storage of data on remote servers, accessible only via a WAN (the internet)."},
+    {"id": "n45", "topic": "Cloud Computing", "q": "What storage do cloud servers typically use?", "a": "Magnetic (HDD), increasingly solid state (SSD)."},
+    {"id": "n46", "topic": "Cloud Computing", "q": "What is a public cloud?", "a": "The customer and the cloud storage provider are different companies."},
+    {"id": "n47", "topic": "Cloud Computing", "q": "What is a private cloud?", "a": "The customer and the cloud storage provider are a single organisation."},
+    {"id": "n48", "topic": "Cloud Computing", "q": "What is a hybrid cloud?", "a": "Combines public and private: sensitive data stays private while public cloud is used for less sensitive information."},
+    {"id": "n49", "topic": "Cloud Computing", "q": "Give advantages of cloud storage (access and sharing).", "a": "Data can be accessed from anywhere, on any device with internet; quick to share files and collaborate with the relevant permissions."},
+    {"id": "n50", "topic": "Cloud Computing", "q": "Give advantages of cloud storage (capacity, backup, staff).", "a": "Capacity can be increased or decreased as needed; multiple servers back up data; no need to hire specialist IT staff."},
+    {"id": "n51", "topic": "Cloud Computing", "q": "What security features do cloud providers offer?", "a": "Advanced features such as data encryption and multi-factor authentication."},
+    {"id": "n52", "topic": "Cloud Computing", "q": "Give disadvantages of cloud storage (connection and providers).", "a": "Needs a stable internet connection; you depend on the provider's availability and reliability; data may be lost if the company ceases to exist."},
+    {"id": "n53", "topic": "Cloud Computing", "q": "Give disadvantages of cloud storage (security and cost).", "a": "Vulnerable to security breaches; can become expensive over time as storage or bandwidth needs grow."},
+    {"id": "n54", "topic": "Cloud Computing", "q": "Explain the difference between cloud storage and local storage.", "a": "Cloud: data stored on remote servers accessed via the internet. Local: data stored on physical devices such as hard drives or flash drives."},
+    {"id": "n55", "topic": "Network Environments", "q": "What is the internet?", "a": "A global network of networks: multiple LANs connected to form a large WAN. The most well-known WAN."},
+    {"id": "n56", "topic": "Network Environments", "q": "What is the World Wide Web?", "a": "A collection of websites and web pages accessed using the internet."},
+    {"id": "n57", "topic": "Network Environments", "q": "Who created the World Wide Web and when?", "a": "Tim Berners-Lee, in 1989."},
+    {"id": "n58", "topic": "Network Environments", "q": "How are web pages accessed?", "a": "Using a web browser, which communicates with web servers to retrieve and display the content."},
+    {"id": "n59", "topic": "Network Environments", "q": "What is an intranet?", "a": "A private network that works like the internet but operates only within a LAN, for use by an organisation's employees."},
+    {"id": "n60", "topic": "Network Environments", "q": "How is an intranet kept secure?", "a": "It sits behind a firewall so only authorised users can access it."},
+    {"id": "n61", "topic": "Network Environments", "q": "Give advantages of an intranet over the internet.", "a": "Better bandwidth; data kept within the organisation; less chance of hacking; administrators can manage access to external sites and links."},
+    {"id": "n62", "topic": "Network Environments", "q": "What is an extranet?", "a": "An extension to an intranet that allows authorised access from outside the LAN, with managed access once authenticated."},
+    {"id": "n63", "topic": "Network Environments", "q": "Who might use an extranet?", "a": "Customers, clients and key stakeholders."},
+    {"id": "n64", "topic": "Network Environments", "q": "Give similarities between the internet, intranet and extranet.", "a": "All web-based, allow remote access, use client-server architecture, use authentication and encryption, and facilitate information and resource sharing."},
+    {"id": "n65", "topic": "Network Environments", "q": "A company uses an intranet. Explain what is meant by an intranet.", "a": "A private network accessible to the organisation's employees and not the public, giving access to company information and letting them share resources internally."},
+    {"id": "n66", "topic": "Network Types", "q": "What is a network?", "a": "Two or more devices connected together to share resources."},
+    {"id": "n67", "topic": "Network Types", "q": "Name the three types of network.", "a": "LAN (local area network), WLAN (wireless LAN) and WAN (wide area network)."},
+    {"id": "n68", "topic": "Network Types", "q": "What is a LAN?", "a": "A network with a small geographical area (under 1 mile), where all hardware is owned by the organisation using it."},
+    {"id": "n69", "topic": "Network Types", "q": "What connections do LANs use?", "a": "UTP cable, fibre optic cable or wireless (Wi-Fi)."},
+    {"id": "n70", "topic": "Network Types", "q": "Give advantages of a LAN.", "a": "Centralised management of updates and backups; can be secured with firewalls and antivirus; share resources such as printers; collaborate and share files."},
+    {"id": "n71", "topic": "Network Types", "q": "Give disadvantages of a LAN.", "a": "If hardware fails the network may not work; more prone to attacks than standalone computers; can be slow with heavy traffic; costly maintenance."},
+    {"id": "n72", "topic": "Network Types", "q": "What is a WLAN?", "a": "A LAN where devices connect wirelessly instead of using cables, via wireless access points (WAPs) or hotspots."},
+    {"id": "n73", "topic": "Network Types", "q": "Give advantages of a WLAN.", "a": "Connect anywhere within range of a WAP without extra wiring; flexible indoors and out; easy to add WAPs for more users or coverage; access to peripherals such as printers."},
+    {"id": "n74", "topic": "Network Types", "q": "Give disadvantages of a WLAN.", "a": "Limited coverage (affected by walls); bandwidth problems in high traffic; interference from other devices; wireless signals can be intercepted."},
+    {"id": "n75", "topic": "Network Types", "q": "What is a WAN?", "a": "A network over a large geographical area (over 1 mile), made of LANs joined together and connected via routers."},
+    {"id": "n76", "topic": "Network Types", "q": "Who owns the hardware in a WAN?", "a": "Not all owned by the organisation using it, e.g. telephone lines owned by telecommunication companies."},
+    {"id": "n77", "topic": "Network Types", "q": "What do WANs use to connect LANs?", "a": "Fibre optic cable, telephone lines and satellite."},
+    {"id": "n78", "topic": "Network Types", "q": "Give 2 reasons a fitness centre may want a WLAN.", "a": "Customers can connect to Wi-Fi to look up class times, improving customer service; staff can reach resources such as printers wirelessly and move freely around the centre."},
+    {"id": "n79", "topic": "Data Transfer & Passwords", "q": "Why is data transfer a network issue?", "a": "Data constantly moves between sender and receiver, creating risks of unauthorised access and data manipulation."},
+    {"id": "n80", "topic": "Data Transfer & Passwords", "q": "How do hackers threaten data transfer?", "a": "They exploit network weaknesses to access, delete or steal confidential data."},
+    {"id": "n81", "topic": "Data Transfer & Passwords", "q": "What is an insider threat?", "a": "Intentionally or unintentionally compromising network security policies, leading to data interception or theft."},
+    {"id": "n82", "topic": "Data Transfer & Passwords", "q": "What is social engineering?", "a": "Manipulating users into giving away confidential information or clicking links that install malware."},
+    {"id": "n83", "topic": "Data Transfer & Passwords", "q": "Name three weaknesses in how data is transferred.", "a": "Unencrypted transfers, weak/outdated encryption, and insecure protocols such as HTTP instead of HTTPS."},
+    {"id": "n84", "topic": "Data Transfer & Passwords", "q": "What is a password?", "a": "A digital lock that prevents unauthorised access to an account."},
+    {"id": "n85", "topic": "Data Transfer & Passwords", "q": "How are passwords usually stored?", "a": "As encrypted/ciphered text in a database, so a hacker with database access still can't read individual passwords."},
+    {"id": "n86", "topic": "Data Transfer & Passwords", "q": "How can passwords be kept safe?", "a": "Use anti-spyware to stop keyloggers, change passwords periodically, and use strong passwords."},
+    {"id": "n87", "topic": "Data Transfer & Passwords", "q": "What makes a password strong?", "a": "Upper and lower case mix, at least one number, at least one symbol, and a minimum of eight characters."},
+    {"id": "n88", "topic": "Authentication", "q": "What is authentication?", "a": "Ensuring a system is secure by asking the user to complete tasks proving they are an authorised user."},
+    {"id": "n89", "topic": "Authentication", "q": "Name the authentication methods.", "a": "Zero login & biometrics, magnetic stripe, smart cards, physical tokens and electronic tokens."},
+    {"id": "n90", "topic": "Authentication", "q": "What is zero login & biometrics?", "a": "Logging in without a username and password, using biometric data (fingerprint, face, gestures) to profile the user."},
+    {"id": "n91", "topic": "Authentication", "q": "Give pros and cons of zero login & biometrics.", "a": "Convenient for frequent logins (e.g. smartphones); but biometric data can't be changed if compromised, and imperfect recognition can cause failed logins."},
+    {"id": "n92", "topic": "Authentication", "q": "How does a magnetic stripe card authenticate a user?", "a": "The stripe holds unique data (e.g. ID, name, date of birth), read when the card is swiped through a card reader."},
+    {"id": "n93", "topic": "Authentication", "q": "Give pros and cons of magnetic stripe cards.", "a": "Easy, cheap, work on multiple systems, remotely deactivated; but stripes wear, readers need maintenance, and they're less secure (easily copied)."},
+    {"id": "n94", "topic": "Authentication", "q": "What is a smart card?", "a": "A magnetic stripe card enhanced with a microchip (contactless) that stores extra information such as a PIN, with encrypted data."},
+    {"id": "n95", "topic": "Authentication", "q": "Give pros and cons of smart cards.", "a": "More secure, multi-purpose and faster transactions; but more expensive to make and compatibility can be a problem."},
+    {"id": "n96", "topic": "Authentication", "q": "How does a physical token work?", "a": "A physical device generates a random one-time password (OTP) the user types in, letting them authenticate remotely."},
+    {"id": "n97", "topic": "Authentication", "q": "What is an OTP?", "a": "A one-time password: randomly generated and changes after a few minutes."},
+    {"id": "n98", "topic": "Authentication", "q": "Give pros and cons of physical tokens.", "a": "Very secure; but inconvenient, as the user needs the device, a card and login credentials."},
+    {"id": "n99", "topic": "Authentication", "q": "How does an electronic token work?", "a": "A software token: an app generates OTPs after the user authenticates in the app (e.g. with a fingerprint)."},
+    {"id": "n100", "topic": "Authentication", "q": "How do electronic tokens compare with physical tokens?", "a": "Both very secure, but electronic tokens are more convenient."},
+    {"id": "n101", "topic": "Anti-Malware", "q": "What is anti-malware software?", "a": "A combination of software that stops computers being susceptible to viruses and other malicious software."},
+    {"id": "n102", "topic": "Anti-Malware", "q": "What software does anti-malware include?", "a": "Anti-virus, anti-spam and anti-spyware."},
+    {"id": "n103", "topic": "Anti-Malware", "q": "What does anti-malware scan?", "a": "Email attachments, websites and downloaded files."},
+    {"id": "n104", "topic": "Anti-Malware", "q": "How does anti-malware use malware signatures?", "a": "It holds a list of known signatures and blocks matching malware immediately."},
+    {"id": "n105", "topic": "Anti-Malware", "q": "Why does anti-malware check for updates?", "a": "To keep its database of known threats up to date."},
+    {"id": "n106", "topic": "Anti-Malware", "q": "What does it mean to quarantine a file?", "a": "Infected files are isolated so they can be deleted, or so the user can check it isn't a false positive."},
+    {"id": "n107", "topic": "Anti-Malware", "q": "What is heuristic checking?", "a": "Identifying potential threats from behavioural patterns and characteristics rather than only a database of known viruses."},
+    {"id": "n108", "topic": "Anti-Malware", "q": "Give two ways anti-malware protects a device.", "a": "Regular updates keep the threat list current; detected threats are quarantined; external storage is scanned when connected, preventing transfer of viruses."},
+    {"id": "n109", "topic": "Electronic Conferencing", "q": "What is video-conferencing?", "a": "Real-time audio and visual communication between geographically separated parties."},
+    {"id": "n110", "topic": "Electronic Conferencing", "q": "What is video-conferencing best for?", "a": "Small groups, e.g. staff meetings and presentations."},
+    {"id": "n111", "topic": "Electronic Conferencing", "q": "What hardware is needed for video-conferencing?", "a": "Webcam, large output display, microphone and speakers."},
+    {"id": "n112", "topic": "Electronic Conferencing", "q": "What software is needed for video-conferencing?", "a": "Drivers to control the webcam, and a codec to encode (compress) and decode (decompress) the data."},
+    {"id": "n113", "topic": "Electronic Conferencing", "q": "Give advantages of video-conferencing.", "a": "Convenient, saves cost, better for the environment, no travel, anyone can attend regardless of location, short notice, outsiders can join, meetings can be recorded."},
+    {"id": "n114", "topic": "Electronic Conferencing", "q": "Give disadvantages of video-conferencing.", "a": "Costly equipment, time-zone issues, staff training, needs a stable connection, poor picture/sound quality, delays disrupting the meeting."},
+    {"id": "n115", "topic": "Electronic Conferencing", "q": "What is audio-conferencing?", "a": "Real-time audio-only communication between geographically separated parties, using standard phone lines."},
+    {"id": "n116", "topic": "Electronic Conferencing", "q": "How is an audio-conference hosted?", "a": "The phone company gives the host a personal PIN and a participant PIN; the host starts with their PIN and participants dial in with theirs."},
+    {"id": "n117", "topic": "Electronic Conferencing", "q": "What can be used for audio-conferences on computers?", "a": "Voice over Internet Protocol (VoIP)."},
+    {"id": "n118", "topic": "Electronic Conferencing", "q": "Give advantages of audio-conferencing.", "a": "Cheaper (less hardware), more accessible (less training), participants focus on voice."},
+    {"id": "n119", "topic": "Electronic Conferencing", "q": "Give disadvantages of audio-conferencing.", "a": "Focus may be lost, lack of visual clues risks miscommunication, poor audio quality, poor for collaboration."},
+    {"id": "n120", "topic": "Electronic Conferencing", "q": "What is web-conferencing?", "a": "Real-time audio and visual communication over the internet, ideal for large groups (webinars, lectures, presentations); needs a high-speed, stable connection."},
+    {"id": "n121", "topic": "Electronic Conferencing", "q": "Give advantages of web-conferencing.", "a": "Pre-shared slides, instant messaging for questions, virtual whiteboards, screen sharing and annotations."},
+    {"id": "n122", "topic": "Electronic Conferencing", "q": "Give disadvantages of web-conferencing.", "a": "Technical issues with connections, security/interception risk, distractions, information overload."},
+    {"id": "n123", "topic": "Electronic Conferencing", "q": "Video-conferencing vs web-conferencing: key difference?", "a": "Video focuses on face-to-face communication; web focuses on interaction and collaboration (document sharing, whiteboards)."},
+    {"id": "n124", "topic": "Electronic Conferencing", "q": "Name three devices needed for a video-conference besides a PC, keyboard and mouse.", "a": "Any three of: webcam, speakers/headset, large monitor/TV/projector, microphone."},
+    {"id": "n125", "topic": "Electronic Conferencing", "q": "Give three problems of video-conferencing instead of meeting in person.", "a": "Any three of: time lag/lip-sync; poor picture or sound quality; confidential material or a new product may need viewing in person; hardware or communication breakdown; inconvenient time zones."},
+    {"id": "n126", "topic": "Transmission", "q": "What is bandwidth?", "a": "The range of frequencies available to a communication method, determining the maximum amount of data that could be transferred in a given time."},
+    {"id": "n127", "topic": "Transmission", "q": "What is the difference between bandwidth and speed?", "a": "Bandwidth is the potential capacity; speed is the actual transfer rate a user experiences, also affected by latency and device efficiency."},
+    {"id": "n128", "topic": "Transmission", "q": "What is bit rate?", "a": "The rate at which bits are actually transferred in a given period of time, e.g. bits per second."},
+    {"id": "n129", "topic": "Transmission", "q": "Can bit rate ever exceed bandwidth?", "a": "No — bandwidth is the maximum possible bit rate."},
+    {"id": "n130", "topic": "Transmission", "q": "What is real-time streaming?", "a": "Data is streamed as soon as it's recorded, for example by a camera."},
+    {"id": "n131", "topic": "Transmission", "q": "What is on-demand streaming?", "a": "Pre-recorded data is streamed to the user whenever they request it."},
+    {"id": "n132", "topic": "Transmission", "q": "What is a buffer used for in streaming?", "a": "A temporary storage area where data is held as it downloads, then removed to be played while more data is added."},
+    {"id": "n133", "topic": "Transmission", "q": "Why might a low-bandwidth connection struggle with 4K video?", "a": "Producing each frame needs far more data than that bandwidth can carry."},
+    {"id": "n134", "topic": "Transmission", "q": "What happens to video quality at a lower bit rate?", "a": "It lacks detail, looks pixelated, or shows jerky motion."},
+    {"id": "n135", "topic": "Routing", "q": "What happens in packet switching?", "a": "A message is divided into smaller numbered packets, sent individually, each taking whatever path a router judges shortest, then reassembled at the end."},
+    {"id": "n136", "topic": "Routing", "q": "What happens if a packet is missing or corrupted in packet switching?", "a": "A message is sent asking for it to be resent."},
+    {"id": "n137", "topic": "Routing", "q": "What is connection-oriented switching?", "a": "A session/fixed channel is created before any data is transferred, and the first packet requests an acknowledgment before more are sent."},
+    {"id": "n138", "topic": "Routing", "q": "Name two connection-oriented switching methods.", "a": "TCP and frame relay."},
+    {"id": "n139", "topic": "Routing", "q": "What happens to a frame with an error in frame relay?", "a": "It's simply dropped, and the endpoint devices detect the gap and request a retransmission."},
+    {"id": "n140", "topic": "Routing", "q": "What is the difference between a PVC and an SVC in frame relay?", "a": "A PVC (permanent virtual circuit) is meant to exist for long periods; an SVC (switched virtual circuit) exists only for a single session."},
+    {"id": "n141", "topic": "Routing", "q": "What is connectionless switching?", "a": "Packets are simply dispatched with no prior arrangement, no way to know if the receiver is ready, and no confirmation of success."},
+    {"id": "n142", "topic": "Routing", "q": "Name three connectionless protocols.", "a": "Ethernet, IP and UDP."},
+    {"id": "n143", "topic": "Routing", "q": "Why is UDP generally faster than TCP?", "a": "It doesn't control the flow of data or carry out error checking."},
+    {"id": "n144", "topic": "Routing", "q": "What happens in circuit switching?", "a": "A dedicated path is established between sender and receiver before communication, and no other device can use it until the connection ends."},
+    {"id": "n145", "topic": "Routing", "q": "Where is circuit switching mainly used?", "a": "The public telephone network, mainly for voice transmission."},
+    {"id": "n146", "topic": "Routing", "q": "What is message switching?", "a": "A complete message is treated as one unit, stored and forwarded at each intermediate node (store-and-forward), with no dedicated path set up in advance."},
+    {"id": "n147", "topic": "Routing", "q": "What layer does MAC addressing sit at?", "a": "The data link layer (layer 2) of the OSI model."},
+    {"id": "n148", "topic": "Routing", "q": "What does ARP rely on MAC addresses for?", "a": "Mapping IP addresses within the local network."},
+    {"id": "n149", "topic": "Protocols", "q": "What is a protocol?", "a": "A set of rules for sending and receiving data between devices on a network, defining format, timing, sequencing and error checking."},
+    {"id": "n150", "topic": "Protocols", "q": "What does TCP provide?", "a": "Reliable, connection-oriented, point-to-point delivery with checksums, port numbers, lost-packet reporting, flow control and handshaking."},
+    {"id": "n151", "topic": "Protocols", "q": "What does IP do?", "a": "Lets devices communicate over the internet, giving each a unique address and ensuring packets are routed correctly."},
+    {"id": "n152", "topic": "Protocols", "q": "What does ICMP do?", "a": "Generates error messages back to the sender when network problems prevent packets being delivered."},
+    {"id": "n153", "topic": "Protocols", "q": "What does ARP do?", "a": "Translates an IP address into a MAC address for a device."},
+    {"id": "n154", "topic": "Protocols", "q": "What does IARP do?", "a": "The reverse of ARP: translates a MAC address into an IP address."},
+    {"id": "n155", "topic": "Protocols", "q": "What does DHCP do?", "a": "Automatically assigns IP addresses, a gateway address and a subnet mask to devices, avoiding addressing conflicts."},
+    {"id": "n156", "topic": "Protocols", "q": "How does UDP differ from TCP?", "a": "UDP is connectionless: no reporting of lost packets, no handshaking, no guarantee of delivery or order, and no error checking."},
+    {"id": "n157", "topic": "Protocols", "q": "What does HTTPS add over HTTP?", "a": "Encryption using TLS/SSL, authentication via a public-key certificate, and protection against eavesdropping and man-in-the-middle attacks."},
+    {"id": "n158", "topic": "Protocols", "q": "What does FTP do?", "a": "Transfers files between a client and a server on a network."},
+    {"id": "n159", "topic": "Protocols", "q": "What does a tunnelling protocol do?", "a": "Encapsulates private data packets so they look like ordinary public packets, letting them travel across a public network."},
+    {"id": "n160", "topic": "Protocols", "q": "What does SMTP do?", "a": "Sends email from a computer to a mail server, and between mail servers."},
+    {"id": "n161", "topic": "Protocols", "q": "How does POP handle email on the server?", "a": "It downloads the email to the user's device and then deletes it from the server."},
+    {"id": "n162", "topic": "Protocols", "q": "How does IMAP differ from POP?", "a": "IMAP doesn't delete email from the server automatically — it stays there until the user deletes it."},
+    {"id": "n163", "topic": "Protocols", "q": "Why is Telnet considered insecure?", "a": "It sends data in plain text with no authentication or encryption."},
+    {"id": "n164", "topic": "Protocols", "q": "What does SSH provide?", "a": "Secure access to a computer over an unsecured network, encrypting data end-to-end using automatically generated public/private key pairs."},
+    {"id": "n165", "topic": "Protocols", "q": "What is TLS/SSL used for?", "a": "Securing connections between web clients and web/mail servers, using public and private keys to encrypt data in transit."},
+    {"id": "n166", "topic": "Traffic management", "q": "At which OSI layer does routing take place?", "a": "The network layer."},
+    {"id": "n167", "topic": "Traffic management", "q": "What is a routing (forwarding) table used for?", "a": "Choosing the preferred route for a packet, built by routing algorithms and stored in the router's non-volatile memory."},
+    {"id": "n168", "topic": "Traffic management", "q": "What is static routing?", "a": "Routes are entered manually by a network administrator and stay fixed — not configured automatically."},
+    {"id": "n169", "topic": "Traffic management", "q": "What is dynamic routing?", "a": "Routing protocols build the table automatically from the real-time state of the network."},
+    {"id": "n170", "topic": "Traffic management", "q": "What is a 'route of last resort'?", "a": "The route static routing defines for where to send a packet if no destination is known."},
+    {"id": "n171", "topic": "Traffic management", "q": "What does an interior gateway protocol specify?", "a": "How routers communicate within a single network, such as a LAN."},
+    {"id": "n172", "topic": "Traffic management", "q": "What does a border gateway protocol manage?", "a": "The exchange of data packets across the internet."},
+    {"id": "n173", "topic": "Traffic management", "q": "How many layers does the OSI model have?", "a": "Seven."},
+    {"id": "n174", "topic": "Traffic management", "q": "What does the OSI application layer manage?", "a": "Protocols such as HTTP and SMTP, interacting directly with user data."},
+    {"id": "n175", "topic": "Traffic management", "q": "What does the OSI presentation layer do?", "a": "Translates, encrypts/decrypts and compresses/decompresses data so it's ready for the application layer."},
+    {"id": "n176", "topic": "Traffic management", "q": "What does the OSI session layer do?", "a": "Opens and closes the communication link between devices, keeping it open just long enough for the data to transfer."},
+    {"id": "n177", "topic": "Traffic management", "q": "What does the OSI transport layer do?", "a": "Breaks data into segments, hands them to the network layer, and handles flow control and error checking."},
+    {"id": "n178", "topic": "Traffic management", "q": "What does the OSI network layer do?", "a": "Breaks segments into packets and handles routing — finding the best path from network to network."},
+    {"id": "n179", "topic": "Traffic management", "q": "What does the OSI data link layer do?", "a": "Converts packets into frames for transmission between nodes within one network; the switch is key here."},
+    {"id": "n180", "topic": "Traffic management", "q": "What does the OSI physical layer do?", "a": "Breaks data into bits for transmission along cables, and reassembles bits into frames after transmission."},
+    {"id": "n181", "topic": "Traffic management", "q": "How many layers does the TCP/IP model have?", "a": "Four (or five, depending how it's described) — fewer than the OSI model's seven."},
+    {"id": "n182", "topic": "Traffic management", "q": "What does the TCP/IP application layer combine?", "a": "The OSI model's application, presentation and session layers into one."},
+    {"id": "n183", "topic": "Traffic management", "q": "What does the TCP/IP link layer combine?", "a": "The OSI model's data link and physical layers."},
+    {"id": "n184", "topic": "Traffic management", "q": "Give one way the OSI and TCP/IP network layers differ.", "a": "OSI's network layer supports both connection-oriented and connectionless links; TCP/IP's only supports connectionless."},
+    {"id": "n185", "topic": "Traffic management", "q": "Give one way the OSI and TCP/IP transport layers differ.", "a": "OSI's transport layer guarantees delivery of packets; TCP/IP's doesn't."},
+    {"id": "n186", "topic": "Transmission methods", "q": "How does fibre optic cable transmit data?", "a": "Electrical signals are converted to light (via an LED or laser) and sent along glass threads, then converted back to electricity by a photodetector."},
+    {"id": "n187", "topic": "Transmission methods", "q": "Why is fibre optic considered more secure than copper?", "a": "It's hard to tap into or hack."},
+    {"id": "n188", "topic": "Transmission methods", "q": "Give a disadvantage of fibre optic cable.", "a": "Highest cost to manufacture and buy (or: carries only data not power, difficult to terminate, fragile glass)."},
+    {"id": "n189", "topic": "Transmission methods", "q": "What is coaxial cable's structure?", "a": "A central wire surrounded by an insulating layer, able to carry radio-frequency signals."},
+    {"id": "n190", "topic": "Transmission methods", "q": "Why does coaxial cable have a lower error rate?", "a": "The central wire sits inside a Faraday shield that blocks magnetic interference."},
+    {"id": "n191", "topic": "Transmission methods", "q": "What is the main weakness of coaxial cable?", "a": "It has the lowest bandwidth of the three cable types, and needs repeaters."},
+    {"id": "n192", "topic": "Transmission methods", "q": "What is twisted pair cable's structure?", "a": "Two separately insulated wires twisted around each other, covered by an outer jacket."},
+    {"id": "n193", "topic": "Transmission methods", "q": "Why are the wires in twisted pair cable twisted together?", "a": "To minimise crosstalk — signal bleeding from one channel to another."},
+    {"id": "n194", "topic": "Transmission methods", "q": "What is the main weakness of twisted pair cable?", "a": "Susceptible to electromagnetic interference, and the signal deteriorates over the shortest distance of the three cable types."},
+    {"id": "n195", "topic": "Transmission methods", "q": "What is a free-space laser system?", "a": "High-power laser beams that travel directly through the air between two points in line of sight, rather than through a fibre."},
+    {"id": "n196", "topic": "Transmission methods", "q": "Give a typical use of free-space lasers.", "a": "Links between spacecraft in orbit (or: connecting sites across a barrier, temporary links in disaster areas)."},
+    {"id": "n197", "topic": "Transmission methods", "q": "What is the main weakness of a free-space laser link?", "a": "It is easily blocked by objects or weather in its path, and accurate aiming is difficult."}
+  ];
+
+  var TOTAL = CARDS.length;
+  var STORE_KEY = 'asal-it-flashcards-networks-progress::v1';
+
+  function loadMastered(){
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
+    catch(e){ return []; }
+  }
+  function saveMastered(arr){
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(arr)); }
+    catch(e){ /* fail silently */ }
+  }
+
+  var mastered = loadMastered();
+  var masteredSet = {};
+  mastered.forEach(function(id){ masteredSet[id] = true; });
+
+  var queue = CARDS.filter(function(c){ return !masteredSet[c.id]; });
+
+  var cardEl = document.getElementById('card');
+  var stage = document.getElementById('stage');
+  var completeStage = document.getElementById('complete-stage');
+  var qText = document.getElementById('question-text');
+  var aText = document.getElementById('answer-text');
+  var topicFront = document.getElementById('topic-front');
+  var topicBack = document.getElementById('topic-back');
+  var progressText = document.getElementById('progress-text');
+  var progressTotal = document.getElementById('progress-total');
+  var progressFill = document.getElementById('progress-fill');
+  var btnLearning = document.getElementById('btn-learning');
+  var btnKnow = document.getElementById('btn-know');
+  var nudge = document.getElementById('nudge');
+  var shuffleBtn = document.getElementById('shuffle-btn');
+  var restartBtn = document.getElementById('restart-btn');
+  var resetLink = document.getElementById('reset-link');
+
+  var isFlipped = false;
+  var nudgeTimer = null;
+
+  function updateProgress(){
+    var masteredCount = TOTAL - queue.length;
+    progressText.textContent = masteredCount + ' mastered · ' + queue.length + ' remaining';
+    progressTotal.textContent = 'of ' + TOTAL;
+    progressFill.style.width = (TOTAL ? (masteredCount / TOTAL * 100) : 0) + '%';
+  }
+
+  function showNudge(msg){
+    nudge.textContent = msg;
+    nudge.classList.add('show');
+    clearTimeout(nudgeTimer);
+    nudgeTimer = setTimeout(function(){ nudge.classList.remove('show'); nudge.textContent=''; }, 1800);
+  }
+
+  function renderCard(){
+    if(queue.length === 0){
+      stage.style.display = 'none';
+      completeStage.style.display = 'block';
+      return;
+    }
+    stage.style.display = 'block';
+    completeStage.style.display = 'none';
+    var c = queue[0];
+    qText.textContent = c.q;
+    aText.textContent = c.a;
+    topicFront.textContent = c.topic;
+    topicBack.textContent = c.topic;
+    isFlipped = false;
+    cardEl.classList.remove('flipped');
+    updateProgress();
+  }
+
+  cardEl.addEventListener('click', function(){
+    isFlipped = !isFlipped;
+    cardEl.classList.toggle('flipped', isFlipped);
+  });
+
+  function handleKnow(){
+    if(!isFlipped){ showNudge('Flip the card first — take a guess before checking.'); return; }
+    var c = queue.shift();
+    if(masteredSet[c.id] !== true){
+      masteredSet[c.id] = true;
+      mastered.push(c.id);
+      saveMastered(mastered);
+    }
+    renderCard();
+  }
+
+  function handleLearning(){
+    if(!isFlipped){ showNudge('Flip the card first — take a guess before checking.'); return; }
+    var c = queue.shift();
+    queue.push(c);
+    renderCard();
+  }
+
+  btnKnow.addEventListener('click', handleKnow);
+  btnLearning.addEventListener('click', handleLearning);
+
+  document.addEventListener('keydown', function(e){
+    if(completeStage.style.display === 'block') return;
+    if(e.code === 'Space' || e.key === 'Enter'){
+      e.preventDefault();
+      isFlipped = !isFlipped;
+      cardEl.classList.toggle('flipped', isFlipped);
+    } else if(e.key === 'ArrowRight'){
+      handleKnow();
+    } else if(e.key === 'ArrowLeft'){
+      handleLearning();
+    }
+  });
+
+  shuffleBtn.addEventListener('click', function(){
+    for(var i = queue.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = queue[i]; queue[i] = queue[j]; queue[j] = tmp;
+    }
+    renderCard();
+  });
+
+  function fullReset(){
+    mastered = [];
+    masteredSet = {};
+    saveMastered(mastered);
+    queue = CARDS.slice();
+    renderCard();
+  }
+
+  restartBtn.addEventListener('click', fullReset);
+  resetLink.addEventListener('click', function(e){
+    e.preventDefault();
+    if(confirm('Reset all flashcard progress on this device?')){
+      fullReset();
+    }
+  });
+
+  renderCard();
+})();
+</script>
+</body>
+</html>
