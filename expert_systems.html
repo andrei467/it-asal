@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expert Systems — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --bg-deep:#090d18;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#04141a;}
+
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 24px 120px; }
+
+  nav.theory-nav{
+    max-width:760px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:44px 24px 34px; max-width:760px; margin:0 auto; border-bottom:1px solid var(--trace);
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,38px);
+    line-height:1.15; margin:0 0 14px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
+
+  nav.tabs{
+    max-width:760px; margin:0 auto; padding:14px 24px; display:flex; gap:6px;
+    overflow-x:auto; border-bottom:1px solid var(--trace); position:sticky; top:0;
+    background:rgba(13,18,32,.95); backdrop-filter: blur(4px); z-index:30;
+  }
+  nav.tabs button{
+    font-family:var(--mono); font-size:12.5px; white-space:nowrap; background:transparent;
+    border:1px solid var(--trace); color:var(--paper-dim); padding:8px 13px;
+    border-radius:var(--radius); cursor:pointer; flex-shrink:0;
+  }
+  nav.tabs button:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  nav.tabs button.active{ background:var(--signal); color:#04141a; border-color:var(--signal); font-weight:500; }
+
+  .panel{ display:none; padding:40px 0 8px; }
+  .panel.active{ display:block; }
+
+  h2.section-title{
+    font-family:var(--mono); font-size:22px; color:var(--signal-bright);
+    margin:0 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2.section-title .tag{
+    font-size:12px; color:var(--sage); border:1px solid var(--trace);
+    padding:2px 7px; border-radius:var(--radius);
+  }
+  h3{ font-family:var(--mono); font-size:16px; color:var(--gold); margin:26px 0 8px; font-weight:500; }
+  p{margin:10px 0;}
+  ul, ol{padding-left:22px; margin:10px 0;}
+  li{margin:4px 0;}
+  strong{color:var(--paper); font-weight:600;}
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0 8px; font-size:15px; }
+  th,td{ border:1px solid var(--trace); padding:8px 10px; text-align:left; vertical-align:top; }
+  th{ font-family:var(--mono); font-size:12px; color:var(--sage); font-weight:500; background:rgba(134,201,160,0.06); }
+  .table-scroll{ overflow-x:auto; }
+  .note{ color:var(--paper-dim); font-size:14.5px; }
+
+  .block{ border-left:2px solid var(--trace); padding-left:18px; margin:18px 0; }
+  .block ul, .block ol{ margin:0; padding-left:20px; }
+
+  .proscons{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 8px; }
+  .pc{ border:1px solid var(--trace); border-radius:var(--radius); background:var(--bg-raised); padding:2px 14px 12px; }
+  .pc.pro{ border-top:2px solid var(--sage); }
+  .pc.con{ border-top:2px solid var(--brick); }
+  .pc-title{ font-family:var(--mono); font-size:12.5px; font-weight:500; margin:12px 0 4px; }
+  .pc.pro .pc-title{ color:var(--sage); }
+  .pc.con .pc-title{ color:var(--brick); }
+  .pc ul{ padding-left:18px; margin:6px 0 0; font-size:15px; }
+  @media (max-width:600px){ .proscons{ grid-template-columns:1fr; } }
+
+  details.fold{ border:1px solid var(--trace); border-radius:var(--radius); margin:12px 0; background:var(--bg-raised); }
+  details.fold summary{ font-family:var(--mono); font-size:13.5px; color:var(--gold); padding:11px 14px; cursor:pointer; }
+  details.fold[open] summary{ border-bottom:1px solid var(--trace); }
+  details.fold .fold-body{ padding:2px 14px 12px; }
+
+  .diagram-box{
+    background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius);
+    padding:14px 10px; margin:18px 0 6px; text-align:center;
+  }
+  .diagram-box svg{ width:100%; height:auto; max-width:460px; }
+  .diagram-box svg.wide{ max-width:600px; }
+  .diagram-caption{ font-family:var(--mono); font-size:12px; color:var(--paper-dim); margin-top:6px; }
+  .signal-caption{ font-family: var(--mono); font-size:12.5px; color:var(--paper-dim); margin-top:8px; text-align:center; }
+
+  .task{ margin:32px 0; border:1px solid var(--trace); border-radius:var(--radius); background: var(--bg-raised); padding:20px 20px 22px; }
+  .task-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .task-label .pts{color:var(--sage);}
+  .task h4{ margin:0 0 12px; font-family:var(--serif); font-weight:600; font-size:16.5px; color:var(--paper); }
+  .task .sub-q{margin:18px 0;}
+  .task .sub-q:first-child{margin-top:0;}
+  .sub-q label{ display:block; font-family:var(--serif); font-size:15.5px; margin-bottom:8px; color:var(--paper); }
+
+  textarea{
+    width:100%; min-height:52px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-radius:var(--radius); color:var(--paper); font-family:var(--serif);
+    font-size:15.5px; padding:10px 12px; resize:vertical;
+  }
+  textarea:focus, button:focus-visible, .opt:focus-visible, summary:focus-visible, input[type=checkbox]:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:1px; }
+  .row{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+
+  button{
+    font-family:var(--mono); font-size:13px; background:var(--signal); color:#04141a;
+    border:none; padding:9px 15px; border-radius:var(--radius); cursor:pointer; font-weight:500;
+  }
+  button:hover{background:var(--signal-bright);}
+  button.ghost{ background:transparent; border:1px solid var(--trace); color:var(--paper-dim); }
+  button.ghost:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  button:disabled{opacity:.5; cursor:default;}
+
+  .error-msg{ color:var(--brick); font-family:var(--mono); font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show{display:block;}
+
+  .answer-reveal{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .answer-reveal.show{display:block;}
+  .answer-reveal .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:5px; }
+
+  .self-mark{ display:none; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:13px; color:var(--paper-dim); }
+  .self-mark.show{display:flex;}
+  .self-mark input[type=checkbox]{ width:17px; height:17px; accent-color: var(--gold); cursor:pointer; }
+  .self-mark label{cursor:pointer; margin:0; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+
+  .markpoints{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .markpoints.show{display:block;}
+  .markpoints .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:6px; }
+  .markpoints .mp-item{
+    display:flex; gap:10px; align-items:flex-start; margin:0; padding:7px 0;
+    border-bottom:1px solid var(--trace-dim); font-size:15px; font-weight:400; cursor:pointer;
+  }
+  .markpoints .mp-item:last-of-type{border-bottom:none;}
+  .markpoints .mp-item input{ width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--gold); cursor:pointer; }
+  .mp-foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; font-family:var(--mono); font-size:13px; }
+  .mp-count{ color:var(--gold); }
+  .mp-note{ color:var(--brick); }
+
+  .mcq{margin:20px 0;}
+  .mcq:first-of-type{margin-top:0;}
+  .mcq p.q{ font-family:var(--serif); font-size:15.5px; color:var(--paper); margin:0 0 10px; }
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:10px 13px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer; font-weight:400;
+  }
+  .opt:hover:not(:disabled){border-color:var(--signal); background:var(--bg-deep);}
+  .opt.correct{border-color:var(--sage); background:rgba(134,201,160,0.14);}
+  .opt.incorrect{border-color:var(--brick); background:rgba(224,104,92,0.14);}
+  .opt:disabled{cursor:default;}
+  .mcq-feedback{ font-family:var(--mono); font-size:13px; margin-top:8px; min-height:1.2em; }
+  .mcq-feedback.ok{color:var(--sage);}
+  .mcq-feedback.bad{color:var(--brick);}
+
+  .classify-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 0; border-bottom:1px solid var(--trace-dim); flex-wrap:wrap;
+  }
+  .classify-item:last-child{border-bottom:none;}
+  .classify-item .term{font-size:15px; max-width:60%;}
+  .classify-item .choices{display:flex; gap:8px; flex-wrap:wrap;}
+  .classify-item .choices button{
+    background:transparent; border:1px solid var(--trace); color:var(--paper-dim);
+    font-size:12px; padding:6px 10px;
+  }
+  .classify-item .choices button:hover:not(:disabled){ color:var(--paper); border-color:var(--paper-dim); }
+  .classify-item .choices button.correct{background:rgba(134,201,160,0.16); border-color:var(--sage); color:var(--paper);}
+  .classify-item .choices button.incorrect{background:rgba(224,104,92,0.16); border-color:var(--brick); color:var(--paper);}
+  @media (max-width:600px){ .classify-item .term{max-width:100%;} }
+
+  #score-badge{
+    position:fixed; top:14px; right:14px; z-index:50; font-family:var(--mono); font-size:13px;
+    background:var(--bg-raised); border:1px solid var(--signal); color:var(--signal-bright);
+    padding:8px 13px; border-radius:var(--radius); box-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  #score-badge .n{color:var(--gold); font-weight:700;}
+
+  footer{ max-width:760px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    header.hero{padding:36px 20px 26px;}
+    #score-badge{top:auto; bottom:14px; right:14px;}
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+
+  .diagram-box img{ max-width:100%; height:auto; background:#fff; border-radius:3px; padding:8px; }
+  pre{ background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius); padding:12px 14px; overflow-x:auto; font-family:var(--mono); font-size:13.5px; line-height:1.55; margin:14px 0; color:var(--paper); }
+  code{ font-family:var(--mono); font-size:.9em; color:var(--signal-bright); }
+  pre code{ color:inherit; }
+
+  .dg svg{ width:100%; height:auto; display:block; }
+  .dg .box{ fill:var(--bg-raised); stroke:var(--trace); stroke-width:1.5; }
+  .dg .boxh{ fill:var(--bg-raised); stroke:var(--signal); stroke-width:1.8; }
+  .dg .node{ fill:var(--bg-deep); stroke:var(--signal); stroke-width:1.6; }
+  .dg .ln{ stroke:var(--paper-dim); stroke-width:1.6; fill:none; }
+  .dg .lnc{ stroke:var(--gold); stroke-width:2.6; fill:none; }
+  .dg .bar{ fill:#23365a; stroke:var(--signal); stroke-width:1.2; }
+  .dg .barc{ fill:var(--gold); stroke:var(--gold); stroke-width:1.2; }
+  .dg .grid{ stroke:var(--trace-dim); stroke-width:1; }
+  .dg text{ fill:var(--paper); font-family:var(--mono); font-size:12px; text-anchor:middle; dominant-baseline:central; }
+  .dg text.dim{ fill:var(--paper-dim); font-size:11px; }
+  .dg text.gold{ fill:var(--gold); }
+  .dg text.l{ text-anchor:start; }
+  .dg text.r{ text-anchor:end; }
+  .dg text.dark{ fill:#0d1220; font-weight:700; }
+  .dg-cap{ font-family:var(--mono); font-size:12px; color:var(--paper-dim); margin:8px 0 0; text-align:center; }
+  .diagram-box.dg{ padding:14px; }
+  .diagram-box.dg svg{ max-width:100%; }
+  .dg text.halo{ paint-order:stroke; stroke:var(--bg-deep); stroke-width:7px; stroke-linejoin:round; fill:var(--paper-dim); font-size:11px; }
+</style>
+</head>
+<body>
+<div id="score-badge">Score: <span class="n" id="score-val">0</span> / <span id="score-max">0</span></div>
+<nav class="theory-nav"><a class="disabled" href="#" aria-disabled="true">← <span class="full">Previous theory</span></a><span class="spacer"></span><a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a></nav>
+<header class="hero">
+  <p class="kicker">Cambridge AS &amp; A Level IT · Expert Systems</p>
+  <h1 class="title">Expert Systems</h1>
+  <p>This page covers what expert systems are and the components they use, real-world scenarios where they support decision making, forward and backward chaining in the inference engine, and the advantages and disadvantages of expert systems.</p>
+</header>
+<nav class="tabs">
+  <button class="tab-btn active" data-panel="components">7.1 Components</button>
+  <button class="tab-btn" data-panel="uses">7.2 Uses</button>
+  <button class="tab-btn" data-panel="chaining">7.3 Chaining &amp; AI</button>
+  <button class="tab-btn" data-panel="proscons">7.4 Pros &amp; cons</button>
+  <button class="tab-btn" data-panel="practice">Practice questions</button>
+</nav>
+
+<div class="wrap">
+  <!-- ==================== TAB 1: 7.1 COMPONENTS ==================== -->
+  <div class="panel active" id="panel-components">
+    <h2 class="section-title">Components of an expert system <span class="tag">7.1</span></h2>
+
+    <h3>Introduction</h3>
+    <p>You spend time every day developing your knowledge, thinking and making decisions. It is possible to develop computerised systems to aid decision-making processes. These are called <strong>expert systems</strong>.</p>
+    <p>An <strong>expert system</strong> is a computerised system that attempts to reproduce the decision-making process of an expert human being. Expert systems are designed to try to replicate the judgement of a human that has expert knowledge in a certain field. By doing this, expert systems can be used to replace or assist a human expert. The person who designs and develops an expert system is called an <strong>expert system engineer</strong>.</p>
+    <p>An expert system operates by prompting the user to enter certain data using the <strong>user interface</strong>, referring to the <strong>knowledge base</strong> and using the <strong>inference engine</strong> to aid the decision-making process it is designed to support.</p>
+    <p>Expert systems can be used in many different <strong>scenarios</strong> — settings where expert systems are used for specific tasks. They can be used as a diagnostic tool, such as in financial planning and risk analysis, or even for a more fun purpose, such as playing Scrabble online against a computer. They are also a form of <strong>artificial intelligence</strong>, which is a computer system designed to simulate human intelligence.</p>
+
+    <h3>The five core components</h3>
+    <p>An expert system consists of several interrelated components:</p>
+    <div class="block">
+      <ul>
+        <li>a <strong>user interface</strong></li>
+        <li>a <strong>knowledge base</strong> (made up of a <strong>database of facts</strong> and a <strong>rules base</strong>)</li>
+        <li>an <strong>inference engine</strong></li>
+        <li>an <strong>explanation system</strong></li>
+        <li>a <strong>knowledge base editor</strong></li>
+      </ul>
+    </div>
+
+    <div class="diagram-box dg">
+      <svg viewBox="0 0 760 270" role="img" aria-label="Architecture diagram showing how the components of an expert system interact">
+        <defs>
+          <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/>
+          </marker>
+          <marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/>
+          </marker>
+        </defs>
+        <!-- User node -->
+        <rect class="box" x="14" y="54" width="110" height="58" rx="3"/>
+        <text x="69" y="76">User</text>
+        <text x="69" y="94" class="dim">(queries/output)</text>
+
+        <!-- User interface -->
+        <rect class="boxh" x="174" y="54" width="140" height="58" rx="3"/>
+        <text x="244" y="76">User</text>
+        <text x="244" y="94">interface</text>
+
+        <!-- Inference engine -->
+        <rect class="boxh" x="368" y="54" width="146" height="58" rx="3"/>
+        <text x="441" y="76">Inference</text>
+        <text x="441" y="94">engine</text>
+
+        <!-- Explanation system -->
+        <rect class="box" x="268" y="176" width="154" height="58" rx="3"/>
+        <text x="345" y="198">Explanation</text>
+        <text x="345" y="216">system</text>
+
+        <!-- Knowledge base container -->
+        <rect class="boxh" x="564" y="22" width="182" height="122" rx="3"/>
+        <text x="655" y="42" class="gold">Knowledge base</text>
+        <rect class="box" x="578" y="56" width="154" height="34" rx="2"/>
+        <text x="655" y="73">Database of facts</text>
+        <rect class="box" x="578" y="98" width="154" height="34" rx="2"/>
+        <text x="655" y="115">Rules base (IF…THEN)</text>
+
+        <!-- Knowledge base editor -->
+        <rect class="box" x="564" y="176" width="182" height="58" rx="3"/>
+        <text x="655" y="198">Knowledge base</text>
+        <text x="655" y="216">editor</text>
+
+        <!-- Arrows -->
+        <path class="lnc" d="M124,75 L171,75" marker-end="url(#c1)"/>
+        <path class="ln" d="M174,91 L127,91" marker-end="url(#a1)"/>
+        <path class="lnc" d="M314,75 L365,75" marker-end="url(#c1)"/>
+        <path class="ln" d="M368,91 L317,91" marker-end="url(#a1)"/>
+        <path class="lnc" d="M514,75 L561,75" marker-end="url(#c1)"/>
+        <path class="ln" d="M564,91 L517,91" marker-end="url(#a1)"/>
+
+        <!-- Explanation system links -->
+        <path class="ln" d="M420,112 L375,173" marker-end="url(#a1)"/>
+        <path class="ln" d="M315,176 L268,115" marker-end="url(#a1)"/>
+
+        <!-- Knowledge base editor link -->
+        <path class="ln" d="M655,176 L655,147" marker-end="url(#a1)"/>
+        <text x="655" y="252" class="dim">Updated by expert system engineer / domain experts</text>
+      </svg>
+      <p class="dg-cap">Architecture of an expert system showing how the five components interrelate.</p>
+    </div>
+
+    <h3>User interface</h3>
+    <p>The <strong>user interface</strong> is the way that a user interacts with the expert system. This could include using a keyboard to enter data into text query boxes, or choosing options by pressing offered choices on a touch screen (Figure 7.1).</p>
+    <p>The user interface prompts the user for the data they need to input into the expert system and then displays any output from the expert system. Other output devices may also be available, such as a printer to produce a paper copy of results.</p>
+    <p>Without a user interface, a user would need to know how to program each of the interactions they want to make with the expert system. The quality of the design of a user interface is important to the usefulness of an expert system.</p>
+
+    <h3>Knowledge base</h3>
+    <p>The <strong>knowledge base</strong> is a component of an expert system that stores the knowledge provided by experts — a database of related information about a particular subject. It allows the storage and retrieval of the knowledge required for an expert system to operate.</p>
+    <p>When an expert system is developed, several experts are interviewed and asked to provide the knowledge they have of a given field. This knowledge is then used to build a <strong>database of facts</strong> (all information that is known about the subject within the knowledge base).</p>
+    <p>The developers want two types of knowledge from the experts:</p>
+    <div class="block">
+      <ul>
+        <li><strong>Factual knowledge:</strong> knowledge that is widely shared among experts in the field.</li>
+        <li><strong>Heuristic knowledge:</strong> knowledge that is built on personal experiences and reasoning.</li>
+      </ul>
+    </div>
+    <p>Part of the knowledge base is the <strong>rules base</strong> — the part of the knowledge base that contains all the rules to be analysed by the expert system to produce a decision. These rules are used by the inference engine as a base for reasoning, to obtain a solution to a problem or a decision. Each rule contains two parts, <code>IF</code> and <code>THEN</code>. A rule can also have multiple <code>IF</code> statements joined together by Boolean operators, including <code>AND</code> and <code>OR</code>. A simple example of a rule could be:</p>
+    <pre>IF a &gt; b AND a &gt; c THEN highest = a</pre>
+    <p>The knowledge base should be regularly updated. Because of this, the expert system needs to have a <strong>knowledge base editor</strong> — a component used to change or update the knowledge base. The knowledge base editor allows the knowledge base to be edited and added to when necessary.</p>
+
+    <h3>Inference engine</h3>
+    <p>The <strong>inference engine</strong> is the part of the expert system that makes judgements and reasoning using the knowledge base and user responses. It is designed to produce reasoning based on the rules base and the knowledge base.</p>
+    <p>The inference engine asks the user questions and, based on their answer, follows a line of logic. This may then lead to further questions and, eventually, to a final result.</p>
+
+    <h3>Explanation system</h3>
+    <p>The conclusion or decision the expert system provides may not always be an obvious choice to a user. The user may therefore want to gain an understanding of how the conclusion or decision was made. To provide this information, some expert systems have an <strong>explanation system</strong> built into them — a component that provides an explanation of the reasoning process and shows how the output given by the system was reached.</p>
+
+    <details class="fold">
+      <summary>Unplugged Activities 7.01 &amp; 7.02 and Reflection</summary>
+      <div class="fold-body">
+        <p><strong>Unplugged Activity 7.01:</strong> Produce a poster outlining the components of an expert system and their purpose, including how each part interrelates (for example, a link between the explanation system and the inference engine).</p>
+        <p><strong>Reflection:</strong> Did the poster you made for Activity 7.01 clarify your understanding of the components of the expert system and their purpose?</p>
+        <p><strong>Unplugged Activity 7.02:</strong> Do you think you have ever used an expert system or seen one being used? If so, what was it used for? Explain to a partner what the system was and how it was used.</p>
+      </div>
+    </details>
+
+    <!-- Tasks for Tab 1 -->
+    <div class="task">
+      <p class="task-label"><span>Questions from the book</span><span class="pts">4 points</span></p>
+      <h4>Answers from the notes (Questions 1–4).</h4>
+
+      <div class="sub-q">
+        <label>1. What could happen if the user interface for the expert system is poorly designed?</label>
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>Users may find the system difficult or confusing to interact with, enter incorrect data into queries, or misread the output, reducing the usefulness of the expert system</div>
+        <div class="self-mark"><input type="checkbox" id="sm-1"><label for="sm-1">My answer was close enough — award myself the point</label></div>
+      </div>
+
+      <div class="sub-q">
+        <label>2. What could happen if the expert system did not have a knowledge base editor?</label>
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>The knowledge base (facts and rules) could not be easily changed, updated or added to when new knowledge is discovered, so the system would become out of date and produce inaccurate results</div>
+        <div class="self-mark"><input type="checkbox" id="sm-2"><label for="sm-2">My answer was close enough — award myself the point</label></div>
+      </div>
+
+      <div class="sub-q">
+        <label>3. Think of a scenario in which an expert system would be useful.</label>
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>Any valid scenario from the coursebook, such as: medical diagnosis, car engine fault diagnosis, financial planning and investment analysis, insurance planning, plant and animal identification, delivery vehicle route scheduling, or mineral prospecting</div>
+        <div class="self-mark"><input type="checkbox" id="sm-3"><label for="sm-3">My answer was close enough — award myself the point</label></div>
+      </div>
+
+      <div class="sub-q">
+        <label>4. Think of a scenario where an expert system would not be suitable.</label>
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>Any situation requiring human intuition, empathy, creative judgement, or adapting immediately to completely new or extraordinary situations not covered by existing rules</div>
+        <div class="self-mark"><input type="checkbox" id="sm-4"><label for="sm-4">My answer was close enough — award myself the point</label></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <p class="task-label"><span>Sort it</span><span class="pts">10 points</span></p>
+      <h4>Click the component of an expert system that each statement describes.</h4>
+      <div class="classify-list">
+        <div class="classify-item" data-answer="ie">
+          <span class="term">Makes judgements and reasoning using the knowledge base and user responses</span>
+          <span class="choices">
+            <button data-choice="ui">User interface</button>
+            <button data-choice="kb">Knowledge base</button>
+            <button data-choice="ie">Inference engine</button>
+            <button data-choice="es">Explanation system</button>
+            <button data-choice="ed">KB editor</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="ed">
+          <span class="term">Used to regularly change, edit or add new rules and facts when updates are needed</span>
+          <span class="choices">
+            <button data-choice="ui">User interface</button>
+            <button data-choice="kb">Knowledge base</button>
+            <button data-choice="ie">Inference engine</button>
+            <button data-choice="es">Explanation system</button>
+            <button data-choice="ed">KB editor</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="ui">
+          <span class="term">Without it, a user would need to know how to program each interaction</span>
+          <span class="choices">
+            <button data-choice="ui">User interface</button>
+            <button data-choice="kb">Knowledge base</button>
+            <button data-choice="ie">Inference engine</button>
+            <button data-choice="es">Explanation system</button>
+            <button data-choice="ed">KB editor</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="kb">
+          <span class="term">Stores both factual knowledge and heuristic knowledge gathered from interviewing experts</span>
+          <span class="choices">
+            <button data-choice="ui">User interface</button>
+            <button data-choice="kb">Knowledge base</button>
+            <button data-choice="ie">Inference engine</button>
+            <button data-choice="es">Explanation system</button>
+            <button data-choice="ed">KB editor</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="es">
+          <span class="term">Shows the user the reasoning process and how a non-obvious conclusion was reached</span>
+          <span class="choices">
+            <button data-choice="ui">User interface</button>
+            <button data-choice="kb">Knowledge base</button>
+            <button data-choice="ie">Inference engine</button>
+            <button data-choice="es">Explanation system</button>
+            <button data-choice="ed">KB editor</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="ui">
+          <span class="term">Prompts the user for input data via text query boxes or a touch screen and displays output</span>
+          <span class="choices">
+            <button data-choice="ui">User interface</button>
+            <button data-choice="kb">Knowledge base</button>
+            <button data-choice="ie">Inference engine</button>
+            <button data-choice="es">Explanation system</button>
+            <button data-choice="ed">KB editor</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="ie">
+          <span class="term">Asks the user questions and follows a line of logic based on their answers to reach a final result</span>
+          <span class="choices">
+            <button data-choice="ui">User interface</button>
+            <button data-choice="kb">Knowledge base</button>
+            <button data-choice="ie">Inference engine</button>
+            <button data-choice="es">Explanation system</button>
+            <button data-choice="ed">KB editor</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="kb">
+          <span class="term">Contains the database of facts and the IF…THEN rules base</span>
+          <span class="choices">
+            <button data-choice="ui">User interface</button>
+            <button data-choice="kb">Knowledge base</button>
+            <button data-choice="ie">Inference engine</button>
+            <button data-choice="es">Explanation system</button>
+            <button data-choice="ed">KB editor</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="ed">
+          <span class="term">Allows the expert system to be kept up to date when new information in the field is discovered</span>
+          <span class="choices">
+            <button data-choice="ui">User interface</button>
+            <button data-choice="kb">Knowledge base</button>
+            <button data-choice="ie">Inference engine</button>
+            <button data-choice="es">Explanation system</button>
+            <button data-choice="ed">KB editor</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="es">
+          <span class="term">Helps a user understand why the expert system recommended a particular decision</span>
+          <span class="choices">
+            <button data-choice="ui">User interface</button>
+            <button data-choice="kb">Knowledge base</button>
+            <button data-choice="ie">Inference engine</button>
+            <button data-choice="es">Explanation system</button>
+            <button data-choice="ed">KB editor</button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="task">
+      <p class="task-label"><span>Quick check</span><span class="pts">4 points</span></p>
+      <div class="mcq" data-answer="1">
+        <p class="q">1. What is heuristic knowledge?</p>
+        <div class="opts">
+          <button class="opt" data-idx="0">Knowledge that is only ever stored on paper printouts</button>
+          <button class="opt" data-idx="1">Knowledge built on personal experiences and reasoning</button>
+          <button class="opt" data-idx="2">The user interface layout of a touch screen</button>
+        </div>
+        <p class="mcq-feedback"></p>
+      </div>
+      <div class="mcq" data-answer="2">
+        <p class="q">2. How are multiple IF statements joined together in a rules base?</p>
+        <div class="opts">
+          <button class="opt" data-idx="0">By the explanation system only</button>
+          <button class="opt" data-idx="1">By converting them into a Gantt chart</button>
+          <button class="opt" data-idx="2">By Boolean operators such as AND and OR</button>
+        </div>
+        <p class="mcq-feedback"></p>
+      </div>
+      <div class="mcq" data-answer="0">
+        <p class="q">3. What is the person who designs and develops an expert system called?</p>
+        <div class="opts">
+          <button class="opt" data-idx="0">An expert system engineer</button>
+          <button class="opt" data-idx="1">A stakeholder manager</button>
+          <button class="opt" data-idx="2">An inference operator</button>
+        </div>
+        <p class="mcq-feedback"></p>
+      </div>
+      <div class="mcq" data-answer="1">
+        <p class="q">4. Why do some expert systems include an explanation system?</p>
+        <div class="opts">
+          <button class="opt" data-idx="0">To allow the knowledge base to be edited by anyone</button>
+          <button class="opt" data-idx="1">Because the conclusion may not always be obvious and the user wants to see how it was reached</button>
+          <button class="opt" data-idx="2">To replace the user interface with a printer</button>
+        </div>
+        <p class="mcq-feedback"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 2: 7.2 USES ==================== -->
+  <div class="panel" id="panel-uses">
+    <h2 class="section-title">How are expert systems used? <span class="tag">7.2</span></h2>
+    <p>Expert systems are used in a range of scenarios by individuals and organisations to support decision making. Expert systems may be used in:</p>
+    <div class="block">
+      <ul>
+        <li>medical diagnosis</li>
+        <li>car engine fault diagnosis</li>
+        <li>providing financial planning and investment analysis</li>
+        <li>providing insurance planning advice</li>
+        <li>plant and animal identification</li>
+        <li>scheduling routes for delivery vehicles</li>
+        <li>mineral prospecting</li>
+      </ul>
+    </div>
+
+    <h3>Medical diagnosis</h3>
+    <p>The organisation <strong>WebMD</strong> has a website that offers a medical expert system called <strong>'symptom checker'</strong>. It asks the user a series of questions about their symptoms and then provides possible conditions that match the symptoms. It lists the possible conditions in order, starting with the one it finds to be the closest match.</p>
+
+    <h3>Car engine fault diagnosis</h3>
+    <p>Most modern cars have lots of technology built into them, including an on-board expert system known as the <strong>on-board diagnostics system</strong>. It monitors the car's engine performance. If the engine develops a fault, the diagnostics system turns on a warning light on the dashboard to alert the driver. When the driver sees the warning light, they should take the car to a garage. At the garage, a mechanic connects a diagnostic tool to the on-board diagnostics system (Figure 7.2). The expert system provides the mechanic with a code that helps them to find and fix the fault.</p>
+
+    <details class="fold">
+      <summary>Did you know? — Diagnostic Trouble Codes (DTC) &amp; Activity 7.03 (Deep Blue &amp; AlphaZero)</summary>
+      <div class="fold-body">
+        <p><strong>Diagnostic Trouble Codes:</strong> When a car mechanic connects a diagnostic tool to the on-board diagnostic system, they are given a five-digit <strong>Diagnostic Trouble Code (DTC)</strong>. There are thousands of possible DTCs, including some that are specific to different manufacturers.</p>
+        <p><strong>Activity 7.03 — Chess Systems:</strong> In 1997, the expert system <strong>Deep Blue</strong> beat the world champion chess player Garry Kasparov (Figure 7.3). Modern systems such as <strong>AlphaZero</strong> also demonstrate how AI and rule/search-based systems can defeat world-champion human players.</p>
+      </div>
+    </details>
+
+    <h3>Financial planning and investment analysis</h3>
+    <p>Expert systems can be a useful tool in financial planning for both individuals and businesses. They can create a financial plan or assess what financial actions need to be taken to achieve a desired outcome. They can help people to:</p>
+    <div class="block">
+      <ul>
+        <li>manage their debt</li>
+        <li>reduce their outgoings</li>
+        <li>reduce their taxes</li>
+        <li>plan for retirement</li>
+      </ul>
+    </div>
+    <p>A user enters information about their financial situation and personal circumstances. The expert system then produces a financial plan, or a list of possible outcomes, based on this information.</p>
+    <p>Expert systems can also be used to analyse investments and help maximise returns on funds invested. They can help people to:</p>
+    <div class="block">
+      <ul>
+        <li>monitor stock markets and suggest when to buy and sell shares</li>
+        <li>determine how much risk is involved with certain investments</li>
+        <li>make decisions based on the amount of money they wish to invest</li>
+        <li>examine options on the period of time to invest their money, for example 1–5 years</li>
+        <li>decide whether to move from one type of investment to another</li>
+      </ul>
+    </div>
+    <p>Using such systems, sometimes with the support of a professional financial adviser, enables people to make informed decisions based on the information provided.</p>
+
+    <h3>Insurance planning</h3>
+    <p>Many insurance company websites use an online expert system so that users can quickly see if the company has a policy that would be suitable for them. Such systems ask the user for relevant personal information and then provide a result to say whether the insurance company would be willing to give the user an insurance policy. If the expert system is able to match their data to a possible policy, it informs the user with details about the policy, such as how much it will cost and what benefits it will provide.</p>
+
+    <h3>Plant and animal identification</h3>
+    <p>The <strong>Native Plants Database</strong>, provided by the University of Texas in Austin, allows users to enter a range of characteristics about a plant (mostly covering native plants in North America). The website takes the data input about the plant and analyses it against its rules and knowledge base. It then tells the user what kind of plant it could be, with further options provided to offer more specific results if required. A user could find out what kind of plant is growing in their garden, or try to discover the type of plant they have seen when on a walk (Figure 7.4).</p>
+    <p>Expert systems are also available to enable users to identify animals — for example, inputting data based on an animal's characteristics to determine what animal it might be.</p>
+
+    <h3>Route scheduling for delivery vehicles</h3>
+    <p>Delivery companies can use expert systems to find out the best route for a delivery driver. The expert system helps determine the most efficient route, such as the shortest distance or quickest time, for all the deliveries the driver has on a given day.</p>
+    <p>Each of the deliveries the driver needs to make is put into the system, which then outputs the most efficient route to follow. It may request further information, such as the type of delivery vehicle and how long each delivery will take. The system may make further recommendations about how many drivers are needed to deliver all the items that day and what kind of vehicle each driver will need to take for the packages they need to deliver. An expert system can work out this type of outcome quicker than a human due to the amount of data it handles, especially in large delivery companies where multiple vehicles are used at the same time (Figure 7.5).</p>
+
+    <h3>Mineral prospecting</h3>
+    <p>Minerals like ruby, emerald and iron can be very precious, and geologists can spend a long time trying to source them (Figure 7.6). Digging for minerals can be very expensive, so companies want to be sure that minerals will be present when they break ground (Figure 7.7).</p>
+    <p>An expert system called <strong>PROSPECTOR</strong> was one of the first expert systems developed to aid geologists in exploring for minerals. PROSPECTOR can be used to calculate the probability of minerals being present in a certain location by examining data related to factors such as the soil type and topography of the land.</p>
+
+    <!-- Tasks for Tab 2 -->
+    <div class="task">
+      <p class="task-label"><span>Questions from the book</span><span class="pts">4 points</span></p>
+      <h4>Answers from the notes (Questions 5–8).</h4>
+
+      <div class="sub-q">
+        <label>5. What could be the benefits and the disadvantages of people using online self-diagnosis systems?</label>
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>Benefits: available at any time without needing an appointment, gives quick initial guidance on matching conditions. Disadvantages: users may enter inaccurate symptoms, worry unnecessarily about serious conditions, or rely on it instead of seeing a qualified doctor</div>
+        <div class="self-mark"><input type="checkbox" id="sm-5"><label for="sm-5">My answer was close enough — award myself the point</label></div>
+      </div>
+
+      <div class="sub-q">
+        <label>6. Why might a doctor use an expert system to aid a diagnosis?</label>
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>It can prompt and guide the doctor to look at areas of medical knowledge or rare conditions they may not have considered or remembered, and provide consistent logical checks against a large knowledge base</div>
+        <div class="self-mark"><input type="checkbox" id="sm-6"><label for="sm-6">My answer was close enough — award myself the point</label></div>
+      </div>
+
+      <div class="sub-q">
+        <label>7. An insurance company offers life insurance policies. What kind of questions do you think the expert system will ask to check whether an insurance policy can be issued to a user?</label>
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>Questions about personal circumstances such as age, medical history and pre-existing conditions, whether they smoke or drink, occupation, and the level/length of cover required</div>
+        <div class="self-mark"><input type="checkbox" id="sm-7"><label for="sm-7">My answer was close enough — award myself the point</label></div>
+      </div>
+
+      <div class="sub-q">
+        <label>8. What kind of questions would an expert system ask in order to identify a type of animal?</label>
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>Questions about the animal's observable characteristics, such as number of legs, body covering (fur, feathers, scales), size, colour, habitat, diet, and whether it flies or lives in water</div>
+        <div class="self-mark"><input type="checkbox" id="sm-8"><label for="sm-8">My answer was close enough — award myself the point</label></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <p class="task-label"><span>Sort it</span><span class="pts">10 points</span></p>
+      <h4>Click the scenario that matches each real-world example or feature.</h4>
+      <div class="classify-list">
+        <div class="classify-item" data-answer="rte">
+          <span class="term">PROSPECTOR examining soil type and land topography before breaking ground</span>
+          <span class="choices">
+            <button data-choice="med">Medical</button>
+            <button data-choice="car">Car fault</button>
+            <button data-choice="fin">Finance &amp; insurance</button>
+            <button data-choice="bio">Plant &amp; animal ID</button>
+            <button data-choice="rte">Routes &amp; minerals</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="fin">
+          <span class="term">Helping individuals manage debt, reduce outgoings, reduce taxes and plan for retirement</span>
+          <span class="choices">
+            <button data-choice="med">Medical</button>
+            <button data-choice="car">Car fault</button>
+            <button data-choice="fin">Finance &amp; insurance</button>
+            <button data-choice="bio">Plant &amp; animal ID</button>
+            <button data-choice="rte">Routes &amp; minerals</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="car">
+          <span class="term">Outputs a five-digit Diagnostic Trouble Code (DTC) when a mechanic connects a tool at the garage</span>
+          <span class="choices">
+            <button data-choice="med">Medical</button>
+            <button data-choice="car">Car fault</button>
+            <button data-choice="fin">Finance &amp; insurance</button>
+            <button data-choice="bio">Plant &amp; animal ID</button>
+            <button data-choice="rte">Routes &amp; minerals</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="bio">
+          <span class="term">University of Texas in Austin database matching characteristics of North American plants</span>
+          <span class="choices">
+            <button data-choice="med">Medical</button>
+            <button data-choice="car">Car fault</button>
+            <button data-choice="fin">Finance &amp; insurance</button>
+            <button data-choice="bio">Plant &amp; animal ID</button>
+            <button data-choice="rte">Routes &amp; minerals</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="med">
+          <span class="term">WebMD 'symptom checker' listing possible conditions starting with the closest match</span>
+          <span class="choices">
+            <button data-choice="med">Medical</button>
+            <button data-choice="car">Car fault</button>
+            <button data-choice="fin">Finance &amp; insurance</button>
+            <button data-choice="bio">Plant &amp; animal ID</button>
+            <button data-choice="rte">Routes &amp; minerals</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="rte">
+          <span class="term">Recommending how many drivers and what vehicle types are needed for a day's packages</span>
+          <span class="choices">
+            <button data-choice="med">Medical</button>
+            <button data-choice="car">Car fault</button>
+            <button data-choice="fin">Finance &amp; insurance</button>
+            <button data-choice="bio">Plant &amp; animal ID</button>
+            <button data-choice="rte">Routes &amp; minerals</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="fin">
+          <span class="term">Checking personal details online to see if a policy can be offered and showing its cost and benefits</span>
+          <span class="choices">
+            <button data-choice="med">Medical</button>
+            <button data-choice="car">Car fault</button>
+            <button data-choice="fin">Finance &amp; insurance</button>
+            <button data-choice="bio">Plant &amp; animal ID</button>
+            <button data-choice="rte">Routes &amp; minerals</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="car">
+          <span class="term">On-board diagnostics system monitoring engine performance and turning on a dashboard warning light</span>
+          <span class="choices">
+            <button data-choice="med">Medical</button>
+            <button data-choice="car">Car fault</button>
+            <button data-choice="fin">Finance &amp; insurance</button>
+            <button data-choice="bio">Plant &amp; animal ID</button>
+            <button data-choice="rte">Routes &amp; minerals</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="fin">
+          <span class="term">Monitoring stock markets to suggest when to buy/sell shares and assessing 1–5 year investment options</span>
+          <span class="choices">
+            <button data-choice="med">Medical</button>
+            <button data-choice="car">Car fault</button>
+            <button data-choice="fin">Finance &amp; insurance</button>
+            <button data-choice="bio">Plant &amp; animal ID</button>
+            <button data-choice="rte">Routes &amp; minerals</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="bio">
+          <span class="term">Entering observable characteristics discovered on a walk or in a garden to identify a species</span>
+          <span class="choices">
+            <button data-choice="med">Medical</button>
+            <button data-choice="car">Car fault</button>
+            <button data-choice="fin">Finance &amp; insurance</button>
+            <button data-choice="bio">Plant &amp; animal ID</button>
+            <button data-choice="rte">Routes &amp; minerals</button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="task">
+      <p class="task-label"><span>Quick check</span><span class="pts">4 points</span></p>
+      <div class="mcq" data-answer="2">
+        <p class="q">1. What does the PROSPECTOR expert system calculate?</p>
+        <div class="opts">
+          <button class="opt" data-idx="0">The shortest delivery route for a fleet of vans</button>
+          <button class="opt" data-idx="1">The five-digit fault code for a car engine</button>
+          <button class="opt" data-idx="2">The probability of minerals being present in a certain location</button>
+        </div>
+        <p class="mcq-feedback"></p>
+      </div>
+      <div class="mcq" data-answer="0">
+        <p class="q">2. How does a car's on-board diagnostics system first alert the driver to an engine fault?</p>
+        <div class="opts">
+          <button class="opt" data-idx="0">It turns on a warning light on the dashboard</button>
+          <button class="opt" data-idx="1">It prints a five-digit code on paper</button>
+          <button class="opt" data-idx="2">It contacts the insurance company automatically</button>
+        </div>
+        <p class="mcq-feedback"></p>
+      </div>
+      <div class="mcq" data-answer="1">
+        <p class="q">3. Why is an expert system likely to work out delivery routes quicker than a human?</p>
+        <div class="opts">
+          <button class="opt" data-idx="0">Because it uses human intuition rather than rules</button>
+          <button class="opt" data-idx="1">Due to the large amount of data it handles across multiple deliveries and vehicles</button>
+          <button class="opt" data-idx="2">Because it does not need a knowledge base</button>
+        </div>
+        <p class="mcq-feedback"></p>
+      </div>
+      <div class="mcq" data-answer="2">
+        <p class="q">4. How does the WebMD 'symptom checker' order the possible conditions it outputs?</p>
+        <div class="opts">
+          <button class="opt" data-idx="0">In alphabetical order from A to Z</button>
+          <button class="opt" data-idx="1">From the rarest condition to the most common</button>
+          <button class="opt" data-idx="2">Starting with the condition it finds to be the closest match to the symptoms</button>
+        </div>
+        <p class="mcq-feedback"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 3: 7.3 CHAINING & AI ==================== -->
+  <div class="panel" id="panel-chaining">
+    <h2 class="section-title">Backward chaining and forward chaining <span class="tag">7.3</span></h2>
+    <p>There are two main methods that an inference engine can use to simulate reasoning: <strong>backward chaining</strong> and <strong>forward chaining</strong>. <code>IF…THEN</code> constructs are used to determine whether a rule is true when using these methods.</p>
+
+    <h3>Backward chaining</h3>
+    <p><strong>Backward chaining</strong> is based on <strong>goal driven</strong> reasoning, where reasoning is dependent on finding a desired goal. This type of chaining is used when the possible outcomes are <strong>limited and clearly defined</strong>. In backward chaining, the system takes a goal and repeatedly splits it into <strong>sub-goals</strong> that are simpler to achieve. This type of system moves backwards from the goal to be achieved, using the sub-goals to inform the next piece of data that is needed by the system to reach a goal.</p>
+    <p>For example, within a video game, an expert system might be used to determine whether a player can progress to a certain area (the goal). Backward chaining could be used to check <code>IF</code> the player has collected certain items, such as a key, <code>AND</code> <code>IF</code> they have defeated a specific enemy, such as a robot spider (sub-goals). Should both these facts be true, <code>THEN</code> the player can move on to the next part of the game.</p>
+
+    <div class="diagram-box dg">
+      <svg viewBox="0 0 760 220" role="img" aria-label="Figure 7.8: Example of backward chaining used in gaming">
+        <defs>
+          <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/>
+          </marker>
+          <marker id="c2" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/>
+          </marker>
+        </defs>
+        <!-- Goal at top -->
+        <rect class="boxh" x="260" y="14" width="240" height="50" rx="3"/>
+        <text x="380" y="31" class="gold">GOAL: Progress to</text>
+        <text x="380" y="49">next area of game</text>
+
+        <!-- Sub-goals -->
+        <rect class="box" x="90" y="108" width="230" height="52" rx="3"/>
+        <text x="205" y="126">Sub-goal 1: IF player</text>
+        <text x="205" y="144">has collected the key</text>
+
+        <text x="380" y="134" class="gold">AND</text>
+
+        <rect class="box" x="440" y="108" width="230" height="52" rx="3"/>
+        <text x="555" y="126">Sub-goal 2: IF player</text>
+        <text x="555" y="144">defeated robot spider</text>
+
+        <!-- Arrows splitting backwards from goal to sub-goals -->
+        <path class="lnc" d="M330,64 L225,105" marker-end="url(#c2)"/>
+        <path class="lnc" d="M430,64 L535,105" marker-end="url(#c2)"/>
+
+        <text x="380" y="192" class="dim">Both sub-goals true → THEN player moves on to next part of the game</text>
+      </svg>
+      <p class="dg-cap">Figure 7.8: Example of backward chaining used in gaming (working backwards from the goal into sub-goals).</p>
+    </div>
+
+    <h3>Forward chaining</h3>
+    <p><strong>Forward chaining</strong> is based on <strong>data driven</strong> reasoning and is dependent on the data that the expert system is provided with. This type of system is used when a problem is more <strong>open ended</strong>, and the outcome is not always clearly defined. The system takes data input by the user and moves forward from rule to rule to suggest possible outcomes where the rule for the data input is true. It then asks the user for more data and repeats this process until it can suggest an outcome.</p>
+    <p>For example, when a doctor is deciding on a diagnosis for a patient, they input data prompted by the expert system, such as <code>IF</code> the patient is over a certain age. Should the patient be older than the age specified, such as over 65 years, <code>THEN</code> further questions will be asked appropriate to that age group, such as if they have mobility needs. Different questions could be asked if the patient is the same age or younger than the age specified.</p>
+
+    <div class="diagram-box dg">
+      <svg viewBox="0 0 760 210" role="img" aria-label="Figure 7.9: Example of forward chaining used in diagnosis">
+        <defs>
+          <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/>
+          </marker>
+          <marker id="c3" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/>
+          </marker>
+        </defs>
+        <!-- Step 1: Data input -->
+        <rect class="boxh" x="14" y="76" width="160" height="56" rx="3"/>
+        <text x="94" y="96" class="gold">Data input</text>
+        <text x="94" y="114">Patient age</text>
+
+        <!-- Step 2: Rule check -->
+        <rect class="box" x="218" y="76" width="170" height="56" rx="3"/>
+        <text x="303" y="96">Rule: IF age</text>
+        <text x="303" y="114">&gt; 65 years?</text>
+
+        <!-- Branch 1: Over 65 -->
+        <rect class="boxh" x="444" y="24" width="296" height="52" rx="3"/>
+        <text x="592" y="42" class="gold">TRUE → Ask age-appropriate</text>
+        <text x="592" y="60">questions (e.g. mobility needs)</text>
+
+        <!-- Branch 2: 65 or younger -->
+        <rect class="box" x="444" y="132" width="296" height="52" rx="3"/>
+        <text x="592" y="150">FALSE → Ask questions for</text>
+        <text x="592" y="168">patient 65 or younger</text>
+
+        <path class="lnc" d="M174,104 L215,104" marker-end="url(#c3)"/>
+        <path class="lnc" d="M388,92 L441,54" marker-end="url(#c3)"/>
+        <path class="ln" d="M388,116 L441,154" marker-end="url(#a3)"/>
+      </svg>
+      <p class="dg-cap">Figure 7.9: Example of forward chaining used in diagnosis (moving forward from user data through rules).</p>
+    </div>
+
+    <h3>Comparing backward and forward chaining</h3>
+    <div class="table-scroll">
+      <table>
+        <tr>
+          <th>Feature</th>
+          <th>Backward chaining</th>
+          <th>Forward chaining</th>
+        </tr>
+        <tr>
+          <td><strong>Reasoning basis</strong></td>
+          <td><strong>Goal driven</strong> — dependent on finding a desired goal</td>
+          <td><strong>Data driven</strong> — dependent on the data provided to the system</td>
+        </tr>
+        <tr>
+          <td><strong>When it is used</strong></td>
+          <td>When possible outcomes are <strong>limited and clearly defined</strong></td>
+          <td>When a problem is more <strong>open ended</strong> and the outcome is not clearly defined</td>
+        </tr>
+        <tr>
+          <td><strong>How it works</strong></td>
+          <td>Takes a goal and repeatedly splits it backwards into simpler <strong>sub-goals</strong> to find what data is needed</td>
+          <td>Takes user data and moves <strong>forward from rule to rule</strong> where true, asking for more data until an outcome is reached</td>
+        </tr>
+        <tr>
+          <td><strong>Coursebook example</strong></td>
+          <td>Video game checking if a player collected a key AND defeated a robot spider to enter the next area</td>
+          <td>Medical diagnosis asking if a patient is over 65 and then asking about mobility needs</td>
+        </tr>
+      </table>
+    </div>
+
+    <h3>Artificial intelligence and social media</h3>
+    <p>Data-driven <strong>artificial intelligence (AI)</strong> may be used to manipulate social media. Social networking platforms can use data related to the user's behaviour — such as videos viewed, group membership and adverts clicked on — to change the content provided to individuals.</p>
+    <p>Through manipulating the content shown to a user, AI can be used to ensure only certain viewpoints are presented, which may influence the user's point of view and decision making. Using data in this way may result in users being presented with false or misleading information, potentially allowing their views to be manipulated.</p>
+
+    <!-- Tasks for Tab 3 -->
+    <div class="task">
+      <p class="task-label"><span>Concept check</span><span class="pts">4 points</span></p>
+      <h4>Answers from the notes on section 7.3.</h4>
+
+      <div class="sub-q">
+        <label>1. State the difference between goal-driven reasoning and data-driven reasoning.</label>
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>Goal-driven reasoning (backward chaining) starts with a desired goal and splits it into sub-goals; data-driven reasoning (forward chaining) starts with the data provided and moves forward from rule to rule until it reaches an outcome</div>
+        <div class="self-mark"><input type="checkbox" id="sm-9"><label for="sm-9">My answer was close enough — award myself the point</label></div>
+      </div>
+
+      <div class="sub-q">
+        <label>2. Explain how backward chaining is used in the video game example.</label>
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>The goal is progressing to the next area; the system splits this into sub-goals checking IF the player has collected the key AND IF they have defeated the robot spider; if both are true, THEN they can progress</div>
+        <div class="self-mark"><input type="checkbox" id="sm-10"><label for="sm-10">My answer was close enough — award myself the point</label></div>
+      </div>
+
+      <div class="sub-q">
+        <label>3. Why is forward chaining suitable for a doctor diagnosing a patient?</label>
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>Medical diagnosis is open-ended and the outcome is not clearly defined at the start; the system takes initial patient data (such as age) and moves forward rule by rule, asking appropriate follow-up questions (such as mobility needs if over 65)</div>
+        <div class="self-mark"><input type="checkbox" id="sm-11"><label for="sm-11">My answer was close enough — award myself the point</label></div>
+      </div>
+
+      <div class="sub-q">
+        <label>4. Explain how data-driven AI can be used to manipulate users on social media.</label>
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>Platforms track user behaviour (videos viewed, group membership, adverts clicked on) to change the content shown, presenting only certain viewpoints or false/misleading information that influences their decision making</div>
+        <div class="self-mark"><input type="checkbox" id="sm-12"><label for="sm-12">My answer was close enough — award myself the point</label></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <p class="task-label"><span>Sort it</span><span class="pts">9 points</span></p>
+      <h4>Click whether each statement describes backward chaining, forward chaining, or social media AI.</h4>
+      <div class="classify-list">
+        <div class="classify-item" data-answer="f">
+          <span class="term">Used when a problem is more open ended and the outcome is not always clearly defined</span>
+          <span class="choices">
+            <button data-choice="b">Backward chaining</button>
+            <button data-choice="f">Forward chaining</button>
+            <button data-choice="ai">Social media AI</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="ai">
+          <span class="term">Uses videos viewed, group membership and adverts clicked on to alter the content shown</span>
+          <span class="choices">
+            <button data-choice="b">Backward chaining</button>
+            <button data-choice="f">Forward chaining</button>
+            <button data-choice="ai">Social media AI</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="b">
+          <span class="term">Takes a desired goal and repeatedly splits it backwards into simpler sub-goals</span>
+          <span class="choices">
+            <button data-choice="b">Backward chaining</button>
+            <button data-choice="f">Forward chaining</button>
+            <button data-choice="ai">Social media AI</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="b">
+          <span class="term">Checking IF a player collected a key AND defeated a robot spider to progress to the next area</span>
+          <span class="choices">
+            <button data-choice="b">Backward chaining</button>
+            <button data-choice="f">Forward chaining</button>
+            <button data-choice="ai">Social media AI</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="f">
+          <span class="term">Entering a patient's age (&gt; 65 years) and then being prompted with questions about mobility needs</span>
+          <span class="choices">
+            <button data-choice="b">Backward chaining</button>
+            <button data-choice="f">Forward chaining</button>
+            <button data-choice="ai">Social media AI</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="ai">
+          <span class="term">May ensure only certain viewpoints or misleading information are presented to influence decisions</span>
+          <span class="choices">
+            <button data-choice="b">Backward chaining</button>
+            <button data-choice="f">Forward chaining</button>
+            <button data-choice="ai">Social media AI</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="b">
+          <span class="term">Goal-driven reasoning used when the possible outcomes are limited and clearly defined</span>
+          <span class="choices">
+            <button data-choice="b">Backward chaining</button>
+            <button data-choice="f">Forward chaining</button>
+            <button data-choice="ai">Social media AI</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="f">
+          <span class="term">Moves forward from rule to rule where user data is true, asking for more data until an outcome is reached</span>
+          <span class="choices">
+            <button data-choice="b">Backward chaining</button>
+            <button data-choice="f">Forward chaining</button>
+            <button data-choice="ai">Social media AI</button>
+          </span>
+        </div>
+        <div class="classify-item" data-answer="ai">
+          <span class="term">Manipulates platform feeds based on tracked user behaviour</span>
+          <span class="choices">
+            <button data-choice="b">Backward chaining</button>
+            <button data-choice="f">Forward chaining</button>
+            <button data-choice="ai">Social media AI</button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="task">
+      <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+      <div class="mcq" data-answer="1">
+        <p class="q">1. Which component of an expert system uses forward chaining and backward chaining?</p>
+        <div class="opts">
+          <button class="opt" data-idx="0">The knowledge base editor</button>
+          <button class="opt" data-idx="1">The inference engine</button>
+          <button class="opt" data-idx="2">The printer output interface</button>
+        </div>
+        <p class="mcq-feedback"></p>
+      </div>
+      <div class="mcq" data-answer="0">
+        <p class="q">2. What construct is used to determine whether a rule is true in both chaining methods?</p>
+        <div class="opts">
+          <button class="opt" data-idx="0">IF…THEN constructs</button>
+          <button class="opt" data-idx="1">ES + length of task</button>
+          <button class="opt" data-idx="2">Five-digit DTC codes</button>
+        </div>
+        <p class="mcq-feedback"></p>
+      </div>
+      <div class="mcq" data-answer="2">
+        <p class="q">3. Which user data might social media AI use to alter the content shown to an individual?</p>
+        <div class="opts">
+          <button class="opt" data-idx="0">Only offline paper records</button>
+          <button class="opt" data-idx="1">Car engine diagnostic codes</button>
+          <button class="opt" data-idx="2">Videos viewed, group membership and adverts clicked on</button>
+        </div>
+        <p class="mcq-feedback"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 4: 7.4 PROS & CONS ==================== -->
+  <div class="panel" id="panel-proscons">
+    <h2 class="section-title">Advantages and disadvantages of expert systems <span class="tag">7.4</span></h2>
+    <p>Table 7.1 sets out the possible advantages and disadvantages of using an expert system.</p>
+
+    <div class="proscons">
+      <div class="pc pro">
+        <p class="pc-title">Advantages</p>
+        <ul>
+          <li>Can provide answers to questions that are outside the knowledge that you currently have.</li>
+          <li>Can aid professional people by prompting and guiding them to look at areas of knowledge they may not have considered or remembered.</li>
+          <li>Are consistent in the responses they produce as they are arrived at in a logical way.</li>
+          <li>Can be used at any time, so you do not need to contact another person who may have the knowledge, yet be unavailable.</li>
+          <li>Can explain how they have arrived at a decision through displaying the logic used.</li>
+          <li>Can sometimes arrive at a solution to a problem quicker than a human would.</li>
+        </ul>
+      </div>
+      <div class="pc con">
+        <p class="pc-title">Disadvantages</p>
+        <ul>
+          <li>Do not have the intuition that humans have. This means that their response can only be a logical one and may not be useful.</li>
+          <li>Are only as good as the rules and data they are provided with. If there are errors in the data or rules, such as if the data or rules need to be updated, then this will produce incorrect results.</li>
+          <li>Are expensive to create and maintain. Many experts need to be consulted and a high level of skill is required to build the component parts, along with keeping the system up to date.</li>
+          <li>Cannot adapt to new or extraordinary situations and may require the knowledge base to be edited in order to do this.</li>
+        </ul>
+      </div>
+    </div>
+
+    <details class="fold">
+      <summary>Discussion point</summary>
+      <div class="fold-body">
+        <p>How do you feel about the use of expert systems to make decisions, or for planning, in your own life? Consider when you would trust an automated logical system (such as route planning or checking insurance quotes) versus when you would prefer human intuition and empathy (such as complex medical or personal decisions).</p>
+      </div>
+    </details>
+
+    <!-- Tasks for Tab 4 -->
+    <div class="task">
+      <p class="task-label"><span>Questions from the book</span><span class="pts">2 points</span></p>
+      <h4>Answers from the notes (Questions 9 &amp; 10).</h4>
+
+      <div class="sub-q">
+        <label>9. What do you feel is the most significant advantage of using an expert system? Why is this?</label>
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>Any justified advantage from Table 7.1, for example: being able to provide answers outside your own knowledge or guide professionals so nothing is overlooked; consistency because decisions follow logic; 24/7 availability; explaining the logic used; or arriving at solutions faster than a human</div>
+        <div class="self-mark"><input type="checkbox" id="sm-13"><label for="sm-13">My answer was close enough — award myself the point</label></div>
+      </div>
+
+      <div class="sub-q">
+        <label>10. What do you think is the biggest disadvantage of using an expert system? Why?</label>
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>Any justified disadvantage from Table 7.1, for example: lacking human intuition; being only as good as its data and rules (errors or outdated rules produce wrong results); high cost to consult experts, build and maintain; or inability to adapt to new/extraordinary situations without editing the knowledge base</div>
+        <div class="self-mark"><input type="checkbox" id="sm-14"><label for="sm-14">My answer was close enough — award myself the point</label></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <p class="task-label"><span>Sort it</span><span class="pts">10 points</span></p>
+      <h4>Click whether each statement is an advantage or a disadvantage of expert systems.</h4>
+      <div class="classify-list">
+        <div class="classify-item" data-answer="d">
+          <span class="term">Cannot adapt to new or extraordinary situations without editing the knowledge base</span>
+          <span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span>
+        </div>
+        <div class="classify-item" data-answer="a">
+          <span class="term">Can be used at any time when a human expert may be unavailable</span>
+          <span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span>
+        </div>
+        <div class="classify-item" data-answer="a">
+          <span class="term">Can explain how they arrived at a decision by displaying the logic used</span>
+          <span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span>
+        </div>
+        <div class="classify-item" data-answer="d">
+          <span class="term">Do not have the intuition that humans have, so responses are only logical</span>
+          <span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span>
+        </div>
+        <div class="classify-item" data-answer="a">
+          <span class="term">Prompt and guide professionals to look at areas they may not have considered or remembered</span>
+          <span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span>
+        </div>
+        <div class="classify-item" data-answer="d">
+          <span class="term">Expensive to create and maintain because many experts must be consulted and high skill is needed</span>
+          <span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span>
+        </div>
+        <div class="classify-item" data-answer="d">
+          <span class="term">Only as good as the rules and data provided — errors or outdated rules produce incorrect results</span>
+          <span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span>
+        </div>
+        <div class="classify-item" data-answer="a">
+          <span class="term">Can provide answers to questions that are outside the knowledge you currently have</span>
+          <span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span>
+        </div>
+        <div class="classify-item" data-answer="a">
+          <span class="term">Can sometimes arrive at a solution to a problem quicker than a human would</span>
+          <span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span>
+        </div>
+        <div class="classify-item" data-answer="a">
+          <span class="term">Are consistent in the responses they produce as they are arrived at in a logical way</span>
+          <span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="task">
+      <p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p>
+      <div class="mcq" data-answer="2">
+        <p class="q">1. Why are expert systems expensive to create and maintain?</p>
+        <div class="opts">
+          <button class="opt" data-idx="0">Because they can only be used once before being deleted</button>
+          <button class="opt" data-idx="1">Because they require a human expert to type every answer live</button>
+          <button class="opt" data-idx="2">Many experts need to be consulted, high skill is needed to build the parts, and the system must be kept up to date</button>
+        </div>
+        <p class="mcq-feedback"></p>
+      </div>
+      <div class="mcq" data-answer="1">
+        <p class="q">2. Why do expert systems produce consistent responses?</p>
+        <div class="opts">
+          <button class="opt" data-idx="0">Because they rely on human intuition and emotion</button>
+          <button class="opt" data-idx="1">Because their responses are arrived at in a logical way using the rules and data</button>
+          <button class="opt" data-idx="2">Because they ignore the rules base</button>
+        </div>
+        <p class="mcq-feedback"></p>
+      </div>
+      <div class="mcq" data-answer="0">
+        <p class="q">3. What is needed if an expert system has to handle a new or extraordinary situation?</p>
+        <div class="opts">
+          <button class="opt" data-idx="0">The knowledge base may need to be edited</button>
+          <button class="opt" data-idx="1">It uses its own human intuition automatically</button>
+          <button class="opt" data-idx="2">Nothing — expert systems adapt automatically without updates</button>
+        </div>
+        <p class="mcq-feedback"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TAB 5: PRACTICE QUESTIONS ==================== -->
+  <div class="panel" id="panel-practice">
+    <h2 class="section-title">Practice questions <span class="tag">Exam style</span></h2>
+    <p>These are the official Practice Questions from the end of Chapter 7 (page 146). Write each answer in full first, then check your response and tick the mark points you covered.</p>
+
+    <div class="task">
+      <p class="task-label"><span>Practice question 1</span><span class="pts">1 point</span></p>
+      <h4>1. Identify the name of the component in an expert system that stores the data required for the system to use in decision making. [1]</h4>
+      <div class="sub-q">
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>Knowledge base (or database of facts)</div>
+        <div class="self-mark"><input type="checkbox" id="sm-15"><label for="sm-15">My answer was close enough — award myself the point</label></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <p class="task-label"><span>Practice question 2</span><span class="pts">1 point</span></p>
+      <h4>2. Identify the name of the component in an expert system responsible for reasoning and judgement. [1]</h4>
+      <div class="sub-q">
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>Inference engine</div>
+        <div class="self-mark"><input type="checkbox" id="sm-16"><label for="sm-16">My answer was close enough — award myself the point</label></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <p class="task-label"><span>Practice question 3</span><span class="pts">2 points</span></p>
+      <h4>3. Explain the role of an expert system. (2 marks)</h4>
+      <div class="sub-q mp" data-max="2">
+        <textarea placeholder="Write your full answer here…" style="min-height:90px;"></textarea>
+        <div class="row"><button class="check-btn">Show mark points</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="markpoints">
+          <span class="lbl">Mark points — tick each one your answer covered (up to 2)</span>
+          <label class="mp-item"><input type="checkbox"><span>A computerised system that attempts to reproduce the decision-making process / replicate the judgement of a human with expert knowledge in a certain field</span></label>
+          <label class="mp-item"><input type="checkbox"><span>Used to replace or assist a human expert (by prompting the user for data and using its knowledge base and inference engine to reach a decision)</span></label>
+          <div class="mp-foot"><span class="mp-count">0 / 2 marks</span><span class="mp-note"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task">
+      <p class="task-label"><span>Practice question 4</span><span class="pts">3 points</span></p>
+      <h4>4. Describe the concept of forward chaining. (3 marks)</h4>
+      <div class="sub-q mp" data-max="3">
+        <textarea placeholder="Write your full answer here…" style="min-height:105px;"></textarea>
+        <div class="row"><button class="check-btn">Show mark points</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="markpoints">
+          <span class="lbl">Mark points — tick each one your answer covered (up to 3)</span>
+          <label class="mp-item"><input type="checkbox"><span>It is based on data-driven reasoning and is dependent on the data provided to the expert system</span></label>
+          <label class="mp-item"><input type="checkbox"><span>It is used when a problem is open ended and the outcome is not always clearly defined</span></label>
+          <label class="mp-item"><input type="checkbox"><span>The system takes data input by the user and moves forward from rule to rule (using IF…THEN constructs) where the rule for the data is true</span></label>
+          <label class="mp-item"><input type="checkbox"><span>It asks the user for more data and repeats the process until it can suggest a possible outcome</span></label>
+          <div class="mp-foot"><span class="mp-count">0 / 3 marks</span><span class="mp-note"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task">
+      <p class="task-label"><span>Practice question 5</span><span class="pts">1 point</span></p>
+      <h4>5. Identify the type of problem for which backward chaining would be more suitable. [1]</h4>
+      <div class="sub-q">
+        <textarea placeholder="Type your answer here…"></textarea>
+        <div class="row"><button class="check-btn">Check answer</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="answer-reveal"><span class="lbl">Answer</span>Goal-driven problems where the possible outcomes are limited and clearly defined</div>
+        <div class="self-mark"><input type="checkbox" id="sm-17"><label for="sm-17">My answer was close enough — award myself the point</label></div>
+      </div>
+    </div>
+
+    <div class="task">
+      <p class="task-label"><span>Practice question 6</span><span class="pts">4 points</span></p>
+      <h4>6. Explain two scenarios where an expert system can be used. (4 marks)</h4>
+      <div class="sub-q mp" data-max="4">
+        <textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea>
+        <div class="row"><button class="check-btn">Show mark points</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="markpoints">
+          <span class="lbl">Mark points — 1 mark for identifying each scenario + 1 mark for its explanation (up to 4)</span>
+          <label class="mp-item"><input type="checkbox"><span>Medical diagnosis: asks questions about a patient's symptoms and outputs a list of possible matching conditions in order of closest match</span></label>
+          <label class="mp-item"><input type="checkbox"><span>Car engine fault diagnosis: on-board diagnostics monitors engine performance, lights a dashboard warning, and gives a mechanic's diagnostic tool a code (DTC) to find and fix the fault</span></label>
+          <label class="mp-item"><input type="checkbox"><span>Financial planning / investment analysis: takes personal financial data to help manage debt, taxes or retirement, or analyses stock markets and risk for investments</span></label>
+          <label class="mp-item"><input type="checkbox"><span>Insurance planning: asks personal questions online to decide if a policy can be issued and shows its cost and benefits</span></label>
+          <label class="mp-item"><input type="checkbox"><span>Plant and animal identification: matches entered characteristics against its rules and knowledge base to identify a plant or animal</span></label>
+          <label class="mp-item"><input type="checkbox"><span>Route scheduling for delivery vehicles: calculates the shortest distance or quickest time for deliveries and recommends driver and vehicle numbers</span></label>
+          <label class="mp-item"><input type="checkbox"><span>Mineral prospecting (e.g. PROSPECTOR): examines soil type and land topography to calculate the probability of minerals being present before digging</span></label>
+          <div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task">
+      <p class="task-label"><span>Practice question 7</span><span class="pts">4 points</span></p>
+      <h4>7. Explain two advantages and two disadvantages of expert systems. (4 marks)</h4>
+      <div class="sub-q mp" data-max="4">
+        <textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea>
+        <div class="row"><button class="check-btn">Show mark points</button></div>
+        <p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p>
+        <div class="markpoints">
+          <span class="lbl">Mark points — tick up to two advantages and two disadvantages (up to 4)</span>
+          <label class="mp-item"><input type="checkbox"><span>Advantage: Can provide answers outside your current knowledge, or prompt/guide professionals to areas they may not have considered</span></label>
+          <label class="mp-item"><input type="checkbox"><span>Advantage: Produces consistent logical responses, can explain its logic, can be used at any time (24/7), or can solve problems quicker than a human</span></label>
+          <label class="mp-item"><input type="checkbox"><span>Disadvantage: Lacks human intuition (responses are purely logical), or cannot adapt to new/extraordinary situations without editing the knowledge base</span></label>
+          <label class="mp-item"><input type="checkbox"><span>Disadvantage: Only as good as the rules and data provided (errors or outdated rules cause incorrect results), or expensive to create and maintain</span></label>
+          <div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>Cambridge AS &amp; A Level IT · Expert Systems — built for revision, points are just for you.</footer>
+
+<script>
+(function(){
+  const scoreValEl = document.getElementById('score-val');
+  const scoreMaxEl = document.getElementById('score-max');
+  let score = 0;
+  function addScore(n){
+    score += n;
+    if(score < 0) score = 0;
+    scoreValEl.textContent = score;
+  }
+
+  // Work out the maximum score from what is actually on the page
+  let max = 0;
+  document.querySelectorAll('.self-mark input[type=checkbox]').forEach(function(cb){
+    max += parseInt(cb.dataset.points || '1', 10);
+  });
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    max += parseInt(sq.dataset.max, 10);
+  });
+  max += document.querySelectorAll('.classify-item').length;
+  max += document.querySelectorAll('.mcq').length;
+  scoreMaxEl.textContent = max;
+
+  // Tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // Written questions with one self-marked point each
+  document.querySelectorAll('.sub-q:not(.mp)').forEach(function(sq){
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const reveal = sq.querySelector('.answer-reveal');
+    const mark = sq.querySelector('.self-mark');
+    const checkbox = mark ? mark.querySelector('input[type=checkbox]') : null;
+    if(!btn || !reveal || !mark) return;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        reveal.classList.remove('show');
+        mark.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      reveal.classList.add('show');
+      mark.classList.add('show');
+    });
+
+    if(checkbox){
+      checkbox.addEventListener('change', function(){
+        const pts = parseInt(checkbox.dataset.points || '1', 10);
+        addScore(checkbox.checked ? pts : -pts);
+      });
+    }
+  });
+
+  // Extended answers: tick the mark points you covered, capped at the maximum
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    const cap = parseInt(sq.dataset.max, 10);
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const panel = sq.querySelector('.markpoints');
+    const note = sq.querySelector('.mp-note');
+    const count = sq.querySelector('.mp-count');
+    const boxes = panel.querySelectorAll('input[type=checkbox]');
+    let awarded = 0;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        panel.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      panel.classList.add('show');
+    });
+
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if(cb.checked){
+          if(awarded >= cap){
+            cb.checked = false;
+            note.textContent = "That's already full marks (" + cap + "). Untick a point first to swap it.";
+            return;
+          }
+          awarded += 1;
+          addScore(1);
+        } else {
+          awarded -= 1;
+          addScore(-1);
+        }
+        note.textContent = '';
+        count.textContent = awarded + ' / ' + cap + ' marks';
+      });
+    });
+  });
+
+  // Sort-it tasks
+  document.querySelectorAll('.classify-item').forEach(function(item){
+    const answer = item.dataset.answer;
+    const buttons = item.querySelectorAll('.choices button');
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){
+        buttons.forEach(function(other){ other.disabled = true; });
+        if(b.dataset.choice === answer){
+          b.classList.add('correct');
+          addScore(1);
+        } else {
+          b.classList.add('incorrect');
+          buttons.forEach(function(other){
+            if(other.dataset.choice === answer) other.classList.add('correct');
+          });
+        }
+      });
+    });
+  });
+
+  // Quick checks
+  document.querySelectorAll('.mcq').forEach(function(mcq){
+    const correctIdx = mcq.dataset.answer;
+    const opts = mcq.querySelectorAll('.opt');
+    const feedback = mcq.querySelector('.mcq-feedback');
+    opts.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        opts.forEach(function(o){ o.disabled = true; });
+        if(opt.dataset.idx === correctIdx){
+          opt.classList.add('correct');
+          feedback.textContent = 'Correct.';
+          feedback.className = 'mcq-feedback ok';
+          addScore(1);
+        } else {
+          opt.classList.add('incorrect');
+          opts.forEach(function(o){
+            if(o.dataset.idx === correctIdx) o.classList.add('correct');
+          });
+          feedback.textContent = 'Not quite — the correct answer is highlighted above.';
+          feedback.className = 'mcq-feedback bad';
+        }
+      });
+    });
+  });
+})();
+</script>
+<script>
+(function(){
+  var STORE_KEY = 'ict-lesson-progress::' + location.pathname + '::' + document.title;
+
+  function load(){
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+    catch(e){ return {}; }
+  }
+  function save(mutator){
+    try {
+      var s = load();
+      mutator(s);
+      localStorage.setItem(STORE_KEY, JSON.stringify(s));
+    } catch(e){ /* storage unavailable or full: fail silently */ }
+  }
+  function all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+  function all_in(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); }
+
+  var subQs      = all('.sub-q:not(.mp)');
+  var mpQs       = all('.sub-q.mp');
+  var classifyIt = all('.classify-item');
+  var mcqs       = all('.mcq');
+
+  // ---- SAVE: listen alongside the page's own handlers ----
+
+  subQs.forEach(function(sq, i){
+    var key = 'subq-' + i;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var cb = sq.querySelector('.self-mark input[type=checkbox]');
+    if(ta) ta.addEventListener('input', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+    });
+    if(btn) btn.addEventListener('click', function(){
+      save(function(s){
+        s[key] = s[key] || {};
+        s[key].text = ta ? ta.value : '';
+        s[key].checked = !!(ta && ta.value.trim());
+      });
+    });
+    if(cb) cb.addEventListener('change', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].selfMarked = cb.checked; });
+    });
+  });
+
+  mpQs.forEach(function(sq, i){
+    var key = 'mp-' + i;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var boxes = all_in(sq, '.markpoints input[type=checkbox]');
+    if(ta) ta.addEventListener('input', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+    });
+    if(btn) btn.addEventListener('click', function(){
+      save(function(s){
+        s[key] = s[key] || {};
+        s[key].text = ta ? ta.value : '';
+        s[key].shown = !!(ta && ta.value.trim());
+      });
+    });
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        save(function(s){
+          s[key] = s[key] || {};
+          var ticked = [];
+          boxes.forEach(function(b, bi){ if(b.checked) ticked.push(bi); });
+          s[key].ticked = ticked;
+        });
+      });
+    });
+  });
+
+  classifyIt.forEach(function(item, i){
+    all_in(item, '.choices button').forEach(function(b, bi){
+      b.addEventListener('click', function(){
+        save(function(s){ s['classify-' + i] = bi; });
+      });
+    });
+  });
+
+  mcqs.forEach(function(mcq, i){
+    all_in(mcq, '.opt').forEach(function(o, oi){
+      o.addEventListener('click', function(){
+        save(function(s){ s['mcq-' + i] = oi; });
+      });
+    });
+  });
+
+  // ---- RESTORE: replay stored answers as real clicks ----
+
+  (function restore(){
+    var s = load();
+
+    subQs.forEach(function(sq, i){
+      var rec = s['subq-' + i];
+      if(!rec) return;
+      var ta = sq.querySelector('textarea');
+      var btn = sq.querySelector('.check-btn');
+      var cb = sq.querySelector('.self-mark input[type=checkbox]');
+      if(ta && rec.text) ta.value = rec.text;
+      if(rec.checked && btn) btn.click();
+      if(rec.selfMarked && cb){
+        cb.checked = true;
+        cb.dispatchEvent(new Event('change'));
+      }
+    });
+
+    mpQs.forEach(function(sq, i){
+      var rec = s['mp-' + i];
+      if(!rec) return;
+      var ta = sq.querySelector('textarea');
+      var btn = sq.querySelector('.check-btn');
+      var boxes = all_in(sq, '.markpoints input[type=checkbox]');
+      if(ta && rec.text) ta.value = rec.text;
+      if(rec.shown && btn) btn.click();
+      (rec.ticked || []).forEach(function(bi){
+        if(boxes[bi]){
+          boxes[bi].checked = true;
+          boxes[bi].dispatchEvent(new Event('change'));
+        }
+      });
+    });
+
+    classifyIt.forEach(function(item, i){
+      var bi = s['classify-' + i];
+      if(bi === undefined) return;
+      var buttons = item.querySelectorAll('.choices button');
+      if(buttons[bi]) buttons[bi].click();
+    });
+
+    mcqs.forEach(function(mcq, i){
+      var oi = s['mcq-' + i];
+      if(oi === undefined) return;
+      var opts = mcq.querySelectorAll('.opt');
+      if(opts[oi]) opts[oi].click();
+    });
+  })();
+
+  // ---- Small "reset my answers" control (two-click inline confirmation) ----
+  var resetBtn = document.createElement('button');
+  resetBtn.textContent = 'Reset my answers';
+  resetBtn.setAttribute('type', 'button');
+  resetBtn.style.cssText = 'position:fixed;bottom:14px;left:14px;z-index:50;font-family:JetBrains Mono,monospace;'
+    + 'font-size:11px;padding:7px 11px;background:#141b2e;border:1px solid #40557d;'
+    + 'color:#9ba4bc;border-radius:3px;cursor:pointer;';
+  var armed = false;
+  var armTimer = null;
+  resetBtn.addEventListener('mouseenter', function(){ if(!armed) resetBtn.style.color = '#e7e9f1'; });
+  resetBtn.addEventListener('mouseleave', function(){ if(!armed) resetBtn.style.color = '#9ba4bc'; });
+  resetBtn.addEventListener('click', function(){
+    if(!armed){
+      armed = true;
+      resetBtn.textContent = 'Click again to confirm reset';
+      resetBtn.style.borderColor = '#e0685c';
+      resetBtn.style.color = '#e0685c';
+      clearTimeout(armTimer);
+      armTimer = setTimeout(function(){
+        armed = false;
+        resetBtn.textContent = 'Reset my answers';
+        resetBtn.style.borderColor = '#40557d';
+        resetBtn.style.color = '#9ba4bc';
+      }, 3500);
+      return;
+    }
+    try { localStorage.removeItem(STORE_KEY); } catch(e){}
+    location.reload();
+  });
+  document.body.appendChild(resetBtn);
+})();
+</script>
+</body>
+</html>

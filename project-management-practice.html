@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Management — Practice &amp; Revision — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --bg-deep:#090d18;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#04141a;}
+
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 24px 120px; }
+
+  nav.theory-nav{
+    max-width:760px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:44px 24px 34px; max-width:760px; margin:0 auto; border-bottom:1px solid var(--trace); text-align:left;
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,36px);
+    line-height:1.15; margin:0 0 14px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:64ch; margin:0; font-size:17px; }
+
+  nav.tabs{
+    max-width:760px; margin:0 auto; padding:14px 24px; display:flex; gap:6px;
+    overflow-x:auto; border-bottom:1px solid var(--trace); position:sticky; top:0;
+    background:rgba(13,18,32,.95); backdrop-filter: blur(4px); z-index:30;
+  }
+  nav.tabs button{
+    font-family:var(--mono); font-size:12.5px; white-space:nowrap; background:transparent;
+    border:1px solid var(--trace); color:var(--paper-dim); padding:8px 13px;
+    border-radius:var(--radius); cursor:pointer; flex-shrink:0;
+  }
+  nav.tabs button:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  nav.tabs button.active{ background:var(--signal); color:#04141a; border-color:var(--signal); font-weight:500; }
+
+  .panel{ display:none; padding:36px 0 8px; }
+  .panel.active{ display:block; }
+
+  h2.section-title{
+    font-family:var(--mono); font-size:22px; color:var(--signal-bright);
+    margin:0 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2.section-title .tag{
+    font-size:12px; color:var(--sage); border:1px solid var(--trace);
+    padding:2px 7px; border-radius:var(--radius);
+  }
+  h3{ font-family:var(--mono); font-size:16px; color:var(--gold); margin:24px 0 8px; font-weight:500; }
+  p{margin:10px 0;}
+  ul, ol{padding-left:22px; margin:10px 0;}
+  li{margin:4px 0;}
+  strong{color:var(--paper); font-weight:600;}
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0 8px; font-size:15px; }
+  th,td{ border:1px solid var(--trace); padding:8px 10px; text-align:left; vertical-align:top; }
+  th{ font-family:var(--mono); font-size:12px; color:var(--sage); font-weight:500; background:rgba(134,201,160,0.06); }
+  .table-scroll{ overflow-x:auto; }
+
+  .block{ border-left:2px solid var(--trace); padding-left:18px; margin:16px 0; }
+
+  .task{ margin:28px 0; border:1px solid var(--trace); border-radius:var(--radius); background: var(--bg-raised); padding:20px 20px 22px; }
+  .task-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .task-label .pts{color:var(--sage);}
+  .task h4{ margin:0 0 12px; font-family:var(--serif); font-weight:600; font-size:16.5px; color:var(--paper); }
+  .task .sub-q{margin:18px 0;}
+  .task .sub-q:first-child{margin-top:0;}
+  .sub-q label{ display:block; font-family:var(--serif); font-size:15.5px; margin-bottom:8px; color:var(--paper); }
+
+  textarea{
+    width:100%; min-height:52px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-radius:var(--radius); color:var(--paper); font-family:var(--serif);
+    font-size:15.5px; padding:10px 12px; resize:vertical;
+  }
+  textarea:focus, button:focus-visible, .opt:focus-visible, .choice-btn:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:1px; }
+  .row{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+
+  button{
+    font-family:var(--mono); font-size:13px; background:var(--signal); color:#04141a;
+    border:none; padding:9px 15px; border-radius:var(--radius); cursor:pointer; font-weight:500;
+  }
+  button:hover{background:var(--signal-bright);}
+  button.ghost{ background:transparent; border:1px solid var(--trace); color:var(--paper-dim); }
+  button.ghost:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  button:disabled{opacity:.5; cursor:default;}
+
+  .error-msg{ color:var(--brick); font-family:var(--mono); font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show{display:block;}
+
+  .answer-reveal{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .answer-reveal.show{display:block;}
+  .answer-reveal .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:5px; }
+
+  .self-mark{ display:none; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:13px; color:var(--paper-dim); }
+  .self-mark.show{display:flex;}
+  .self-mark input[type=checkbox]{ width:17px; height:17px; accent-color: var(--gold); cursor:pointer; }
+  .self-mark label{cursor:pointer; margin:0; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+
+  .markpoints{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .markpoints.show{display:block;}
+  .markpoints .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:6px; }
+  .markpoints .mp-item{
+    display:flex; gap:10px; align-items:flex-start; margin:0; padding:7px 0;
+    border-bottom:1px solid var(--trace-dim); font-size:15px; font-weight:400; cursor:pointer;
+  }
+  .markpoints .mp-item:last-of-type{border-bottom:none;}
+  .markpoints .mp-item input{ width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--gold); cursor:pointer; }
+  .mp-foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; font-family:var(--mono); font-size:13px; }
+  .mp-count{ color:var(--gold); }
+  .mp-note{ color:var(--brick); }
+
+  /* MCQ Styles */
+  .mcq{margin:20px 0;}
+  .mcq:first-of-type{margin-top:0;}
+  .mcq p.q{ font-family:var(--serif); font-size:15.5px; color:var(--paper); margin:0 0 10px; }
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:10px 13px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer; font-weight:400;
+  }
+  .opt:hover:not(:disabled){border-color:var(--signal); background:var(--bg-deep);}
+  .opt.correct{border-color:var(--sage); background:rgba(134,201,160,0.14);}
+  .opt.incorrect{border-color:var(--brick); background:rgba(224,104,92,0.14);}
+  .opt:disabled{cursor:default;}
+  .mcq-feedback{ font-family:var(--mono); font-size:13px; margin-top:8px; min-height:1.2em; }
+  .mcq-feedback.ok{color:var(--sage);}
+  .mcq-feedback.bad{color:var(--brick);}
+
+  /* Matcher Styles */
+  .classify-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 0; border-bottom:1px solid var(--trace-dim); flex-wrap:wrap;
+  }
+  .classify-item:last-child{border-bottom:none;}
+  .classify-item .term{font-size:15px; max-width:62%;}
+  .classify-item .choices{display:flex; gap:8px; flex-wrap:wrap;}
+  .classify-item .choices button{
+    background:transparent; border:1px solid var(--trace); color:var(--paper-dim);
+    font-size:12px; padding:6px 10px;
+  }
+  .classify-item .choices button:hover:not(:disabled){ color:var(--paper); border-color:var(--paper-dim); }
+  .classify-item .choices button.correct{background:rgba(134,201,160,0.16); border-color:var(--sage); color:var(--paper);}
+  .classify-item .choices button.incorrect{background:rgba(224,104,92,0.16); border-color:var(--brick); color:var(--paper);}
+  @media (max-width:600px){ .classify-item .term{max-width:100%;} }
+
+  /* Simulation Styles */
+  .sim-scenario{
+    background:var(--bg-raised); border:1px solid var(--trace); border-radius:var(--radius);
+    padding:22px; margin:20px 0;
+  }
+  .sim-tag{
+    font-family:var(--mono); font-size:11.5px; color:var(--sage);
+    border:1px solid var(--trace); padding:2px 8px; border-radius:var(--radius);
+    display:inline-block; margin-bottom:12px;
+  }
+  .sim-title{ font-family:var(--serif); font-size:18px; font-weight:600; color:var(--signal-bright); margin:0 0 10px; }
+  .sim-desc{ font-size:15.5px; color:var(--paper); margin:0 0 16px; }
+  .sim-choices{ display:flex; flex-direction:column; gap:9px; margin-bottom:14px; }
+  .sim-choice-btn{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:11px 14px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer;
+  }
+  .sim-choice-btn:hover:not(:disabled){ border-color:var(--signal); }
+  .sim-choice-btn.chosen-correct{ border-color:var(--sage); background:rgba(134,201,160,0.14); }
+  .sim-choice-btn.chosen-wrong{ border-color:var(--brick); background:rgba(224,104,92,0.14); }
+  .sim-feedback{
+    display:none; font-family:var(--serif); font-size:14.5px; line-height:1.6;
+    padding:12px 14px; border-radius:var(--radius); margin-top:10px;
+  }
+  .sim-feedback.show{ display:block; }
+  .sim-feedback.ok{ background:rgba(134,201,160,0.08); border-left:3px solid var(--sage); color:var(--paper); }
+  .sim-feedback.bad{ background:rgba(224,104,92,0.08); border-left:3px solid var(--brick); color:var(--paper); }
+
+  /* 3D Flashcards Styles */
+  .flash-progress-row{
+    padding:14px 0 0; display:flex; align-items:center; gap:14px;
+    font-family:var(--mono); font-size:12.5px; color:var(--paper-dim);
+  }
+  .flash-progress-bar{ flex:1; height:6px; background:var(--trace-dim); border-radius:4px; overflow:hidden; }
+  .flash-progress-fill{ height:100%; background:var(--sage); width:0%; transition:width .3s ease; }
+  .flash-progress-text{ white-space:nowrap; }
+
+  .flash-controls-row{
+    padding:10px 0 0; display:flex; justify-content:flex-end; gap:8px;
+  }
+  .flash-controls-row button{
+    font-family:var(--mono); font-size:11.5px; background:transparent; border:1px solid var(--trace);
+    color:var(--paper-dim); padding:6px 11px; border-radius:var(--radius); cursor:pointer;
+  }
+  .flash-controls-row button:hover{ color:var(--paper); border-color:var(--paper-dim); }
+
+  .flash-stage{ padding:24px 0 0; }
+  .card-scene{ perspective:1400px; height:310px; }
+  .card{
+    position:relative; width:100%; height:100%; cursor:pointer;
+    transform-style:preserve-3d; transition:transform .5s cubic-bezier(.2,.7,.3,1);
+  }
+  .card.flipped{ transform:rotateY(180deg); }
+  .card-face{
+    position:absolute; inset:0; backface-visibility:hidden;
+    border:1px solid var(--trace); border-radius:6px; background:var(--bg-raised);
+    padding:24px; display:flex; flex-direction:column;
+  }
+  .card-face.back{ transform:rotateY(180deg); border-color:var(--sage); }
+  .card-topic{
+    font-family:var(--mono); font-size:11px; color:var(--sage);
+    border:1px solid var(--trace); display:inline-block; padding:2px 8px; border-radius:var(--radius);
+    align-self:flex-start; margin-bottom:14px;
+  }
+  .card-face.back .card-topic{ color:var(--signal-bright); border-color:var(--signal); }
+  .card-label{ font-family:var(--mono); font-size:11px; color:var(--paper-dim); margin-bottom:10px; letter-spacing:.03em; }
+  .card-text{ font-size:19.5px; line-height:1.5; color:var(--paper); flex:1; display:flex; align-items:center; }
+  .card-hint{ font-family:var(--mono); font-size:12px; color:var(--paper-dim); text-align:center; margin-top:auto; opacity:.85; }
+
+  .action-row{ display:flex; gap:12px; margin-top:18px; }
+  .action-btn{
+    flex:1; font-family:var(--mono); font-size:13.5px; padding:13px 10px; border-radius:var(--radius);
+    cursor:pointer; border:1px solid var(--trace); background:var(--bg-raised); color:var(--paper-dim);
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .action-btn:hover{ color:var(--paper); }
+  .action-btn.learning{ border-color:var(--brick); }
+  .action-btn.learning:hover{ background:rgba(224,104,92,0.12); color:var(--paper); }
+  .action-btn.know{ border-color:var(--sage); }
+  .action-btn.know:hover{ background:rgba(134,201,160,0.12); color:var(--paper); }
+
+  .nudge{ text-align:center; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); margin-top:12px; min-height:1.4em; }
+  .nudge.show{ color:var(--signal-bright); }
+
+  .complete-panel{
+    text-align:center; padding:50px 24px; border:1px solid var(--sage); border-radius:6px; background:var(--bg-raised);
+  }
+  .complete-panel h2{ font-family:var(--mono); color:var(--sage); font-size:22px; margin:0 0 12px; }
+  .complete-panel p{ color:var(--paper-dim); margin:0 0 20px; }
+
+  #score-badge{
+    position:fixed; top:14px; right:14px; z-index:50; font-family:var(--mono); font-size:13px;
+    background:var(--bg-raised); border:1px solid var(--signal); color:var(--signal-bright);
+    padding:8px 13px; border-radius:var(--radius); box-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  #score-badge .n{color:var(--gold); font-weight:700;}
+
+  footer{ max-width:760px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); text-align:center; }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    header.hero{padding:36px 20px 26px;}
+    #score-badge{top:auto; bottom:14px; right:14px;}
+    .card-scene{ height:280px; }
+    .card-text{ font-size:17.5px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .card{ transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="score-badge">Score: <span class="n" id="score-val">0</span> / <span id="score-max">0</span></div>
+
+<nav class="theory-nav">
+  <a href="project-management-as-a-level-it.html">← <span class="full">Previous theory:</span> Project Management</a>
+  <span class="spacer"></span>
+  <a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a>
+</nav>
+
+<header class="hero">
+  <p class="kicker">Cambridge AS &amp; A Level IT · Practice &amp; Revision</p>
+  <h1 class="title">Project Management — Practice &amp; Revision</h1>
+  <p>Test your understanding across all three sections: step into real project management dilemmas in the roleplay simulator, master textbook terminology with 3D flashcards, sharpen your sorting speed in the matcher, and practice exam questions.</p>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-panel="roleplay">Roleplay sim</button>
+  <button class="tab-btn" data-panel="flashcards">Flashcards</button>
+  <button class="tab-btn" data-panel="matcher">Matcher</button>
+  <button class="tab-btn" data-panel="quiz">Quiz</button>
+  <button class="tab-btn" data-panel="textbook">Textbook Qs</button>
+</nav>
+
+<div class="wrap">
+
+<!-- ================= 1. ROLEPLAY SIMULATOR ================= -->
+<div class="panel active" id="panel-roleplay">
+  <h2 class="section-title">Project Manager Dilemmas <span class="tag">Sim</span></h2>
+  <p>You have been appointed lead project manager to deliver a brand-new IT infrastructure for a commercial company. Work through each critical decision point below. Each correct strategic decision earns 1 point toward your total score.</p>
+
+  <!-- Sim 1 -->
+  <div class="sim-scenario" data-sim="0" data-answer="1">
+    <span class="sim-tag">Mission 1 · Initiation Stage</span>
+    <h3 class="sim-title">Defining the 150-Workstation Scope</h3>
+    <p class="sim-desc">During the initiation phase for installing a new IT network, the company board requests that you also oversee digging the road outside to hook up high-voltage commercial mains electricity to the building. What is your correct managerial determination?</p>
+    <div class="sim-choices">
+      <button class="sim-choice-btn" data-idx="0">A. Include it as an internal milestone and assign your junior network technicians to dig the road trench.</button>
+      <button class="sim-choice-btn" data-idx="1">B. Declare connecting the external electricity supply "out of scope" and have it outsourced to the local power company.</button>
+      <button class="sim-choice-btn" data-idx="2">C. List it as an internal success criterion and absorb the power cabling directly into your software licensing budget.</button>
+    </div>
+    <div class="sim-feedback"></div>
+  </div>
+
+  <!-- Sim 2 -->
+  <div class="sim-scenario" data-sim="1" data-answer="2">
+    <span class="sim-tag">Mission 2 · Software Licensing</span>
+    <h3 class="sim-title">Selecting Tooling for Distributed Teams</h3>
+    <p class="sim-desc">Your project team consists of 12 system architects across offices in London and Singapore, plus 4 client stakeholders who require live visibility into milestones. The client suggests purchasing single-user personal licences to cut initial expenditure. How do you respond?</p>
+    <div class="sim-choices">
+      <button class="sim-choice-btn" data-idx="0">A. Accept the personal licences; team members can simply share one desktop password via email.</button>
+      <button class="sim-choice-btn" data-idx="1">B. Purchase a single-user licence; only the lead project manager ever needs to log into the software.</button>
+      <button class="sim-choice-btn" data-idx="2">C. Procure web-based collaborative project management software so distributed members and stakeholders can log in simultaneously.</button>
+    </div>
+    <div class="sim-feedback"></div>
+  </div>
+
+  <!-- Sim 3 -->
+  <div class="sim-scenario" data-sim="2" data-answer="0">
+    <span class="sim-tag">Mission 3 · Planning &amp; Milestones</span>
+    <h3 class="sim-title">Electrical Contracting Efficiency</h3>
+    <p class="sim-desc">You are scheduling building preparation tasks including high-power wall cabling, server room sockets, and rack power strips. An external master electrician charges a call-out fee for every booking. How should these tasks be planned?</p>
+    <div class="sim-choices">
+      <button class="sim-choice-btn" data-idx="0">A. Group all electrical tasks into one coordinated milestone so the electrician is hired once to complete all wiring efficiently.</button>
+      <button class="sim-choice-btn" data-idx="1">B. Spread the electrical tasks across three separate milestones across two months to keep daily spending figures lower.</button>
+      <button class="sim-choice-btn" data-idx="2">C. Hire the electrician continuously on a daily retainer throughout software testing so they are always in the building.</button>
+    </div>
+    <div class="sim-feedback"></div>
+  </div>
+
+  <!-- Sim 4 -->
+  <div class="sim-scenario" data-sim="3" data-answer="1">
+    <span class="sim-tag">Mission 4 · Execution Crisis</span>
+    <h3 class="sim-title">Supply Chain Disruption &amp; Inflation</h3>
+    <p class="sim-desc">Halfway through execution, an unexpected international supply chain shortage causes the unit cost of enterprise server processors to triple, threatening to blow past the agreed budget ceiling. What is your mandatory protocol?</p>
+    <div class="sim-choices">
+      <button class="sim-choice-btn" data-idx="0">A. Keep purchasing the expensive processors in secret and bill the cost overrun to the client after sign-off.</button>
+      <button class="sim-choice-btn" data-idx="1">B. Discuss the cost surge immediately with the stakeholders to agree on a budget revision, alternative hardware, or potential cancellation.</button>
+      <button class="sim-choice-btn" data-idx="2">C. Cancel the project close review and fire the hardware installation team to offset the chip price.</button>
+    </div>
+    <div class="sim-feedback"></div>
+  </div>
+
+  <!-- Sim 5 -->
+  <div class="sim-scenario" data-sim="4" data-answer="2">
+    <span class="sim-tag">Mission 5 · Resource Allocation</span>
+    <h3 class="sim-title">Preventing Team Member Burnout</h3>
+    <p class="sim-desc">During month three, your project management dashboard indicates that Senior Engineer Alex has been assigned 4 simultaneous critical-path server configuration tasks across the exact same calendar week. What risk must you mitigate?</p>
+    <div class="sim-choices">
+      <button class="sim-choice-btn" data-idx="0">A. No mitigation needed; assigning multiple tasks to one person ensures uniform quality across all four jobs.</button>
+      <button class="sim-choice-btn" data-idx="1">B. Offer Alex double overtime pay so they work 24 hours a day through the weekend.</button>
+      <button class="sim-choice-btn" data-idx="2">C. Reallocate tasks; over-allocating one person leads to severe stress, rushed tasks, and sub-standard quality.</button>
+    </div>
+    <div class="sim-feedback"></div>
+  </div>
+
+  <!-- Sim 6 -->
+  <div class="sim-scenario" data-sim="5" data-answer="0">
+    <span class="sim-tag">Mission 6 · Project Close</span>
+    <h3 class="sim-title">Formal Handover &amp; Contract Sign-off</h3>
+    <p class="sim-desc">The IT system is fully deployed and user testing is satisfied. The client indicates verbal satisfaction. What formal procedure completes the project close stage?</p>
+    <div class="sim-choices">
+      <button class="sim-choice-btn" data-idx="0">A. The client formally signs off the project, worker contracts are closed, resources are released, and a post-project review is stored.</button>
+      <button class="sim-choice-btn" data-idx="1">B. Automatically roll the project back into the planning stage to begin redesigning the network from scratch.</button>
+      <button class="sim-choice-btn" data-idx="2">C. Keep worker contracts open indefinitely in case the client decides to add new features next year.</button>
+    </div>
+    <div class="sim-feedback"></div>
+  </div>
+</div>
+
+<!-- ================= 2. FLASHCARDS ================= -->
+<div class="panel" id="panel-flashcards">
+  <h2 class="section-title">3D Flashcards <span class="tag">Deck</span></h2>
+  <p>Test your recall of key terms and concepts across all three sections. Click any card (or tap Space/Enter) to reveal the back, then evaluate your answer.</p>
+
+  <div class="flash-progress-row">
+    <span class="flash-progress-text" id="progress-text">0 mastered · 0 remaining</span>
+    <div class="flash-progress-bar"><div class="flash-progress-fill" id="progress-fill"></div></div>
+    <span class="flash-progress-text" id="progress-total">of 0</span>
+  </div>
+
+  <div class="flash-controls-row">
+    <button id="reset-deck-btn" type="button">↺ Reset progress</button>
+    <button id="shuffle-deck-btn" type="button">🔀 Shuffle remaining</button>
+  </div>
+
+  <div class="flash-stage" id="flash-stage">
+    <div class="card-scene">
+      <div class="card" id="card">
+        <div class="card-face front">
+          <span class="card-topic" id="topic-front">Topic</span>
+          <span class="card-label">QUESTION / CONCEPT</span>
+          <div class="card-text" id="question-text">Loading…</div>
+          <div class="card-hint">Click the card (or press Space) to flip</div>
+        </div>
+        <div class="card-face back">
+          <span class="card-topic" id="topic-back">Topic</span>
+          <span class="card-label">EXPLANATION / ANSWER</span>
+          <div class="card-text" id="answer-text"></div>
+          <div class="card-hint">Click again to flip back</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="action-btn learning" id="btn-learning" type="button">← Still learning <kbd>←</kbd></button>
+      <button class="action-btn know" id="btn-know" type="button">I know this → <kbd>→</kbd></button>
+    </div>
+    <p class="nudge" id="nudge"></p>
+  </div>
+
+  <div class="flash-stage" id="complete-stage" style="display:none;">
+    <div class="complete-panel">
+      <h2>Deck Complete!</h2>
+      <p>You have reviewed and mastered every project management flashcard.</p>
+      <button id="restart-deck-btn" type="button">Restart Deck</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 3. MATCHER ================= -->
+<div class="panel" id="panel-matcher">
+  <h2 class="section-title">Speed Matcher <span class="tag">Sort</span></h2>
+  <p>Test your conceptual boundaries. Fast-sort each feature, scenario, or attribute to its exact category. Each correct sorting match earns 1 point.</p>
+
+  <div class="task">
+    <p class="task-label"><span>Part 1 · Project Management Tools (CPM vs. PERT vs. Gantt vs. WBS)</span><span class="pts">8 points</span></p>
+    <h4>Click the tool or technique that matches each description:</h4>
+    <div class="classify-list">
+      <div class="classify-item" data-answer="pert">
+        <span class="term">Uses optimistic, most likely, and pessimistic time estimates for uncertain activities</span>
+        <span class="choices"><button data-choice="cpm">CPM</button><button data-choice="pert">PERT</button><button data-choice="gantt">Gantt</button><button data-choice="wbs">WBS</button></span>
+      </div>
+      <div class="classify-item" data-answer="cpm">
+        <span class="term">Requires actual, known task lengths and pinpoints zero-float activities</span>
+        <span class="choices"><button data-choice="cpm">CPM</button><button data-choice="pert">PERT</button><button data-choice="gantt">Gantt</button><button data-choice="wbs">WBS</button></span>
+      </div>
+      <div class="classify-item" data-answer="wbs">
+        <span class="term">Decomposes massive projects hierarchically into phases and sub-tasks to reduce team anxiety</span>
+        <span class="choices"><button data-choice="cpm">CPM</button><button data-choice="pert">PERT</button><button data-choice="gantt">Gantt</button><button data-choice="wbs">WBS</button></span>
+      </div>
+      <div class="classify-item" data-answer="gantt">
+        <span class="term">Horizontal bars plotted against calendar dates with progress shading and a red current-time marker</span>
+        <span class="choices"><button data-choice="cpm">CPM</button><button data-choice="pert">PERT</button><button data-choice="gantt">Gantt</button><button data-choice="wbs">WBS</button></span>
+      </div>
+      <div class="classify-item" data-answer="pert">
+        <span class="term">Specifically suited for non-repetitive R&amp;D projects where duration is unknown</span>
+        <span class="choices"><button data-choice="cpm">CPM</button><button data-choice="pert">PERT</button><button data-choice="gantt">Gantt</button><button data-choice="wbs">WBS</button></span>
+      </div>
+      <div class="classify-item" data-answer="cpm">
+        <span class="term">Directly enables "crashing" by shifting resources away from high-float tasks</span>
+        <span class="choices"><button data-choice="cpm">CPM</button><button data-choice="pert">PERT</button><button data-choice="gantt">Gantt</button><button data-choice="wbs">WBS</button></span>
+      </div>
+      <div class="classify-item" data-answer="wbs">
+        <span class="term">Breaks testing down into sub-components like Black box, White box, and User acceptance</span>
+        <span class="choices"><button data-choice="cpm">CPM</button><button data-choice="pert">PERT</button><button data-choice="gantt">Gantt</button><button data-choice="wbs">WBS</button></span>
+      </div>
+      <div class="classify-item" data-answer="gantt">
+        <span class="term">May require converting working hours into day fractions (e.g., 6 hours = 0.25 days)</span>
+        <span class="choices"><button data-choice="cpm">CPM</button><button data-choice="pert">PERT</button><button data-choice="gantt">Gantt</button><button data-choice="wbs">WBS</button></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="task">
+    <p class="task-label"><span>Part 2 · Four Life Cycle Stages</span><span class="pts">6 points</span></p>
+    <h4>Assign each event to its correct life cycle phase:</h4>
+    <div class="classify-list">
+      <div class="classify-item" data-answer="init">
+        <span class="term">Defining success criteria like "Must have dual monitors per machine"</span>
+        <span class="choices"><button data-choice="init">Initiation</button><button data-choice="plan">Planning</button><button data-choice="exec">Execution</button><button data-choice="close">Close</button></span>
+      </div>
+      <div class="classify-item" data-answer="plan">
+        <span class="term">Allocating specific named resources to upcoming milestones and building the initial Gantt chart</span>
+        <span class="choices"><button data-choice="init">Initiation</button><button data-choice="plan">Planning</button><button data-choice="exec">Execution</button><button data-choice="close">Close</button></span>
+      </div>
+      <div class="classify-item" data-answer="exec">
+        <span class="term">Inspecting electrician cabling quality to catch wiring errors before drywall installation</span>
+        <span class="choices"><button data-choice="init">Initiation</button><button data-choice="plan">Planning</button><button data-choice="exec">Execution</button><button data-choice="close">Close</button></span>
+      </div>
+      <div class="classify-item" data-answer="close">
+        <span class="term">Conducting post-project review to document lessons learned for future initiatives</span>
+        <span class="choices"><button data-choice="init">Initiation</button><button data-choice="plan">Planning</button><button data-choice="exec">Execution</button><button data-choice="close">Close</button></span>
+      </div>
+      <div class="classify-item" data-answer="exec">
+        <span class="term">Generating weekly variance reports for stakeholders comparing actual expenditure to budget</span>
+        <span class="choices"><button data-choice="init">Initiation</button><button data-choice="plan">Planning</button><button data-choice="exec">Execution</button><button data-choice="close">Close</button></span>
+      </div>
+      <div class="classify-item" data-answer="close">
+        <span class="term">Releasing IT technicians and formally closing external contractor agreements</span>
+        <span class="choices"><button data-choice="init">Initiation</button><button data-choice="plan">Planning</button><button data-choice="exec">Execution</button><button data-choice="close">Close</button></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 4. QUIZ ================= -->
+<div class="panel" id="panel-quiz">
+  <h2 class="section-title">Concept Mastery Quiz <span class="tag">MCQ</span></h2>
+  <p>Fresh scenario-based multiple choice questions testing critical path analysis, float arithmetic, software licensing, and life cycle management.</p>
+
+  <div class="task">
+    <p class="task-label"><span>Assessment · 10 Questions</span><span class="pts">10 points</span></p>
+
+    <div class="mcq" data-answer="2">
+      <p class="q">1. If Task X (duration 8 days, EF = Day 14) and Task Y (duration 5 days, EF = Day 19) are both immediate predecessors to Task Z, what is the Earliest Start (ES) of Task Z?</p>
+      <div class="opts">
+        <button class="opt" data-idx="0">Day 14, because Task X finishes first</button>
+        <button class="opt" data-idx="1">Day 33, the sum of both finish times</button>
+        <button class="opt" data-idx="2">Day 19, because ES is the latest EF of all dependent predecessors</button>
+        <button class="opt" data-idx="3">Day 0, because Task Z starts at the beginning of the project</button>
+      </div>
+      <p class="mcq-feedback"></p>
+    </div>
+
+    <div class="mcq" data-answer="1">
+      <p class="q">2. What is the mathematical definition of Float Time for any project task?</p>
+      <div class="opts">
+        <button class="opt" data-idx="0">EF of task + ES of task</button>
+        <button class="opt" data-idx="1">ES of next task − EF of current task</button>
+        <button class="opt" data-idx="2">Duration of the task × cost per hour</button>
+        <button class="opt" data-idx="3">Latest finish date − project start date</button>
+      </div>
+      <p class="mcq-feedback"></p>
+    </div>
+
+    <div class="mcq" data-answer="0">
+      <p class="q">3. What does "crashing" a project task specifically refer to?</p>
+      <div class="opts">
+        <button class="opt" data-idx="0">Assigning extra resources to finish a critical task earlier, often diverted from tasks with high float</button>
+        <button class="opt" data-idx="1">Deleting a task from the project because it exceeded its allocated budget</button>
+        <button class="opt" data-idx="2">A catastrophic server hardware failure during software implementation</button>
+        <button class="opt" data-idx="3">Cancelling worker contracts before client sign-off</button>
+      </div>
+      <p class="mcq-feedback"></p>
+    </div>
+
+    <div class="mcq" data-answer="3">
+      <p class="q">4. Why is PERT preferred over CPM for innovative research and development (R&amp;D) initiatives?</p>
+      <div class="opts">
+        <button class="opt" data-idx="0">PERT is free whereas CPM requires expensive commercial software</button>
+        <button class="opt" data-idx="1">PERT eliminates the need for milestones and dependencies</button>
+        <button class="opt" data-idx="2">CPM only supports desktop computers whereas PERT runs on mobile devices</button>
+        <button class="opt" data-idx="3">PERT models uncertainty using optimistic, likely, and pessimistic estimates rather than fixed known times</button>
+      </div>
+      <p class="mcq-feedback"></p>
+    </div>
+
+    <div class="mcq" data-answer="1">
+      <p class="q">5. A company wants to plan a garden shed construction at a manager's personal residence. Which software licence is legally appropriate?</p>
+      <div class="opts">
+        <button class="opt" data-idx="0">Collaborative enterprise licence</button>
+        <button class="opt" data-idx="1">Personal licence</button>
+        <button class="opt" data-idx="2">Multi-seat commercial licence</button>
+        <button class="opt" data-idx="3">Open-source client sign-off licence</button>
+      </div>
+      <p class="mcq-feedback"></p>
+    </div>
+
+    <div class="mcq" data-answer="2">
+      <p class="q">6. In a Gantt chart, what is signified by a vertical red line drawn across the timeline?</p>
+      <div class="opts">
+        <button class="opt" data-idx="0">The final handover date when client sign-off must occur</button>
+        <button class="opt" data-idx="1">The task with the largest amount of float time</button>
+        <button class="opt" data-idx="2">The current date/time, showing whether tasks are running ahead of or behind schedule</button>
+        <button class="opt" data-idx="3">The boundary where tasks become out of scope</button>
+      </div>
+      <p class="mcq-feedback"></p>
+    </div>
+
+    <div class="mcq" data-answer="0">
+      <p class="q">7. Why is grouping electrical tasks into a single milestone recommended during the planning stage?</p>
+      <div class="opts">
+        <button class="opt" data-idx="0">It is more efficient and cost-effective to hire an external contractor once rather than paying multiple short-term call-outs</button>
+        <button class="opt" data-idx="1">It eliminates the need to verify cabling quality during the execution stage</button>
+        <button class="opt" data-idx="2">It ensures the electrician also configures the network operating systems</button>
+        <button class="opt" data-idx="3">It shortens the critical path to zero days</button>
+      </div>
+      <p class="mcq-feedback"></p>
+    </div>
+
+    <div class="mcq" data-answer="1">
+      <p class="q">8. What is the fundamental difference between a project's "Owner" and a general "Stakeholder"?</p>
+      <div class="opts">
+        <button class="opt" data-idx="0">The owner works for the software vendor; stakeholders are outside suppliers</button>
+        <button class="opt" data-idx="1">The owner is the individual who commissions the project and approves objectives; stakeholders are anyone affected by or interested in the outcome</button>
+        <button class="opt" data-idx="2">The owner monitors daily tasks; stakeholders only sign the final checks</button>
+        <button class="opt" data-idx="3">There is no distinction; the two terms are completely interchangeable in Cambridge IT</button>
+      </div>
+      <p class="mcq-feedback"></p>
+    </div>
+
+    <div class="mcq" data-answer="2">
+      <p class="q">9. Which software export format is most widely supported for transferring project costing data into spreadsheets for custom financial modelling?</p>
+      <div class="opts">
+        <button class="opt" data-idx="0">.exe and .bat</button>
+        <button class="opt" data-idx="1">.mp4 and .avi</button>
+        <button class="opt" data-idx="2">.xlsx and .csv</button>
+        <button class="opt" data-idx="3">.html and .css</button>
+      </div>
+      <p class="mcq-feedback"></p>
+    </div>
+
+    <div class="mcq" data-answer="3">
+      <p class="q">10. When does a project manager produce reports covering time, cost, delays, and quality for stakeholders?</p>
+      <div class="opts">
+        <button class="opt" data-idx="0">Exclusively during the initiation phase before any work is scheduled</button>
+        <button class="opt" data-idx="1">Only after the client has signed off the final invoice</button>
+        <button class="opt" data-idx="2">Once every two years regardless of project duration</button>
+        <button class="opt" data-idx="3">During the project execution and monitoring phase as progress unfolds</button>
+      </div>
+      <p class="mcq-feedback"></p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ================= 5. TEXTBOOK QS & EXAM PRACTICE ================= -->
+<div class="panel" id="panel-textbook">
+  <h2 class="section-title">Written Exam Practice <span class="tag">Self-Mark</span></h2>
+  <p>Practice writing precise Cambridge-standard exam explanations. Type your answers into the textareas first, reveal the marking criteria, and award yourself points based on syllabus coverage.</p>
+
+  <!-- Question 1 -->
+  <div class="task">
+    <p class="task-label"><span>Section 15.1 · Written Response</span><span class="pts">1 point</span></p>
+    <h4>Identify three critical elements determined during the project initiation stage.</h4>
+    <div class="sub-q">
+      <label>Explain what is defined at initiation before detailed scheduling begins:</label>
+      <textarea placeholder="Type your answer here…"></textarea>
+      <div class="row"><button class="check-btn">Check answer</button></div>
+      <p class="error-msg">Please write an attempt first before revealing the answer.</p>
+      <div class="answer-reveal">
+        <span class="lbl">Syllabus Answer (any three of):</span>
+        Project objectives; required resources (people, equipment, time); success criteria (essential non-negotiables); stakeholders and their needs; project scope (what is in or out of scope); high-level project schedule.
+      </div>
+      <div class="self-mark">
+        <input type="checkbox" id="sm-rev-1">
+        <label for="sm-rev-1">My answer correctly identified at least three valid initiation elements</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Question 2 -->
+  <div class="task">
+    <p class="task-label"><span>Section 15.2 · Written Response</span><span class="pts">1 point</span></p>
+    <h4>Explain why over-allocating tasks to a single human resource harms project success.</h4>
+    <div class="sub-q">
+      <label>Discuss the human impact and deliverables impact of overloading staff:</label>
+      <textarea placeholder="Type your answer here…"></textarea>
+      <div class="row"><button class="check-btn">Check answer</button></div>
+      <p class="error-msg">Please write an attempt first before revealing the answer.</p>
+      <div class="answer-reveal">
+        <span class="lbl">Syllabus Answer:</span>
+        If too many tasks are allocated to one person simultaneously, they cannot complete them on schedule. The team member becomes stressed, rushes the work, and delivers tasks to an inferior or poor standard.
+      </div>
+      <div class="self-mark">
+        <input type="checkbox" id="sm-rev-2">
+        <label for="sm-rev-2">My response covered stress, rushed work, and sub-standard quality</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Question 3 (Multi-mark) -->
+  <div class="task">
+    <p class="task-label"><span>Section 15.2 · Extended Answer</span><span class="pts">4 points</span></p>
+    <h4>An international engineering company is considering implementing cloud-based collaborative project management software. Discuss the advantages and potential drawbacks. (4 marks)</h4>
+    <div class="sub-q mp" data-max="4">
+      <textarea placeholder="Write your full balanced answer here…" style="min-height:110px;"></textarea>
+      <div class="row"><button class="check-btn">Show mark points</button></div>
+      <p class="error-msg">Please write an attempt first before revealing mark points.</p>
+      <div class="markpoints">
+        <span class="lbl">Mark points — tick each one your answer covered (up to 4):</span>
+        <label class="mp-item"><input type="checkbox"><span>Advantage: Enables simultaneous collaboration and real-time updates across distributed international time zones</span></label>
+        <label class="mp-item"><input type="checkbox"><span>Advantage: Automatically updates downstream dependencies and sends automated reminders/alerts when schedules shift</span></label>
+        <label class="mp-item"><input type="checkbox"><span>Advantage: Generates visual outputs (Gantt charts, expenditure graphs) and allows document centralisation</span></label>
+        <label class="mp-item"><input type="checkbox"><span>Drawback: High ongoing cost of purchasing multiple collaborative user licences</span></label>
+        <label class="mp-item"><input type="checkbox"><span>Drawback: Staff require specialised training, which can be disruptive and expensive</span></label>
+        <label class="mp-item"><input type="checkbox"><span>Drawback: Over-reliance risk where team members fail to spot problems if the software raises no automated flag</span></label>
+        <div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Question 4 -->
+  <div class="task">
+    <p class="task-label"><span>Section 15.3 · Network Calculation</span><span class="pts">2 points</span></p>
+    <h4>Consider a project network where Task M takes 4 days with no dependencies. Task N (3 days) and Task P (7 days) both depend on M. Task Q (2 days) depends on both N and P.</h4>
+    <div class="sub-q">
+      <label>State the length of the critical path and identify which task has float time. [2]</label>
+      <textarea placeholder="Type your answer here…"></textarea>
+      <div class="row"><button class="check-btn">Check answer</button></div>
+      <p class="error-msg">Please write an attempt first before revealing the answer.</p>
+      <div class="answer-reveal">
+        <span class="lbl">Worked Calculation:</span>
+        Path 1 (M → N → Q) = 4 + 3 + 2 = 9 days.<br>
+        Path 2 (M → P → Q) = 4 + 7 + 2 = 13 days.<br>
+        <strong>Critical Path:</strong> M → P → Q (length: <strong>13 days</strong>).<br>
+        <strong>Float task:</strong> Task N has <strong>4 days of float</strong> (Task P finishes on Day 11; Task N finishes on Day 7; 11 − 7 = 4 days).
+      </div>
+      <div class="self-mark">
+        <input type="checkbox" id="sm-rev-4">
+        <label for="sm-rev-4">My answer correctly identified 13 days and Task N's 4 days float</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Question 5 (Multi-mark) -->
+  <div class="task">
+    <p class="task-label"><span>Section 15.1 · Extended Answer</span><span class="pts">3 points</span></p>
+    <h4>Explain why the project close stage is essential for an organisation's long-term operations. (3 marks)</h4>
+    <div class="sub-q mp" data-max="3">
+      <textarea placeholder="Write your full answer here…" style="min-height:95px;"></textarea>
+      <div class="row"><button class="check-btn">Show mark points</button></div>
+      <p class="error-msg">Please write an attempt first before revealing mark points.</p>
+      <div class="markpoints">
+        <span class="lbl">Mark points — tick each one your answer covered (up to 3):</span>
+        <label class="mp-item"><input type="checkbox"><span>Client sign-off establishes legal and formal agreement that all deliverables are completed and no further work is owed</span></label>
+        <label class="mp-item"><input type="checkbox"><span>Releases resources and closes worker/contractor agreements so capital and personnel can be redeployed elsewhere</span></label>
+        <label class="mp-item"><input type="checkbox"><span>Carries out a structured post-project review comparing actual performance against schedule, budget, and requirements</span></label>
+        <label class="mp-item"><input type="checkbox"><span>Stores reviews systematically as institutional memory to prevent repeating past mistakes on future projects</span></label>
+        <div class="mp-foot"><span class="mp-count">0 / 3 marks</span><span class="mp-note"></span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+<footer>
+  Cambridge AS &amp; A Level IT · Project Management — Practice &amp; Revision · Built for active student learning.
+</footer>
+
+<!-- Interactive Scripts & LocalStorage Progress Tracking -->
+<script>
+(function(){
+  // --- 1. Flashcards Data & Logic ---
+  var FLASH_CARDS = [
+    {id: "pm1", topic: "15.1 Life Cycle", q: "What are the four main stages of the project life cycle?", a: "1. Project initiation\n2. Project planning\n3. Project execution and monitoring\n4. Project close."},
+    {id: "pm2", topic: "15.1 Life Cycle", q: "What is the primary role of the project owner?", a: "The person (internal staff or external client) who wants the project completed and agrees to the objectives and requirements at the start."},
+    {id: "pm3", topic: "15.1 Life Cycle", q: "Define 'Success Criteria' and give an example for an IT installation.", a: "Essential non-negotiable elements that must be completed (e.g. 'Must have enough machines for 150 people' or 'Must use Windows OS')."},
+    {id: "pm4", topic: "15.1 Life Cycle", q: "What does it mean if a task is 'out of scope'?", a: "It is work that is NOT included in the project boundaries, often outsourced to external entities (e.g. power company connecting electricity)."},
+    {id: "pm5", topic: "15.1 Life Cycle", q: "What is a milestone?", a: "A key calendar date by which a specific stage or set of tasks in a project must be fully completed."},
+    {id: "pm6", topic: "15.1 Life Cycle", q: "Why should an electrician's tasks be grouped into one milestone?", a: "To hire the electrician once to complete wiring and power supply efficiently, avoiding costly multiple call-out fees."},
+    {id: "pm7", topic: "15.1 Life Cycle", q: "What four aspects do stakeholders expect reports on during execution?", a: "1. Time (schedule adherence)\n2. Cost (budget variance)\n3. Delays\n4. Quality of deliverables."},
+    {id: "pm8", topic: "15.1 Life Cycle", q: "What happens when a client 'signs off' a project?", a: "It formally confirms everything is finished as expected: no further work is needed, worker contracts close, and resources are released."},
+    {id: "pm9", topic: "15.1 Life Cycle", q: "Why is a post-project review stored by an organisation?", a: "To record what went well and what went wrong, preventing future projects from repeating the same mistakes."},
+    {id: "pm10", topic: "15.2 Software", q: "What is the limitation of a Personal Software Licence?", a: "It can only be used on a home computer for personal tasks (e.g. garden shed) and cannot be legally used for business purposes."},
+    {id: "pm11", topic: "15.2 Software", q: "What is Collaborative Project Management Software?", a: "Software that allows multiple users, project managers, and stakeholders to log in simultaneously, often web-based across global time zones."},
+    {id: "pm12", topic: "15.2 Software", q: "Why do project tools provide templates for planning?", a: "They allow plans from previous successful projects to be repurposed, establishing common and recognizable organisational structures."},
+    {id: "pm13", topic: "15.2 Software", q: "What risk arises from allocating too many tasks to one person?", a: "The person becomes stressed, rushes tasks, and delivers sub-standard work that fails quality checks."},
+    {id: "pm14", topic: "15.2 Software", q: "How does project management software calculate task costs?", a: "Based on the hourly rate of assigned resources multiplied by hours used, plus any extra team expenses incurred."},
+    {id: "pm15", topic: "15.2 Software", q: "Name two common file formats used to export project cost data.", a: ".xlsx (Excel) and .csv (Comma-Separated Values)."},
+    {id: "pm16", topic: "15.2 Software", q: "What is the Critical Path?", a: "The sequence of dependent tasks that represents the minimum time required to complete the project — any delay on this path delays the final deadline."},
+    {id: "pm17", topic: "15.3 Tools", q: "When can the Critical Path Method (CPM) be used?", a: "Only when the exact duration of each task is known in advance."},
+    {id: "pm18", topic: "15.3 Tools", q: "What is 'Float Time'?", a: "The amount of spare time a task can be delayed before it affects the start of the next dependent task or the project completion date."},
+    {id: "pm19", topic: "15.3 Tools", q: "State the formula for Earliest Finish (EF).", a: "EF = Earliest Start (ES) + length of task."},
+    {id: "pm20", topic: "15.3 Tools", q: "How is the Earliest Start (ES) of a task calculated when it has parallel predecessors?", a: "ES = the latest (maximum) Earliest Finish (EF) among all its dependent predecessor tasks."},
+    {id: "pm21", topic: "15.3 Tools", q: "State the formula for Float Time.", a: "Float time = ES of next dependent task − EF of current task."},
+    {id: "pm22", topic: "15.3 Tools", q: "What is 'crashing' in project management?", a: "Allocating additional resources to a critical-path task to complete it earlier, ideally transferred from tasks with high float."},
+    {id: "pm23", topic: "15.3 Tools", q: "How does PERT differ fundamentally from CPM?", a: "PERT uses three estimated times (optimistic, likely, pessimistic) for uncertain/R&D projects; CPM uses actual fixed times."},
+    {id: "pm24", topic: "15.3 Tools", q: "What three time estimates does PERT require for every activity?", a: "1. Most optimistic time\n2. Most likely time\n3. Most pessimistic time."},
+    {id: "pm25", topic: "15.3 Tools", q: "In a network activity diagram, what do circles and arrows represent?", a: "Circles (nodes) represent milestones/events; arrows represent tasks/activities with their durations."},
+    {id: "pm26", topic: "15.3 Tools", q: "What does a Gantt chart display on its horizontal axis and rows?", a: "The horizontal axis shows a calendar timeline; each row represents a distinct task with start/finish dates and progress shading."},
+    {id: "pm27", topic: "15.3 Tools", q: "What does a Work Breakdown Structure (WBS) do?", a: "A hierarchical decomposition that breaks a large project down into manageable project phases, stages, and sub-tasks."}
+  ];
+
+  var FLASH_STORE_KEY = 'asal-it-pm-practice-flashcards::v1';
+  var totalFlash = FLASH_CARDS.length;
+
+  function loadMasteredFlash(){
+    try { return JSON.parse(localStorage.getItem(FLASH_STORE_KEY)) || []; }
+    catch(e){ return []; }
+  }
+  function saveMasteredFlash(arr){
+    try { localStorage.setItem(FLASH_STORE_KEY, JSON.stringify(arr)); } catch(e){}
+  }
+
+  var masteredFlash = loadMasteredFlash();
+  var masteredFlashSet = {};
+  masteredFlash.forEach(function(id){ masteredFlashSet[id] = true; });
+
+  var flashQueue = FLASH_CARDS.filter(function(c){ return !masteredFlashSet[c.id]; });
+
+  var cardEl = document.getElementById('card');
+  var flashStage = document.getElementById('flash-stage');
+  var completeStage = document.getElementById('complete-stage');
+  var qText = document.getElementById('question-text');
+  var aText = document.getElementById('answer-text');
+  var topicFront = document.getElementById('topic-front');
+  var topicBack = document.getElementById('topic-back');
+  var progressText = document.getElementById('progress-text');
+  var progressTotal = document.getElementById('progress-total');
+  var progressFill = document.getElementById('progress-fill');
+  var btnLearning = document.getElementById('btn-learning');
+  var btnKnow = document.getElementById('btn-know');
+  var nudge = document.getElementById('nudge');
+  var shuffleBtn = document.getElementById('shuffle-deck-btn');
+  var resetBtn = document.getElementById('reset-deck-btn');
+  var restartBtn = document.getElementById('restart-deck-btn');
+
+  var isFlipped = false;
+  var nudgeTimer = null;
+
+  function updateFlashProgress(){
+    var masteredCount = totalFlash - flashQueue.length;
+    progressText.textContent = masteredCount + ' mastered · ' + flashQueue.length + ' remaining';
+    progressTotal.textContent = 'of ' + totalFlash;
+    progressFill.style.width = (totalFlash ? (masteredCount / totalFlash * 100) : 0) + '%';
+  }
+
+  function showNudge(msg){
+    nudge.textContent = msg;
+    nudge.classList.add('show');
+    clearTimeout(nudgeTimer);
+    nudgeTimer = setTimeout(function(){ nudge.classList.remove('show'); nudge.textContent=''; }, 1800);
+  }
+
+  function renderFlashCard(){
+    if(flashQueue.length === 0){
+      flashStage.style.display = 'none';
+      completeStage.style.display = 'block';
+      updateFlashProgress();
+      return;
+    }
+    flashStage.style.display = 'block';
+    completeStage.style.display = 'none';
+    var c = flashQueue[0];
+    qText.textContent = c.q;
+    aText.innerHTML = c.a.replace(/\n/g, '<br>');
+    topicFront.textContent = c.topic;
+    topicBack.textContent = c.topic;
+    isFlipped = false;
+    cardEl.classList.remove('flipped');
+    updateFlashProgress();
+  }
+
+  cardEl.addEventListener('click', function(){
+    isFlipped = !isFlipped;
+    cardEl.classList.toggle('flipped', isFlipped);
+  });
+
+  function handleKnow(){
+    if(!isFlipped){ showNudge('Flip the card first — take a guess before checking.'); return; }
+    var c = flashQueue.shift();
+    if(masteredFlashSet[c.id] !== true){
+      masteredFlashSet[c.id] = true;
+      masteredFlash.push(c.id);
+      saveMasteredFlash(masteredFlash);
+    }
+    renderFlashCard();
+  }
+
+  function handleLearning(){
+    if(!isFlipped){ showNudge('Flip the card first — take a guess before checking.'); return; }
+    var c = flashQueue.shift();
+    flashQueue.push(c);
+    renderFlashCard();
+  }
+
+  btnKnow.addEventListener('click', handleKnow);
+  btnLearning.addEventListener('click', handleLearning);
+
+  // Keyboard shortcuts active only when the Flashcards tab is visible
+  document.addEventListener('keydown', function(e){
+    var flashPanel = document.getElementById('panel-flashcards');
+    if(!flashPanel.classList.contains('active')) return;
+    if(completeStage.style.display === 'block') return;
+
+    if(e.code === 'Space' || e.key === 'Enter'){
+      e.preventDefault();
+      isFlipped = !isFlipped;
+      cardEl.classList.toggle('flipped', isFlipped);
+    } else if(e.key === 'ArrowRight'){
+      handleKnow();
+    } else if(e.key === 'ArrowLeft'){
+      handleLearning();
+    }
+  });
+
+  shuffleBtn.addEventListener('click', function(){
+    for(var i = flashQueue.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = flashQueue[i]; flashQueue[i] = flashQueue[j]; flashQueue[j] = tmp;
+    }
+    renderFlashCard();
+  });
+
+  function fullFlashReset(){
+    masteredFlash = [];
+    masteredFlashSet = {};
+    saveMasteredFlash(masteredFlash);
+    flashQueue = FLASH_CARDS.slice();
+    renderFlashCard();
+  }
+
+  resetBtn.addEventListener('click', function(){
+    if(confirm('Reset all flashcard progress on this device?')){
+      fullFlashReset();
+    }
+  });
+  restartBtn.addEventListener('click', fullFlashReset);
+  renderFlashCard();
+
+  // --- 2. Score Badge & Main App Logic ---
+  var scoreValEl = document.getElementById('score-val');
+  var scoreMaxEl = document.getElementById('score-max');
+  var score = 0;
+
+  function addScore(n){
+    score += n;
+    if(score < 0) score = 0;
+    scoreValEl.textContent = score;
+  }
+
+  // Calculate Maximum Score for Sim + Matcher + Quiz + Textbook
+  var simCount = document.querySelectorAll('.sim-scenario').length;
+  var classifyCount = document.querySelectorAll('.classify-item').length;
+  var mcqCount = document.querySelectorAll('.mcq').length;
+  var selfMarkCount = document.querySelectorAll('.self-mark input[type=checkbox]').length;
+  var mpMaxTotal = 0;
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    mpMaxTotal += parseInt(sq.dataset.max || '0', 10);
+  });
+
+  var totalMaxScore = simCount + classifyCount + mcqCount + selfMarkCount + mpMaxTotal;
+  scoreMaxEl.textContent = totalMaxScore;
+
+  // Tab Switching
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.panel');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      var pId = 'panel-' + btn.dataset.panel;
+      var targetPanel = document.getElementById(pId);
+      if(targetPanel) targetPanel.classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // Roleplay Simulator Interactions
+  var simScenarios = document.querySelectorAll('.sim-scenario');
+  simScenarios.forEach(function(sim){
+    var correctIdx = sim.dataset.answer;
+    var choices = sim.querySelectorAll('.sim-choice-btn');
+    var fb = sim.querySelector('.sim-feedback');
+
+    choices.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        choices.forEach(function(b){ b.disabled = true; });
+        var chosenIdx = btn.dataset.idx;
+        if(chosenIdx === correctIdx){
+          btn.classList.add('chosen-correct');
+          fb.innerHTML = '<strong>Optimal Decision (+1 pt):</strong> Valid strategic management alignment with Cambridge syllabus principles.';
+          fb.className = 'sim-feedback show ok';
+          addScore(1);
+        } else {
+          btn.classList.add('chosen-wrong');
+          choices.forEach(function(b){
+            if(b.dataset.idx === correctIdx) b.classList.add('chosen-correct');
+          });
+          fb.innerHTML = '<strong>Sub-Optimal Choice:</strong> Review the project lifecycle guidelines. The correct managerial choice is highlighted in green above.';
+          fb.className = 'sim-feedback show bad';
+        }
+      });
+    });
+  });
+
+  // Matcher Interactions
+  var classifyItems = document.querySelectorAll('.classify-item');
+  classifyItems.forEach(function(item){
+    var ans = item.dataset.answer;
+    var buttons = item.querySelectorAll('.choices button');
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){
+        buttons.forEach(function(other){ other.disabled = true; });
+        if(b.dataset.choice === ans){
+          b.classList.add('correct');
+          addScore(1);
+        } else {
+          b.classList.add('incorrect');
+          buttons.forEach(function(other){
+            if(other.dataset.choice === ans) other.classList.add('correct');
+          });
+        }
+      });
+    });
+  });
+
+  // MCQ Interactions
+  var mcqItems = document.querySelectorAll('.mcq');
+  mcqItems.forEach(function(mcq){
+    var correctIdx = mcq.dataset.answer;
+    var opts = mcq.querySelectorAll('.opt');
+    var fb = mcq.querySelector('.mcq-feedback');
+    opts.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        opts.forEach(function(o){ o.disabled = true; });
+        if(opt.dataset.idx === correctIdx){
+          opt.classList.add('correct');
+          fb.textContent = 'Correct.';
+          fb.className = 'mcq-feedback ok';
+          addScore(1);
+        } else {
+          opt.classList.add('incorrect');
+          opts.forEach(function(o){
+            if(o.dataset.idx === correctIdx) o.classList.add('correct');
+          });
+          fb.textContent = 'Not quite — correct option indicated above.';
+          fb.className = 'mcq-feedback bad';
+        }
+      });
+    });
+  });
+
+  // Short Written Answers (Self-Marked)
+  document.querySelectorAll('.sub-q:not(.mp)').forEach(function(sq){
+    var btn = sq.querySelector('.check-btn');
+    var ta = sq.querySelector('textarea');
+    var err = sq.querySelector('.error-msg');
+    var reveal = sq.querySelector('.answer-reveal');
+    var mark = sq.querySelector('.self-mark');
+    var checkbox = mark ? mark.querySelector('input[type=checkbox]') : null;
+
+    if(!btn || !reveal || !mark) return;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        reveal.classList.remove('show');
+        mark.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      reveal.classList.add('show');
+      mark.classList.add('show');
+    });
+
+    if(checkbox){
+      checkbox.addEventListener('change', function(){
+        addScore(checkbox.checked ? 1 : -1);
+      });
+    }
+  });
+
+  // Extended Answers (Mark Points capped at max)
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    var cap = parseInt(sq.dataset.max, 10);
+    var btn = sq.querySelector('.check-btn');
+    var ta = sq.querySelector('textarea');
+    var err = sq.querySelector('.error-msg');
+    var panel = sq.querySelector('.markpoints');
+    var note = sq.querySelector('.mp-note');
+    var count = sq.querySelector('.mp-count');
+    var boxes = panel.querySelectorAll('input[type=checkbox]');
+    var awarded = 0;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        panel.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      panel.classList.add('show');
+    });
+
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if(cb.checked){
+          if(awarded >= cap){
+            cb.checked = false;
+            note.textContent = "That's already full marks (" + cap + "). Untick a point first to swap it.";
+            return;
+          }
+          awarded += 1;
+          addScore(1);
+        } else {
+          awarded -= 1;
+          addScore(-1);
+        }
+        note.textContent = '';
+        count.textContent = awarded + ' / ' + cap + ' marks';
+      });
+    });
+  });
+
+})();
+</script>
+
+<!-- LocalStorage Progress Persistence Script -->
+<script>
+(function(){
+  var STORE_KEY = 'ict-pm-practice-progress::' + location.pathname + '::' + document.title;
+
+  function load(){
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+    catch(e){ return {}; }
+  }
+  function save(mutator){
+    try {
+      var s = load();
+      mutator(s);
+      localStorage.setItem(STORE_KEY, JSON.stringify(s));
+    } catch(e){}
+  }
+  function all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+
+  var sims       = all('.sim-scenario');
+  var classifyIt = all('.classify-item');
+  var mcqs       = all('.mcq');
+  var subQs      = all('.sub-q:not(.mp)');
+  var mpQs       = all('.sub-q.mp');
+
+  // SAVE HANDLERS
+  sims.forEach(function(sim, i){
+    all_in(sim, '.sim-choice-btn').forEach(function(b, bi){
+      b.addEventListener('click', function(){
+        save(function(s){ s['sim-' + i] = bi; });
+      });
+    });
+  });
+
+  classifyIt.forEach(function(item, i){
+    all_in(item, '.choices button').forEach(function(b, bi){
+      b.addEventListener('click', function(){
+        save(function(s){ s['classify-' + i] = bi; });
+      });
+    });
+  });
+
+  mcqs.forEach(function(mcq, i){
+    all_in(mcq, '.opt').forEach(function(o, oi){
+      o.addEventListener('click', function(){
+        save(function(s){ s['mcq-' + i] = oi; });
+      });
+    });
+  });
+
+  subQs.forEach(function(sq, i){
+    var key = 'subq-' + i;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var cb = sq.querySelector('.self-mark input[type=checkbox]');
+    if(ta) ta.addEventListener('input', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+    });
+    if(btn) btn.addEventListener('click', function(){
+      save(function(s){
+        s[key] = s[key] || {};
+        s[key].text = ta ? ta.value : '';
+        s[key].checked = !!(ta && ta.value.trim());
+      });
+    });
+    if(cb) cb.addEventListener('change', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].selfMarked = cb.checked; });
+    });
+  });
+
+  mpQs.forEach(function(sq, i){
+    var key = 'mp-' + i;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var boxes = all_in(sq, '.markpoints input[type=checkbox]');
+    if(ta) ta.addEventListener('input', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+    });
+    if(btn) btn.addEventListener('click', function(){
+      save(function(s){
+        s[key] = s[key] || {};
+        s[key].text = ta ? ta.value : '';
+        s[key].shown = !!(ta && ta.value.trim());
+      });
+    });
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        save(function(s){
+          s[key] = s[key] || {};
+          var ticked = [];
+          boxes.forEach(function(b, bi){ if(b.checked) ticked.push(bi); });
+          s[key].ticked = ticked;
+        });
+      });
+    });
+  });
+
+  function all_in(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); }
+
+  // RESTORE SAVED STATE
+  (function restore(){
+    var s = load();
+
+    sims.forEach(function(sim, i){
+      var bi = s['sim-' + i];
+      if(bi === undefined) return;
+      var buttons = sim.querySelectorAll('.sim-choice-btn');
+      if(buttons[bi]) buttons[bi].click();
+    });
+
+    classifyIt.forEach(function(item, i){
+      var bi = s['classify-' + i];
+      if(bi === undefined) return;
+      var buttons = item.querySelectorAll('.choices button');
+      if(buttons[bi]) buttons[bi].click();
+    });
+
+    mcqs.forEach(function(mcq, i){
+      var oi = s['mcq-' + i];
+      if(oi === undefined) return;
+      var opts = mcq.querySelectorAll('.opt');
+      if(opts[oi]) opts[oi].click();
+    });
+
+    subQs.forEach(function(sq, i){
+      var rec = s['subq-' + i];
+      if(!rec) return;
+      var ta = sq.querySelector('textarea');
+      var btn = sq.querySelector('.check-btn');
+      var cb = sq.querySelector('.self-mark input[type=checkbox]');
+      if(ta && rec.text) ta.value = rec.text;
+      if(rec.checked && btn) btn.click();
+      if(rec.selfMarked && cb){
+        cb.checked = true;
+        cb.dispatchEvent(new Event('change'));
+      }
+    });
+
+    mpQs.forEach(function(sq, i){
+      var rec = s['mp-' + i];
+      if(!rec) return;
+      var ta = sq.querySelector('textarea');
+      var btn = sq.querySelector('.check-btn');
+      var boxes = all_in(sq, '.markpoints input[type=checkbox]');
+      if(ta && rec.text) ta.value = rec.text;
+      if(rec.shown && btn) btn.click();
+      (rec.ticked || []).forEach(function(bi){
+        if(boxes[bi]){
+          boxes[bi].checked = true;
+          boxes[bi].dispatchEvent(new Event('change'));
+        }
+      });
+    });
+  })();
+
+  // Reset Answers Button
+  var resetBtn = document.createElement('button');
+  resetBtn.textContent = 'Reset my answers';
+  resetBtn.setAttribute('type', 'button');
+  resetBtn.style.cssText = 'position:fixed;bottom:14px;left:14px;z-index:50;font-family:JetBrains Mono,monospace;'
+    + 'font-size:11px;padding:7px 11px;background:#141b2e;border:1px solid #40557d;'
+    + 'color:#9ba4bc;border-radius:3px;cursor:pointer;';
+  resetBtn.addEventListener('mouseenter', function(){ resetBtn.style.color = '#e7e9f1'; });
+  resetBtn.addEventListener('mouseleave', function(){ resetBtn.style.color = '#9ba4bc'; });
+  resetBtn.addEventListener('click', function(){
+    if(confirm('Clear all your saved answers on this practice page?')){
+      try { localStorage.removeItem(STORE_KEY); } catch(e){}
+      location.reload();
+    }
+  });
+  document.body.appendChild(resetBtn);
+})();
+</script>
+</body>
+</html>
