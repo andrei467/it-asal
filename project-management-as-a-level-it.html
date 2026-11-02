@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Management — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --bg-deep:#090d18;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#04141a;}
+
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 24px 120px; }
+
+  nav.theory-nav{
+    max-width:760px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:44px 24px 34px; max-width:760px; margin:0 auto; border-bottom:1px solid var(--trace);
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,38px);
+    line-height:1.15; margin:0 0 14px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
+
+  nav.tabs{
+    max-width:760px; margin:0 auto; padding:14px 24px; display:flex; gap:6px;
+    overflow-x:auto; border-bottom:1px solid var(--trace); position:sticky; top:0;
+    background:rgba(13,18,32,.95); backdrop-filter: blur(4px); z-index:30;
+  }
+  nav.tabs button{
+    font-family:var(--mono); font-size:12.5px; white-space:nowrap; background:transparent;
+    border:1px solid var(--trace); color:var(--paper-dim); padding:8px 13px;
+    border-radius:var(--radius); cursor:pointer; flex-shrink:0;
+  }
+  nav.tabs button:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  nav.tabs button.active{ background:var(--signal); color:#04141a; border-color:var(--signal); font-weight:500; }
+
+  .panel{ display:none; padding:40px 0 8px; }
+  .panel.active{ display:block; }
+
+  h2.section-title{
+    font-family:var(--mono); font-size:22px; color:var(--signal-bright);
+    margin:0 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2.section-title .tag{
+    font-size:12px; color:var(--sage); border:1px solid var(--trace);
+    padding:2px 7px; border-radius:var(--radius);
+  }
+  h3{ font-family:var(--mono); font-size:16px; color:var(--gold); margin:26px 0 8px; font-weight:500; }
+  p{margin:10px 0;}
+  ul, ol{padding-left:22px; margin:10px 0;}
+  li{margin:4px 0;}
+  strong{color:var(--paper); font-weight:600;}
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0 8px; font-size:15px; }
+  th,td{ border:1px solid var(--trace); padding:8px 10px; text-align:left; vertical-align:top; }
+  th{ font-family:var(--mono); font-size:12px; color:var(--sage); font-weight:500; background:rgba(134,201,160,0.06); }
+  .table-scroll{ overflow-x:auto; }
+  .note{ color:var(--paper-dim); font-size:14.5px; }
+
+  .block{ border-left:2px solid var(--trace); padding-left:18px; margin:18px 0; }
+  .block ul, .block ol{ margin:0; padding-left:20px; }
+
+  .proscons{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 8px; }
+  .pc{ border:1px solid var(--trace); border-radius:var(--radius); background:var(--bg-raised); padding:2px 14px 12px; }
+  .pc.pro{ border-top:2px solid var(--sage); }
+  .pc.con{ border-top:2px solid var(--brick); }
+  .pc-title{ font-family:var(--mono); font-size:12.5px; font-weight:500; margin:12px 0 4px; }
+  .pc.pro .pc-title{ color:var(--sage); }
+  .pc.con .pc-title{ color:var(--brick); }
+  .pc ul{ padding-left:18px; margin:6px 0 0; font-size:15px; }
+  @media (max-width:600px){ .proscons{ grid-template-columns:1fr; } }
+
+  details.fold{ border:1px solid var(--trace); border-radius:var(--radius); margin:12px 0; background:var(--bg-raised); }
+  details.fold summary{ font-family:var(--mono); font-size:13.5px; color:var(--gold); padding:11px 14px; cursor:pointer; }
+  details.fold[open] summary{ border-bottom:1px solid var(--trace); }
+  details.fold .fold-body{ padding:2px 14px 12px; }
+
+  .diagram-box{
+    background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius);
+    padding:14px 10px; margin:18px 0 6px; text-align:center;
+  }
+  .diagram-box svg{ width:100%; height:auto; max-width:460px; }
+  .diagram-box svg.wide{ max-width:600px; }
+  .diagram-caption{ font-family:var(--mono); font-size:12px; color:var(--paper-dim); margin-top:6px; }
+  .signal-caption{ font-family: var(--mono); font-size:12.5px; color:var(--paper-dim); margin-top:8px; text-align:center; }
+
+  .task{ margin:32px 0; border:1px solid var(--trace); border-radius:var(--radius); background: var(--bg-raised); padding:20px 20px 22px; }
+  .task-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .task-label .pts{color:var(--sage);}
+  .task h4{ margin:0 0 12px; font-family:var(--serif); font-weight:600; font-size:16.5px; color:var(--paper); }
+  .task .sub-q{margin:18px 0;}
+  .task .sub-q:first-child{margin-top:0;}
+  .sub-q label{ display:block; font-family:var(--serif); font-size:15.5px; margin-bottom:8px; color:var(--paper); }
+
+  textarea{
+    width:100%; min-height:52px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-radius:var(--radius); color:var(--paper); font-family:var(--serif);
+    font-size:15.5px; padding:10px 12px; resize:vertical;
+  }
+  textarea:focus, button:focus-visible, .opt:focus-visible, summary:focus-visible, input[type=checkbox]:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:1px; }
+  .row{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+
+  button{
+    font-family:var(--mono); font-size:13px; background:var(--signal); color:#04141a;
+    border:none; padding:9px 15px; border-radius:var(--radius); cursor:pointer; font-weight:500;
+  }
+  button:hover{background:var(--signal-bright);}
+  button.ghost{ background:transparent; border:1px solid var(--trace); color:var(--paper-dim); }
+  button.ghost:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  button:disabled{opacity:.5; cursor:default;}
+
+  .error-msg{ color:var(--brick); font-family:var(--mono); font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show{display:block;}
+
+  .answer-reveal{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .answer-reveal.show{display:block;}
+  .answer-reveal .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:5px; }
+
+  .self-mark{ display:none; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:13px; color:var(--paper-dim); }
+  .self-mark.show{display:flex;}
+  .self-mark input[type=checkbox]{ width:17px; height:17px; accent-color: var(--gold); cursor:pointer; }
+  .self-mark label{cursor:pointer; margin:0; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+
+  .markpoints{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .markpoints.show{display:block;}
+  .markpoints .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:6px; }
+  .markpoints .mp-item{
+    display:flex; gap:10px; align-items:flex-start; margin:0; padding:7px 0;
+    border-bottom:1px solid var(--trace-dim); font-size:15px; font-weight:400; cursor:pointer;
+  }
+  .markpoints .mp-item:last-of-type{border-bottom:none;}
+  .markpoints .mp-item input{ width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--gold); cursor:pointer; }
+  .mp-foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; font-family:var(--mono); font-size:13px; }
+  .mp-count{ color:var(--gold); }
+  .mp-note{ color:var(--brick); }
+
+  .mcq{margin:20px 0;}
+  .mcq:first-of-type{margin-top:0;}
+  .mcq p.q{ font-family:var(--serif); font-size:15.5px; color:var(--paper); margin:0 0 10px; }
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:10px 13px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer; font-weight:400;
+  }
+  .opt:hover:not(:disabled){border-color:var(--signal); background:var(--bg-deep);}
+  .opt.correct{border-color:var(--sage); background:rgba(134,201,160,0.14);}
+  .opt.incorrect{border-color:var(--brick); background:rgba(224,104,92,0.14);}
+  .opt:disabled{cursor:default;}
+  .mcq-feedback{ font-family:var(--mono); font-size:13px; margin-top:8px; min-height:1.2em; }
+  .mcq-feedback.ok{color:var(--sage);}
+  .mcq-feedback.bad{color:var(--brick);}
+
+  .classify-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 0; border-bottom:1px solid var(--trace-dim); flex-wrap:wrap;
+  }
+  .classify-item:last-child{border-bottom:none;}
+  .classify-item .term{font-size:15px; max-width:60%;}
+  .classify-item .choices{display:flex; gap:8px; flex-wrap:wrap;}
+  .classify-item .choices button{
+    background:transparent; border:1px solid var(--trace); color:var(--paper-dim);
+    font-size:12px; padding:6px 10px;
+  }
+  .classify-item .choices button:hover:not(:disabled){ color:var(--paper); border-color:var(--paper-dim); }
+  .classify-item .choices button.correct{background:rgba(134,201,160,0.16); border-color:var(--sage); color:var(--paper);}
+  .classify-item .choices button.incorrect{background:rgba(224,104,92,0.16); border-color:var(--brick); color:var(--paper);}
+  @media (max-width:600px){ .classify-item .term{max-width:100%;} }
+
+  #score-badge{
+    position:fixed; top:14px; right:14px; z-index:50; font-family:var(--mono); font-size:13px;
+    background:var(--bg-raised); border:1px solid var(--signal); color:var(--signal-bright);
+    padding:8px 13px; border-radius:var(--radius); box-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  #score-badge .n{color:var(--gold); font-weight:700;}
+
+  footer{ max-width:760px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    header.hero{padding:36px 20px 26px;}
+    #score-badge{top:auto; bottom:14px; right:14px;}
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+
+  .diagram-box img{ max-width:100%; height:auto; background:#fff; border-radius:3px; padding:8px; }
+  pre{ background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius); padding:12px 14px; overflow-x:auto; font-family:var(--mono); font-size:13.5px; line-height:1.55; margin:14px 0; color:var(--paper); }
+  code{ font-family:var(--mono); font-size:.9em; color:var(--signal-bright); }
+  pre code{ color:inherit; }
+
+  .dg svg{ width:100%; height:auto; display:block; }
+  .dg .box{ fill:var(--bg-raised); stroke:var(--trace); stroke-width:1.5; }
+  .dg .boxh{ fill:var(--bg-raised); stroke:var(--signal); stroke-width:1.8; }
+  .dg .node{ fill:var(--bg-deep); stroke:var(--signal); stroke-width:1.6; }
+  .dg .ln{ stroke:var(--paper-dim); stroke-width:1.6; fill:none; }
+  .dg .lnc{ stroke:var(--gold); stroke-width:2.6; fill:none; }
+  .dg .bar{ fill:#23365a; stroke:var(--signal); stroke-width:1.2; }
+  .dg .barc{ fill:var(--gold); stroke:var(--gold); stroke-width:1.2; }
+  .dg .grid{ stroke:var(--trace-dim); stroke-width:1; }
+  .dg text{ fill:var(--paper); font-family:var(--mono); font-size:12px; text-anchor:middle; dominant-baseline:central; }
+  .dg text.dim{ fill:var(--paper-dim); font-size:11px; }
+  .dg text.gold{ fill:var(--gold); }
+  .dg text.l{ text-anchor:start; }
+  .dg text.r{ text-anchor:end; }
+  .dg text.dark{ fill:#0d1220; font-weight:700; }
+  .dg-cap{ font-family:var(--mono); font-size:12px; color:var(--paper-dim); margin:8px 0 0; text-align:center; }
+  .diagram-box.dg{ padding:14px; }
+  pre{ background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius); padding:12px 14px; overflow-x:auto; font-family:var(--mono); font-size:13.5px; line-height:1.55; margin:14px 0; color:var(--paper); }
+  code{ font-family:var(--mono); font-size:.9em; color:var(--signal-bright); }
+  .diagram-box.dg svg{ max-width:100%; }
+  .dg text.halo{ paint-order:stroke; stroke:var(--bg-deep); stroke-width:7px; stroke-linejoin:round; fill:var(--paper-dim); font-size:11px; }
+</style>
+</head>
+<body>
+<div id="score-badge">Score: <span class="n" id="score-val">0</span> / <span id="score-max">0</span></div>
+<nav class="theory-nav"><a class="disabled" href="#" aria-disabled="true">← <span class="full">Previous theory</span></a><span class="spacer"></span><a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a></nav>
+<header class="hero"><p class="kicker">Cambridge AS &amp; A Level IT · Project Management</p><h1 class="title">Project Management</h1><p>This page covers the stages of the project life cycle, what project management software does, and the tools used to plan and track tasks — critical path method, PERT, Gantt charts and work breakdown structures.</p></header>
+<nav class="tabs"><button class="tab-btn active" data-panel="life">15.1 Life cycle</button><button class="tab-btn" data-panel="software">15.2 Software</button><button class="tab-btn" data-panel="tools">15.3 Tools &amp; techniques</button><button class="tab-btn" data-panel="practice">Practice questions</button></nav>
+<div class="wrap">
+<div class="panel active" id="panel-life"><h2 class="section-title">Stages of the project life cycle <span class="tag">15.1</span></h2>
+<p>A well-managed project ensures deadlines are met, that the <strong>resources</strong> (people, equipment, facilities or funding) required to complete a project are available, and that each person knows the job they are meant to do.</p>
+<p>The project management process is usually carried out in four main stages: <strong>project initiation, planning, execution and monitoring, and project close</strong>.</p><div class="diagram-box dg"><svg viewBox="0 0 760 170" role="img" aria-label="The four project life cycle stages: initiation, planning, execution and monitoring, and close, with an arrow from execution and monitoring back to planning"><defs><marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/></marker><marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/></marker></defs><rect class="box" x="5" y="92" width="150" height="58" rx="3"/><text x="80.0" y="121.0">Initiation</text><rect class="box" x="205" y="92" width="150" height="58" rx="3"/><text x="280.0" y="121.0">Planning</text><rect class="box" x="405" y="92" width="150" height="58" rx="3"/><text x="480.0" y="113.0">Execution and</text><text x="480.0" y="130.0">Monitoring</text><rect class="box" x="605" y="92" width="150" height="58" rx="3"/><text x="680.0" y="121.0">Close</text><path class="ln" d="M155.0,121.0 L202.0,121.0" marker-end="url(#a1)"/><path class="ln" d="M355.0,121.0 L402.0,121.0" marker-end="url(#a1)"/><path class="ln" d="M555.0,121.0 L602.0,121.0" marker-end="url(#a1)"/><path class="ln" d="M480,92 V40 H280 V88" marker-end="url(#a1)"/><text x="380" y="24" class="dim">re-plan if needed</text></svg><p class="dg-cap">Figure 15.2: Project life cycle stages. Monitoring can send the project back to planning.</p></div>
+<h3>Project initiation</h3>
+<p>The start of a project sets the goals of the project. It defines what the project will do, and why there is a need for it. Several aspects are determined at this stage.</p>
+<p><strong>Objectives.</strong> Each project has set objectives, and each large objective may be split into smaller ones. For example, installing a new IT system for a business could be divided into:</p><div class="block"><ol><li>purchase the equipment</li><li>prepare the building (cabling and power sources)</li><li>install the new machines</li><li>check that the machines work</li><li>ensure users are satisfied</li></ol></div>
+<p>Each of these could be subdivided into even smaller objectives, and it is important to list all of them at the start. Every project has an <strong>owner</strong>, usually the person who wants the project completed (an external customer or an internal member of staff). The owner usually agrees to the objectives at the start, meaning they agree that all the objectives they want have been listed.</p>
+<p><strong>Resources.</strong> Resources may be items like new computers or cables, or people such as IT technicians or electricians. Time is also a resource. Resources usually cost money. Projects can run over time and money if all resources are not identified at the start, because more resources have to be bought later.</p>
+<p><strong>Success criteria</strong> are essential elements of the project that must be completed. They are not the same as goals. For installing an IT system they could include 'Must have enough machines for 150 people', 'Must use Windows OS' or 'Must have 2 monitors per machine'.</p>
+<p><strong>Stakeholders and their needs.</strong> Stakeholders are anyone who has an interest in the project, for example the user of the new IT system. They comment on the success criteria and say what they want from the project, so they can impact the goals and the success criteria.</p>
+<p><strong>Project scope and high-level schedules.</strong> Project scope defines how 'large' the project is. In big projects some tasks may be outsourced to other businesses. For example, connecting a new electricity supply to a building is done by the local electricity company, so it is 'out of scope'. A <strong>high-level project schedule</strong> sets out a rough plan of the tasks and how long they will take, based on the resources, goals and success criteria.</p>
+<h3>Project planning</h3><details class="fold"><summary>Did you know?</summary><div class="fold-body"><p>There is a common phrase: "failing to prepare is preparing to fail". It means that if you do not plan something fully, it is most likely to fail.</p></div></details>
+<p>Projects are planned so that all stakeholders know what to do during all stages. Budgets and schedules are created and <strong>milestones</strong> are set — dates by which each part of the project must be completed. Tasks for one milestone are done before the tasks of later milestones. A <strong>Gantt chart</strong> is produced to show the order in which tasks should be completed.</p>
+<p>Resources are allocated to tasks and must be available when needed. The most important part of planning is making sure appropriate time is allocated to each task and the resources for each task are organised so tasks can be completed on time. It is wasteful to have resources not being used: you would not hire an electrician to install the software. Grouping an electrician's tasks into one milestone means they can be hired once to connect the power supply and fit all the wiring, instead of many times for short periods, which is inefficient and may cost more.</p>
+<h3>Project execution and monitoring</h3>
+<p><strong>Implementing the plan.</strong> Once the plans are completed, a start date is set and the project starts. The execution is the 'doing' part, when the milestones are completed.</p>
+<p><strong>Monitoring progress against time.</strong> As each task is completed it is monitored, to check that each part is going to be completed on schedule. Following the plan closely helps make sure resources are used at the right times. Delays to tasks mean tasks scheduled later are delayed too.</p>
+<p>Each project has a <strong>project manager</strong>, who informs each team member about their role, responsibilities and milestone dates, and is responsible for keeping the project to schedule. Projects are not always completed on time, often because smaller tasks take longer than planned, and each delay affects the next section so delays increase as the project moves forward. However, good monitoring can identify where delays may occur, letting the project manager <strong>re-plan small sections</strong> to keep the whole project on schedule. The project manager also monitors the performance of the team, compares expenditure against the budget, and ensures the scope does not grow beyond the agreed boundaries.</p>
+<p><strong>Cost and quality.</strong> The project manager checks that costs stay within the budget. Sometimes this is not possible: during the COVID-19 pandemic a shortage of processors made them much more expensive, so installing an IT system cost more. Cost increases must be discussed with stakeholders, and if the project becomes too expensive it may need to be cancelled. Costs can also go down, for example if a different electrician does the work for less.</p>
+<p>A project is also monitored for quality: each task is checked to ensure it is completed well, for example that there are enough cables and they are installed correctly. This matters because it often costs more money and delays the project if mistakes are only noticed later in the life cycle.</p>
+<p><strong>Reporting to stakeholders.</strong> Stakeholders want to know how the project is progressing in terms of:</p><div class="block"><ul><li>time</li><li>cost</li><li>delays</li><li>quality</li></ul></div>
+<p>During execution the project manager prepares reports for the stakeholders, so they can monitor progress and provide input if needed.</p>
+<h3>Project close</h3>
+<p>A <strong>handover</strong> happens between the project team and the client when the project is complete. The client reviews the project with the project manager, and if the client is happy that everything is finished as expected, they <strong>sign off</strong> the project as completed — meaning no further work is needed. Once signed off, any contracts with the workers are closed and any resources are <strong>released</strong>, so other people or projects can use them.</p>
+<p>A review also takes place, looking at what went wrong and what went well. It covers questions such as:</p><div class="block"><ul><li>Was the project schedule maintained?</li><li>Was the project completed within budget?</li><li>Were all resources available when required?</li><li>Has the project met the original requirements?</li></ul></div>
+<p>The review is stored and used to help plan future projects, so they avoid the same mistakes.</p><div class="task"><p class="task-label"><span>Questions from the book</span><span class="pts">7 points</span></p><h4>Answers from the notes.</h4><div class="sub-q"><label>Identify three things that project initiation will find.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any three of: objectives; resources required; success criteria; stakeholders and their needs; project scope; a high-level schedule</div><div class="self-mark"><input type="checkbox" id="sm-1"><label for="sm-1">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>State the connection between resources and tasks.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Resources are allocated to tasks, and must be available at the time they are needed for each task</div><div class="self-mark"><input type="checkbox" id="sm-2"><label for="sm-2">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>What does a Gantt chart show?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>The order in which tasks should be completed (used in planning)</div><div class="self-mark"><input type="checkbox" id="sm-3"><label for="sm-3">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain why monitoring progress is needed in a project.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>It checks each part of the project is on schedule and resources are used at the right times; delays to one task delay later tasks, so problems can be identified and the plan adjusted</div><div class="self-mark"><input type="checkbox" id="sm-4"><label for="sm-4">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain why the project manager may need to re-plan parts of the project.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Delays affect the next section and increase as the project moves forward, so re-planning small sections helps keep the whole project on schedule</div><div class="self-mark"><input type="checkbox" id="sm-5"><label for="sm-5">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>State the risk of not monitoring the quality of completed tasks.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Mistakes may only be noticed later, which often costs more money and delays the project</div><div class="self-mark"><input type="checkbox" id="sm-6"><label for="sm-6">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Give two examples of review questions.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: Was the project schedule maintained? Was it completed within budget? Were all resources available when required? Has it met the original requirements?</div><div class="self-mark"><input type="checkbox" id="sm-7"><label for="sm-7">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">10 points</span></p><h4>Click the stage of the project life cycle where each activity happens.</h4><div class="classify-list"><div class="classify-item" data-answer="p"><span class="term">Allocating resources to tasks</span><span class="choices"><button data-choice="i">Initiation</button><button data-choice="p">Planning</button><button data-choice="e">Execution &amp; monitoring</button><button data-choice="c">Close</button></span></div><div class="classify-item" data-answer="e"><span class="term">Checking that each task is completed on schedule</span><span class="choices"><button data-choice="i">Initiation</button><button data-choice="p">Planning</button><button data-choice="e">Execution &amp; monitoring</button><button data-choice="c">Close</button></span></div><div class="classify-item" data-answer="i"><span class="term">Setting the goals and objectives of the project</span><span class="choices"><button data-choice="i">Initiation</button><button data-choice="p">Planning</button><button data-choice="e">Execution &amp; monitoring</button><button data-choice="c">Close</button></span></div><div class="classify-item" data-answer="c"><span class="term">The client signs off the project</span><span class="choices"><button data-choice="i">Initiation</button><button data-choice="p">Planning</button><button data-choice="e">Execution &amp; monitoring</button><button data-choice="c">Close</button></span></div><div class="classify-item" data-answer="i"><span class="term">Identifying the stakeholders and their needs</span><span class="choices"><button data-choice="i">Initiation</button><button data-choice="p">Planning</button><button data-choice="e">Execution &amp; monitoring</button><button data-choice="c">Close</button></span></div><div class="classify-item" data-answer="p"><span class="term">Creating budgets and schedules</span><span class="choices"><button data-choice="i">Initiation</button><button data-choice="p">Planning</button><button data-choice="e">Execution &amp; monitoring</button><button data-choice="c">Close</button></span></div><div class="classify-item" data-answer="i"><span class="term">Defining success criteria</span><span class="choices"><button data-choice="i">Initiation</button><button data-choice="p">Planning</button><button data-choice="e">Execution &amp; monitoring</button><button data-choice="c">Close</button></span></div><div class="classify-item" data-answer="p"><span class="term">Producing a Gantt chart and setting milestones</span><span class="choices"><button data-choice="i">Initiation</button><button data-choice="p">Planning</button><button data-choice="e">Execution &amp; monitoring</button><button data-choice="c">Close</button></span></div><div class="classify-item" data-answer="e"><span class="term">Comparing expenditure against the budget</span><span class="choices"><button data-choice="i">Initiation</button><button data-choice="p">Planning</button><button data-choice="e">Execution &amp; monitoring</button><button data-choice="c">Close</button></span></div><div class="classify-item" data-answer="c"><span class="term">Resources are released and contracts closed</span><span class="choices"><button data-choice="i">Initiation</button><button data-choice="p">Planning</button><button data-choice="e">Execution &amp; monitoring</button><button data-choice="c">Close</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="0"><p class="q">1. What is a milestone?</p><div class="opts"><button class="opt" data-idx="0">A date by which each part of the project must be completed</button><button class="opt" data-idx="1">A person who owns the project</button><button class="opt" data-idx="2">A task outsourced to another business</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. What does it mean if a task is "out of scope"?</p><div class="opts"><button class="opt" data-idx="0">It is not something to include in the project</button><button class="opt" data-idx="1">It is too expensive</button><button class="opt" data-idx="2">It has been completed early</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. What happens when the client signs off the project?</p><div class="opts"><button class="opt" data-idx="0">No further work is needed</button><button class="opt" data-idx="1">The project is restarted</button><button class="opt" data-idx="2">The budget is increased</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-software"><h2 class="section-title">Project management software <span class="tag">15.2</span></h2>
+<h3>Types of project management software</h3>
+<p>There are many different types, which can be used on different devices. Examples include Jira, Wrike, Miro and Monday, and Microsoft also produces Microsoft Project. Project management software is often run on a desktop computer or laptop, but some projects need it on mobile devices such as smart phones or tablets. Some is <strong>web-based</strong>, allowing management of projects across the globe, because people from different countries can log in and update projects.</p>
+<h3>Licensing</h3>
+<p>Licensing is the rules on how you can use software. <strong>Personal licences</strong> allow use on a home computer but not for work purposes for a business, which could be useful for a home project such as building a shed. <strong>Single-user licences</strong> can be used within an organisation but only one person can use the software at once. <strong>Collaborative</strong> project management software allows many people to log in at the same time, which is useful for large projects with many project managers and stakeholders.</p>
+<h3>Uses of project management software for supporting projects</h3>
+<p><strong>Planning.</strong> It can schedule tasks to meet milestones and allocate resources to each task. It can link documents such as budgets, goals, requirements and resources to specific tasks, so users have the data they need to complete each task on schedule and within budget. It provides <strong>templates</strong> for the planning stage, used to set up initial plans and budgets. Templates from previous successful projects can be reused, so projects in an organisation have common, recognisable structures.</p>
+<p><strong>Scheduling of tasks.</strong> It can schedule and track the progress of tasks. A <strong>Gantt chart</strong> shows an overview of the tasks on a timeline, and lets a project manager assign hours or days and a deadline to each task; Gantt charts often sort or group tasks automatically. The manager can identify which tasks are <strong>dependent</strong> on other tasks (a task cannot start until another has been completed), delegate tasks to team members, and give tasks a priority so they can be sorted from most to least important. It also allows:</p><div class="block"><ul><li>recording how many hours are spent on each task</li><li>marking each task as complete</li><li>creating milestones for crucial points</li><li>highlighting key project parts</li><li>producing a calendar of events, milestones and progress achieved</li></ul></div>
+<p><strong>Allocation of resources.</strong> Resources (equipment, property or people) must be defined in the software, along with their availability, so the manager knows when each can be used. Each resource is given a cost and a number of hours or days it will be used for, so the manager can see how resource use affects the budget. This is very important when people are resources: if too many tasks are allocated to one person at once, they cannot complete them, may become stressed and rush, and tasks may not be completed to a good standard.</p>
+<p><strong>Costings.</strong> The cost of a task is based on how many hours each resource is used for and how much each costs per hour. The software also records extra expenses incurred by team members, adds them to the overall cost, and can track spending over different time periods, for example graphs of daily, weekly and monthly spending. It can report total costs for individual resources and export data to common file types such as .xlsx or .csv, so spreadsheet software can analyse it.</p>
+<h3>Communication and collaborative working</h3><div class="block"><ul><li><strong>Calendars:</strong> each team member has one, showing the tasks they should be working on. They can be synchronised with third-party calendars such as Google, iCal or Outlook, so members can check them on mobile devices. Shared calendars let meetings be scheduled, with documents attached for review beforehand.</li><li><strong>Instant messaging / video chat / video conferencing:</strong> real-time communication to share ideas and discuss progress, useful when team members work in different countries.</li><li><strong>Shared documents:</strong> cloud storage acts as a central store accessible from anywhere. Documents can be assigned to tasks, resources or milestones, changes can be tracked, versions saved or restored, and team members emailed when documents change.</li><li><strong>Discussions / forums:</strong> set up for tasks, documents or milestones. Very useful when team members are not in the same time zone; they can send email notifications and alerts to project dashboards.</li><li><strong>Progress:</strong> team members update tasks to show how close they are to finishing, which feeds into the project plan. When the timeline changes, automated email notifications go to all affected team members.</li></ul></div>
+<h3>Decisions and the critical path</h3>
+<p>Communication and decisions are usually recorded, so each decision can be linked to the person who made it and why. The software can highlight potential issues and suggest changes, such as changing the timeline or allocating more resources, and these issues can be monitored until resolved. It can compare the project plan with current progress, showing how much time was spent on a task compared with how much was planned, so lessons can be learned for similar tasks.</p>
+<p>It also identifies the <strong>critical path</strong> — the tasks that must be completed on time for the project to complete on time. Critical paths are monitored closely and resources are diverted to critical tasks if they fall behind, helping the project meet its deadlines and recover lost time.</p>
+<h3>Advantages and disadvantages</h3><div class="proscons"><div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Can manage very large projects efficiently</li><li>Can produce a range of outputs to see how the project develops</li><li>Can automatically update areas of the project if changes are made to another part</li><li>Can send automated reminders and updates to people</li><li>Can be used to make calculations very quickly</li><li>Can analyse and make suggestions to help save money and time</li><li>Can reduce the number of people required to manage the project, making communication and control more effective</li><li>Stakeholders can use it for a summary of what stage the project has reached and any potential issues</li></ul></div><div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>May be expensive to buy; many users need several licences, adding to the cost</li><li>The business may not afford the software most appropriate for its requirements</li><li>Special training is often needed, and may differ for different users</li><li>Can be difficult to set up, which could lead to inaccurate results later</li><li>Team members may rely too much on the software and not realise something is wrong if it raises no alert</li><li>Backups of the data need to be made in case of computer failure</li><li>Access and security levels must be set up properly so users can reach the information they need</li></ul></div></div><div class="task"><p class="task-label"><span>Questions from the book</span><span class="pts">4 points</span></p><h4>Answers from the notes.</h4><div class="sub-q"><label>Explain how project management software can be used for allocating resources to tasks.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Resources are defined with their availability and cost, then assigned to tasks for a number of hours or days, so the manager knows what is used when and how it affects the budget, and avoids overloading one person</div><div class="self-mark"><input type="checkbox" id="sm-8"><label for="sm-8">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>State the purpose of project management software.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>To support projects: planning, scheduling tasks, allocating resources, costing, communication and collaboration, and tracking progress</div><div class="self-mark"><input type="checkbox" id="sm-9"><label for="sm-9">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Give two things that project management software can control or monitor.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: scheduling and progress of tasks; resources and their availability; costs and spending; documents and changes; communication between team members; the critical path</div><div class="self-mark"><input type="checkbox" id="sm-10"><label for="sm-10">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Give two reasons why a company may choose not to use project management software.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: it may be expensive (several licences); the business may not afford the most appropriate software; special training is needed; it can be difficult to set up; people may rely on it too much</div><div class="self-mark"><input type="checkbox" id="sm-11"><label for="sm-11">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">8 points</span></p><h4>Click the feature of project management software that each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="p"><span class="term">Reusing templates from previous successful projects</span><span class="choices"><button data-choice="p">Planning</button><button data-choice="s">Scheduling</button><button data-choice="r">Resources &amp; costs</button><button data-choice="c">Communication</button></span></div><div class="classify-item" data-answer="c"><span class="term">Shared calendars synchronised with Outlook or Google</span><span class="choices"><button data-choice="p">Planning</button><button data-choice="s">Scheduling</button><button data-choice="r">Resources &amp; costs</button><button data-choice="c">Communication</button></span></div><div class="classify-item" data-answer="r"><span class="term">Giving each resource a cost per hour</span><span class="choices"><button data-choice="p">Planning</button><button data-choice="s">Scheduling</button><button data-choice="r">Resources &amp; costs</button><button data-choice="c">Communication</button></span></div><div class="classify-item" data-answer="c"><span class="term">Forums that email team members when comments are made</span><span class="choices"><button data-choice="p">Planning</button><button data-choice="s">Scheduling</button><button data-choice="r">Resources &amp; costs</button><button data-choice="c">Communication</button></span></div><div class="classify-item" data-answer="s"><span class="term">Showing tasks on a timeline in a Gantt chart</span><span class="choices"><button data-choice="p">Planning</button><button data-choice="s">Scheduling</button><button data-choice="r">Resources &amp; costs</button><button data-choice="c">Communication</button></span></div><div class="classify-item" data-answer="r"><span class="term">Showing graphs of daily, weekly and monthly spending</span><span class="choices"><button data-choice="p">Planning</button><button data-choice="s">Scheduling</button><button data-choice="r">Resources &amp; costs</button><button data-choice="c">Communication</button></span></div><div class="classify-item" data-answer="p"><span class="term">Linking budgets and goals to specific tasks</span><span class="choices"><button data-choice="p">Planning</button><button data-choice="s">Scheduling</button><button data-choice="r">Resources &amp; costs</button><button data-choice="c">Communication</button></span></div><div class="classify-item" data-answer="s"><span class="term">Identifying which tasks are dependent on other tasks</span><span class="choices"><button data-choice="p">Planning</button><button data-choice="s">Scheduling</button><button data-choice="r">Resources &amp; costs</button><button data-choice="c">Communication</button></span></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">8 points</span></p><h4>Click whether each statement is an advantage or a disadvantage of project management software.</h4><div class="classify-list"><div class="classify-item" data-answer="a"><span class="term">Can analyse and suggest changes to save time and money</span><span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span></div><div class="classify-item" data-answer="d"><span class="term">Several licences may be needed, adding to the cost</span><span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span></div><div class="classify-item" data-answer="a"><span class="term">Can manage very large projects efficiently</span><span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span></div><div class="classify-item" data-answer="d"><span class="term">Team members may rely on it too much</span><span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span></div><div class="classify-item" data-answer="d"><span class="term">Special training is often needed to use it effectively</span><span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span></div><div class="classify-item" data-answer="a"><span class="term">Can send automated reminders and updates</span><span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span></div><div class="classify-item" data-answer="d"><span class="term">Backups must be made in case of computer failure</span><span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span></div><div class="classify-item" data-answer="a"><span class="term">Stakeholders can see a summary of progress</span><span class="choices"><button data-choice="a">Advantage</button><button data-choice="d">Disadvantage</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="0"><p class="q">1. Which licence allows many people to use the software at the same time?</p><div class="opts"><button class="opt" data-idx="0">Collaborative</button><button class="opt" data-idx="1">Single-user</button><button class="opt" data-idx="2">Personal</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. What does the critical path show?</p><div class="opts"><button class="opt" data-idx="0">The tasks that must be completed on time for the project to finish on time</button><button class="opt" data-idx="1">The cheapest tasks</button><button class="opt" data-idx="2">The tasks with the most float</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. Why is over-allocating one person a problem?</p><div class="opts"><button class="opt" data-idx="0">They may rush tasks and complete them to a poor standard</button><button class="opt" data-idx="1">They will finish early</button><button class="opt" data-idx="2">It lowers the project cost</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-tools"><h2 class="section-title">Tools and techniques for project management tasks <span class="tag">15.3</span></h2>
+<p>There are three main tools and techniques used for project management tasks: the <strong>critical path method</strong>, the <strong>performance evaluation and review technique</strong>, and <strong>Gantt charts</strong>.</p>
+<h3>Critical path method (CPM)</h3>
+<p>A <strong>critical path</strong> identifies the order in which project tasks must be completed for the whole project to finish on time. It is also the minimum amount of time in which the project can be completed. The critical path method, also known as critical path analysis (CPA), can only be used when the length of each task is known. Project management software calculates the critical path, identifies the longest and shortest paths, and lists all the <strong>dependent</strong> tasks needed to achieve each path (a task that relies on another being completed before it can start).</p>
+<p><strong>Worked example 15.01: making a cup of tea.</strong> The circles are milestones, each with a unique number. The tasks are the arrows, and the numbers show how many seconds each takes, for example pouring water into the cup takes 10 seconds. The deliverable at the end is a cup of tea.</p><div class="diagram-box dg"><svg viewBox="0 0 780 290" role="img" aria-label="Network activity diagram for making a cup of tea with the critical path highlighted"><defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/></marker><marker id="c2" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/></marker></defs><path class="lnc" d="M45.0,130.0 L122.0,130.0" marker-end="url(#c2)"/><path class="lnc" d="M465.0,130.0 L542.0,130.0" marker-end="url(#c2)"/><path class="lnc" d="M575.0,130.0 L632.0,130.0" marker-end="url(#c2)"/><path class="lnc" d="M665.0,130.0 L722.0,130.0" marker-end="url(#c2)"/><path class="lnc" d="M152.2,121.3 Q295.0,20.0 435.3,119.6" marker-end="url(#c2)"/><path class="ln" d="M151.2,140.0 L221.6,203.0" marker-end="url(#a2)"/><path class="ln" d="M250.0,215.0 L332.0,215.0" marker-end="url(#a2)"/><path class="ln" d="M361.4,205.3 L436.3,141.7" marker-end="url(#a2)"/><circle class="node" cx="30" cy="130" r="15"/><text x="30" y="130">0</text><circle class="node" cx="140" cy="130" r="15"/><text x="140" y="130">1</text><circle class="node" cx="235" cy="215" r="15"/><text x="235" y="215">2</text><circle class="node" cx="350" cy="215" r="15"/><text x="350" y="215">3</text><circle class="node" cx="450" cy="130" r="15"/><text x="450" y="130">4</text><circle class="node" cx="560" cy="130" r="15"/><text x="560" y="130">5</text><circle class="node" cx="650" cy="130" r="15"/><text x="650" y="130">6</text><circle class="node" cx="740" cy="130" r="15"/><text x="740" y="130">7</text><text x="85" y="94" class="gold">Fill kettle</text><text x="85" y="108" class="gold">15 s</text><text x="295" y="46" class="gold">Boil kettle</text><text x="295" y="60" class="gold">180 s</text><text x="505" y="80" class="gold">Pour water</text><text x="505" y="94" class="gold">into cup</text><text x="505" y="108" class="gold">10 s</text><text x="605" y="80" class="gold">Put milk</text><text x="605" y="94" class="gold">into cup</text><text x="605" y="108" class="gold">5 s</text><text x="695" y="94" class="gold">Stir tea</text><text x="695" y="108" class="gold">10 s</text><text x="168" y="236">Put tea in cup</text><text x="168" y="250" class="dim">25 s</text><text x="293" y="248">Put sugar in cup</text><text x="293" y="262" class="dim">25 s</text><text x="448" y="210">Get milk out</text><text x="448" y="224">of fridge</text><text x="448" y="238" class="dim">10 s</text><text x="740" y="164" class="dim">cup of tea</text></svg><p class="dg-cap">Figure 15.7: Network activity diagram for making a cup of tea. The critical path (gold) is 15 + 180 + 10 + 5 + 10 = 220 seconds; the three grey tasks run in parallel with boiling the kettle.</p></div>
+<p>Some tasks can be completed in <strong>parallel</strong>. Boiling the kettle can take place at the same time as putting tea in the cup, sugar in the cup and getting milk out of the fridge. Where there are parallel tasks, the longest timeline forms the critical path: 180 seconds to boil the kettle is longer than the 60 seconds for the three parallel tasks. <strong>Sequential</strong> tasks cannot be done at the same time because they depend on other tasks completing first — boiling the kettle cannot start until the kettle is filled.</p>
+<p>The length of the critical path is all the sequential tasks plus the longest of each parallel set: 15 + 180 + 10 + 5 + 10 = <strong>220 seconds</strong>, the shortest time to complete the project. If any task on the critical path takes longer than planned, the end point is delayed.</p>
+<h3>Float time</h3>
+<p>Some tasks have <strong>float time</strong> — spare time before the next dependent task must start. A task with float can be delayed without affecting the rest of the project. In the tea example, getting milk out of the fridge has float: the tea (25 s), sugar (25 s) and milk (10 s) tasks take 60 seconds, while the kettle takes 180 seconds, leaving 180 − 60 = 120 seconds of float.</p>
+<h3>Creating a network activity diagram</h3>
+<p>You need to know the list of tasks, how long each takes, and which tasks are dependent on each other. This can be shown in an activity dependence table. <strong>Worked example 15.02:</strong></p><div class="table-scroll"><table><tr><th>Task</th><th>Days</th><th>Dependencies</th></tr><tr><td>A</td><td>3</td><td>—</td></tr><tr><td>B</td><td>2</td><td>A</td></tr><tr><td>C</td><td>6</td><td>A</td></tr><tr><td>D</td><td>1</td><td>B</td></tr><tr><td>E</td><td>3</td><td>C</td></tr><tr><td>F</td><td>5</td><td>D</td></tr><tr><td>G</td><td>4</td><td>E, F</td></tr><tr><td>H</td><td>3</td><td>G</td></tr><tr><td>I</td><td>2</td><td>G</td></tr><tr><td>J</td><td>3</td><td>G</td></tr></table></div>
+<p>First add any tasks that have no dependents, then add the tasks dependent on A, and continue task by task until the diagram is complete.</p><div class="diagram-box dg" style="max-width:760px;margin:0 auto"><svg viewBox="0 0 760 290" role="img" aria-label="Network activity diagram built from the activity dependence table with the critical path highlighted"><defs><marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/></marker><marker id="c3" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/></marker></defs><path class="lnc" d="M52.0,150.0 L131.0,150.0" marker-end="url(#c3)"/><text x="93.0" y="137.0" class="gold">A 3</text><path class="ln" d="M162.8,140.4 L254.8,71.4" marker-end="url(#a3)"/><text x="198.0" y="99.0">B 2</text><path class="ln" d="M286.0,60.0 L371.0,60.0" marker-end="url(#a3)"/><text x="330.0" y="47.0">D 1</text><path class="ln" d="M403.2,69.1 L504.4,139.2" marker-end="url(#a3)"/><text x="469.0" y="99.0">F 5</text><path class="lnc" d="M163.1,159.2 L254.5,224.0" marker-end="url(#c3)"/><text x="196.0" y="200.5" class="gold">C 6</text><path class="lnc" d="M285.1,229.8 L502.0,156.1" marker-end="url(#c3)"/><text x="409.0" y="206.5" class="gold">E 3</text><path class="lnc" d="M536.0,150.0 L601.0,150.0" marker-end="url(#c3)"/><text x="570.0" y="137.0" class="gold">G 4</text><path class="ln" d="M629.1,136.8 Q675.0,70.0 719.2,134.3" marker-end="url(#a3)"/><text x="675" y="98.0">I 2</text><path class="lnc" d="M636.0,150.0 L711.0,150.0" marker-end="url(#c3)"/><text x="675" y="137" class="gold">H 3</text><path class="lnc" d="M629.1,163.2 Q675.0,230.0 719.2,165.7" marker-end="url(#c3)"/><text x="675" y="216.0" class="gold">J 3</text><circle class="node" cx="36" cy="150" r="16"/><text x="36" y="150">1</text><circle class="node" cx="150" cy="150" r="16"/><text x="150" y="150">2</text><circle class="node" cx="270" cy="60" r="16"/><text x="270" y="60">3</text><circle class="node" cx="390" cy="60" r="16"/><text x="390" y="60">4</text><circle class="node" cx="520" cy="150" r="16"/><text x="520" y="150">5</text><circle class="node" cx="270" cy="235" r="16"/><text x="270" y="235">6</text><circle class="node" cx="620" cy="150" r="16"/><text x="620" y="150">7</text><circle class="node" cx="730" cy="150" r="16"/><text x="730" y="150">8</text></svg><p class="dg-cap">Network activity diagram for Worked example 15.02. Circles are milestones, arrows are tasks (letter and days). The critical path is gold: A, C, E, G then H or J, 19 days.</p></div>
+<h3>Earliest start, earliest finish and float</h3>
+<p>Network activity diagrams can be extended to include the <strong>earliest start time (ES)</strong> and <strong>earliest finish time (EF)</strong> of a task. The ES of the first task is 0 and its EF is the length of that task. The ES of all other tasks is the latest EF of its dependents:</p><pre>ES of task = latest EF of dependents
+EF = ES + length of task
+Float time = ES of next task - EF of task</pre>
+<p>In Worked example 15.03, the EF for installing windows is day 30 but the EF for tiling the roof is day 42. Both are dependents of first fix electrics, so its ES must be day 42, which leaves 42 − 30 = 12 days of float for the windows. When working in days, the ES and EF are the beginning of the day: if the EF of task 2 is day 4, task 2 should be finished by the beginning of day 4, or the end of day 3.</p>
+<p>Applying these formulas to Worked example 15.02 (float is measured to the next dependent task, or to the project end):</p><div class="table-scroll"><table><tr><th>Task</th><th>Days</th><th>ES</th><th>EF</th><th>Float</th></tr><tr><td>A</td><td>3</td><td>0</td><td>3</td><td>0</td></tr><tr><td>B</td><td>2</td><td>3</td><td>5</td><td>0</td></tr><tr><td>C</td><td>6</td><td>3</td><td>9</td><td>0</td></tr><tr><td>D</td><td>1</td><td>5</td><td>6</td><td>0</td></tr><tr><td>E</td><td>3</td><td>9</td><td>12</td><td>0</td></tr><tr><td>F</td><td>5</td><td>6</td><td>11</td><td>1</td></tr><tr><td>G</td><td>4</td><td>12</td><td>16</td><td>0</td></tr><tr><td>H</td><td>3</td><td>16</td><td>19</td><td>0</td></tr><tr><td>I</td><td>2</td><td>16</td><td>18</td><td>1</td></tr><tr><td>J</td><td>3</td><td>16</td><td>19</td><td>0</td></tr></table></div>
+<p class="note">The critical path is A, C, E, G and then H or J: 3 + 6 + 3 + 4 + 3 = 19 days. Task G cannot start until day 12, because it waits for the later of E (EF 12) and F (EF 11).</p>
+<h3>Crashing</h3>
+<p>A network activity diagram helps allocate the right resources to a task. Additional resources can be allocated to a task that needs to finish earlier than planned — this is known as <strong>crashing</strong>. Resources can be moved from tasks with high float times, because it is not critical that those tasks finish at their earliest possible time. If resources cannot be taken from float tasks, additional resources incur additional cost, which increases the project budget. For example, building the roof earlier could use resources from the plumbing task, which has 12 days of float.</p>
+<h3>Advantages and disadvantages of CPM</h3><div class="proscons"><div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Creates critical paths of shortest and longest options</li><li>Lists resources needed</li><li>Gives total times</li><li>Can show float times</li><li>Shows dependent activities</li></ul></div><div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>Must have all times for task completion</li><li>Must know all dependent activities</li></ul></div></div>
+<h3>Performance evaluation and review technique (PERT)</h3>
+<p>PERT is used to plan, schedule and manage project tasks. It can also identify a critical path. PERT is more suitable for research and development projects or non-repetitive projects, because it uses <strong>estimates</strong> of time for tasks, not actual times. Tasks are represented by arrows and milestones by circles (also called <strong>nodes</strong>), so PERT and network activity diagrams use similar symbols and can look very similar.</p>
+<p class="note"><strong>Tip:</strong> PERT uses estimated time for tasks; CPM uses actual time for tasks.</p>
+<p>PERT estimates the time for a task using three values:</p><div class="table-scroll"><table><tr><th>Estimate</th><th>What it assumes</th></tr><tr><td>Most optimistic time</td><td>Everything will go right and no problems will occur</td></tr><tr><td>Most likely time</td><td>A prediction based on what may or may not go wrong, and the chances of that happening</td></tr><tr><td>Most pessimistic time</td><td>Anything that can go wrong will go wrong</td></tr></table></div><div class="proscons"><div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Creates critical paths</li><li>Not all timings need to be as precise or known</li><li>Uses estimated times</li><li>Gives a range of times for completion (optimistic, likely, pessimistic)</li></ul></div><div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>Uses average times</li><li>Must know all dependent activities</li></ul></div></div>
+<h3>Gantt charts</h3>
+<p>A Gantt chart shows the start and finish dates of each task, the dependents of each task, the progress of each task and the current position within the project. Each <strong>bar</strong> is a task, and can be shaded to show the percentage completed. Arrows show which tasks depend on others, and a line can show the current time. It is also possible to identify the resources required. To create one you need:</p><div class="block"><ul><li>the list of tasks</li><li>how long each task will take</li><li>which tasks are dependent upon others</li><li>the start date of the first task</li><li>the resources allocated to each task</li></ul></div>
+<p>Some programs that create Gantt charts (such as GanttProject) only work in days or months, so you may need to convert hours to days, for example a task of 6 hours converts to 0.25 days.</p>
+<p><strong>Worked example 15.05:</strong> Task A starts on 1 January 2023, using the same tasks as before with these resources:</p><div class="table-scroll"><table><tr><th>Task</th><th>Days</th><th>Dependencies</th><th>Resources</th></tr><tr><td>A</td><td>3</td><td>—</td><td>R1</td></tr><tr><td>B</td><td>2</td><td>A</td><td>R1</td></tr><tr><td>C</td><td>6</td><td>A</td><td>R2</td></tr><tr><td>D</td><td>1</td><td>B</td><td>R1</td></tr><tr><td>E</td><td>3</td><td>C</td><td>R2</td></tr><tr><td>F</td><td>5</td><td>D</td><td>R3</td></tr><tr><td>G</td><td>4</td><td>E, F</td><td>R3</td></tr><tr><td>H</td><td>3</td><td>G</td><td>R5</td></tr><tr><td>I</td><td>2</td><td>G</td><td>R2</td></tr><tr><td>J</td><td>3</td><td>G</td><td>R6</td></tr></table></div>
+<p>First list the tasks, durations and resources and identify the start and finish dates of the first task. Then add the tasks dependent on A, to start the day after A finishes, and continue task by task until the chart is complete.</p><div class="diagram-box dg" style="max-width:700px;margin:0 auto"><svg viewBox="0 0 700 368" role="img" aria-label="Gantt chart of tasks A to J with durations, resources and dependency arrows"><defs><marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/></marker><marker id="c4" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/></marker></defs><line class="grid" x1="104" y1="40" x2="104" y2="348"/><text x="119.0" y="26" class="dim">1</text><line class="grid" x1="134" y1="40" x2="134" y2="348"/><text x="149.0" y="26" class="dim">2</text><line class="grid" x1="164" y1="40" x2="164" y2="348"/><text x="179.0" y="26" class="dim">3</text><line class="grid" x1="194" y1="40" x2="194" y2="348"/><text x="209.0" y="26" class="dim">4</text><line class="grid" x1="224" y1="40" x2="224" y2="348"/><text x="239.0" y="26" class="dim">5</text><line class="grid" x1="254" y1="40" x2="254" y2="348"/><text x="269.0" y="26" class="dim">6</text><line class="grid" x1="284" y1="40" x2="284" y2="348"/><text x="299.0" y="26" class="dim">7</text><line class="grid" x1="314" y1="40" x2="314" y2="348"/><text x="329.0" y="26" class="dim">8</text><line class="grid" x1="344" y1="40" x2="344" y2="348"/><text x="359.0" y="26" class="dim">9</text><line class="grid" x1="374" y1="40" x2="374" y2="348"/><text x="389.0" y="26" class="dim">10</text><line class="grid" x1="404" y1="40" x2="404" y2="348"/><text x="419.0" y="26" class="dim">11</text><line class="grid" x1="434" y1="40" x2="434" y2="348"/><text x="449.0" y="26" class="dim">12</text><line class="grid" x1="464" y1="40" x2="464" y2="348"/><text x="479.0" y="26" class="dim">13</text><line class="grid" x1="494" y1="40" x2="494" y2="348"/><text x="509.0" y="26" class="dim">14</text><line class="grid" x1="524" y1="40" x2="524" y2="348"/><text x="539.0" y="26" class="dim">15</text><line class="grid" x1="554" y1="40" x2="554" y2="348"/><text x="569.0" y="26" class="dim">16</text><line class="grid" x1="584" y1="40" x2="584" y2="348"/><text x="599.0" y="26" class="dim">17</text><line class="grid" x1="614" y1="40" x2="614" y2="348"/><text x="629.0" y="26" class="dim">18</text><line class="grid" x1="644" y1="40" x2="644" y2="348"/><text x="659.0" y="26" class="dim">19</text><line class="grid" x1="674" y1="40" x2="674" y2="348"/><text x="8" y="26" class="l dim">Day</text><text x="119.0" y="8" class="dim">1 Jan</text><text x="659.0" y="12" class="dim">19 Jan</text><text x="8" y="63.0" class="l">A  (R1)</text><rect class="barc" x="104" y="53" width="90" height="20" rx="2"/><text x="149.0" y="63.0" class="dark">3d</text><text x="8" y="93.0" class="l">B  (R1)</text><rect class="bar" x="194" y="83" width="60" height="20" rx="2"/><text x="224.0" y="93.0">2d</text><text x="8" y="123.0" class="l">C  (R2)</text><rect class="barc" x="194" y="113" width="180" height="20" rx="2"/><text x="284.0" y="123.0" class="dark">6d</text><text x="8" y="153.0" class="l">D  (R1)</text><rect class="bar" x="254" y="143" width="30" height="20" rx="2"/><text x="269.0" y="153.0">1d</text><text x="8" y="183.0" class="l">E  (R2)</text><rect class="barc" x="374" y="173" width="90" height="20" rx="2"/><text x="419.0" y="183.0" class="dark">3d</text><text x="8" y="213.0" class="l">F  (R3)</text><rect class="bar" x="284" y="203" width="150" height="20" rx="2"/><text x="359.0" y="213.0">5d</text><text x="8" y="243.0" class="l">G  (R3)</text><rect class="barc" x="464" y="233" width="120" height="20" rx="2"/><text x="524.0" y="243.0" class="dark">4d</text><text x="8" y="273.0" class="l">H  (R5)</text><rect class="barc" x="584" y="263" width="90" height="20" rx="2"/><text x="629.0" y="273.0" class="dark">3d</text><text x="8" y="303.0" class="l">I  (R2)</text><rect class="bar" x="584" y="293" width="60" height="20" rx="2"/><text x="614.0" y="303.0">2d</text><text x="8" y="333.0" class="l">J  (R6)</text><rect class="barc" x="584" y="323" width="90" height="20" rx="2"/><text x="629.0" y="333.0" class="dark">3d</text><path class="ln" d="M189,73 V93.0 H192" marker-end="url(#a4)"/><path class="ln" d="M189,73 V123.0 H192" marker-end="url(#a4)"/><path class="ln" d="M249,103 V153.0 H252" marker-end="url(#a4)"/><path class="ln" d="M279,163 V213.0 H282" marker-end="url(#a4)"/><path class="ln" d="M369,133 V183.0 H372" marker-end="url(#a4)"/><path class="ln" d="M459,193 V243.0 H462" marker-end="url(#a4)"/><path class="ln" d="M429,223 V243.0 H462" marker-end="url(#a4)"/><path class="ln" d="M579,253 V273.0 H582" marker-end="url(#a4)"/><path class="ln" d="M579,253 V303.0 H582" marker-end="url(#a4)"/><path class="ln" d="M579,253 V333.0 H582" marker-end="url(#a4)"/></svg><p class="dg-cap">Gantt chart for Worked example 15.05, starting 1 January 2023 with every day counted as a working day. Gold bars are the critical path; arrows show dependencies; (R) is the resource.</p></div><div class="proscons"><div class="pc pro"><p class="pc-title">Advantages</p><ul><li>Shows dependencies</li><li>Each row is a task, which helps to track tasks more easily</li><li>Progress can be clearly tracked with how complete each task is</li></ul></div><div class="pc con"><p class="pc-title">Disadvantages</p><ul><li>Must know how long each task will take, which tasks have dependents, the start date of the first task and the resources allocated to each task</li><li>May need to convert time into hours or minutes, which can be confusing and make it harder to read</li></ul></div></div>
+<h3>Work breakdown structure (WBS)</h3>
+<p>All the tools so far break the project into manageable tasks. But very large projects may contain hundreds of tasks at once, which can be very difficult to interpret and may create anxiety for team members. To help manage them, a hierarchical decomposition of the project can be created as a <strong>work breakdown structure (WBS)</strong>: a hierarchical diagram with tasks allocated to sub-tasks or project phases.</p>
+<p>In a software development project, the project might be broken down into the stages of a development life cycle. A project manager would then be responsible for each stage, for example the testing stage, and each stage would be broken down further into the phases involved.</p><div class="diagram-box dg"><svg viewBox="0 0 800 170" role="img" aria-label="Work breakdown structure for software development"><defs><marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/></marker><marker id="c5" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/></marker></defs><rect class="boxh" x="310" y="10" width="180" height="44" rx="3"/><text x="400.0" y="24.0">Software</text><text x="400.0" y="41.0">development</text><path class="ln" d="M400,54 V82 M58.0,82 H742.0"/><path class="ln" d="M58.0,82 V104"/><rect class="box" x="4.0" y="104" width="108" height="44" rx="3"/><text x="58.0" y="126.0">Analysis</text><path class="ln" d="M172.0,82 V104"/><rect class="box" x="118.0" y="104" width="108" height="44" rx="3"/><text x="172.0" y="126.0">Design</text><path class="ln" d="M286.0,82 V104"/><rect class="box" x="232.0" y="104" width="108" height="44" rx="3"/><text x="286.0" y="126.0">Development</text><path class="ln" d="M400.0,82 V104"/><rect class="box" x="346.0" y="104" width="108" height="44" rx="3"/><text x="400.0" y="126.0">Testing</text><path class="ln" d="M514.0,82 V104"/><rect class="box" x="460.0" y="104" width="108" height="44" rx="3"/><text x="514.0" y="126.0">Implementation</text><path class="ln" d="M628.0,82 V104"/><rect class="box" x="574.0" y="104" width="108" height="44" rx="3"/><text x="628.0" y="126.0">Documentation</text><path class="ln" d="M742.0,82 V104"/><rect class="box" x="688.0" y="104" width="108" height="44" rx="3"/><text x="742.0" y="126.0">Evaluation</text></svg><p class="dg-cap">Figure 15.19: Work breakdown structure for software development.</p></div><div class="diagram-box dg"><svg viewBox="0 0 800 262" role="img" aria-label="Work breakdown structure for software development with testing expanded"><defs><marker id="a6" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/></marker><marker id="c6" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/></marker></defs><rect class="boxh" x="310" y="10" width="180" height="44" rx="3"/><text x="400.0" y="24.0">Software</text><text x="400.0" y="41.0">development</text><path class="ln" d="M400,54 V82 M58.0,82 H742.0"/><path class="ln" d="M58.0,82 V104"/><rect class="box" x="4.0" y="104" width="108" height="44" rx="3"/><text x="58.0" y="126.0">Analysis</text><path class="ln" d="M172.0,82 V104"/><rect class="box" x="118.0" y="104" width="108" height="44" rx="3"/><text x="172.0" y="126.0">Design</text><path class="ln" d="M286.0,82 V104"/><rect class="box" x="232.0" y="104" width="108" height="44" rx="3"/><text x="286.0" y="126.0">Development</text><path class="ln" d="M400.0,82 V104"/><rect class="box" x="346.0" y="104" width="108" height="44" rx="3"/><text x="400.0" y="126.0">Testing</text><path class="ln" d="M514.0,82 V104"/><rect class="box" x="460.0" y="104" width="108" height="44" rx="3"/><text x="514.0" y="126.0">Implementation</text><path class="ln" d="M628.0,82 V104"/><rect class="box" x="574.0" y="104" width="108" height="44" rx="3"/><text x="628.0" y="126.0">Documentation</text><path class="ln" d="M742.0,82 V104"/><rect class="box" x="688.0" y="104" width="108" height="44" rx="3"/><text x="742.0" y="126.0">Evaluation</text><path class="ln" d="M400.0,148 V176 M260.0,176 H540.0"/><path class="ln" d="M260.0,176 V198"/><rect class="box" x="202.0" y="198" width="116" height="46" rx="3"/><text x="260.0" y="213.0">Black box</text><text x="260.0" y="230.0">testing</text><path class="ln" d="M400.0,176 V198"/><rect class="box" x="342.0" y="198" width="116" height="46" rx="3"/><text x="400.0" y="213.0">White box</text><text x="400.0" y="230.0">testing</text><path class="ln" d="M540.0,176 V198"/><rect class="box" x="482.0" y="198" width="116" height="46" rx="3"/><text x="540.0" y="213.0">User</text><text x="540.0" y="230.0">testing</text></svg><p class="dg-cap">Figure 15.20: WBS for software development with testing expanded.</p></div><div class="task"><p class="task-label"><span>Worked examples and activities</span><span class="pts">7 points</span></p><h4>Answers from the notes and the worked examples.</h4><div class="sub-q"><label>Give one advantage for each of the following project management tools: critical path method, PERT and Gantt charts.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>CPM: any of — creates critical paths of shortest and longest options; lists resources; gives total times; can show float; shows dependent activities. PERT: any of — creates critical paths; timings need not be precise; uses estimated times; gives a range of times. Gantt: any of — shows dependencies; each row is a task; progress is clearly tracked</div><div class="self-mark"><input type="checkbox" id="sm-12"><label for="sm-12">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>In the cup of tea example, how long is the critical path, and which task has 120 seconds of float?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>220 seconds (15 + 180 + 10 + 5 + 10); getting the milk out of the fridge (with putting tea and sugar in the cup)</div><div class="self-mark"><input type="checkbox" id="sm-13"><label for="sm-13">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Why is the ES of first fix electrics day 42 and not day 30?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Its ES is the latest EF of its dependents: windows finish on day 30 but tiling the roof finishes on day 42, so it cannot start until day 42</div><div class="self-mark"><input type="checkbox" id="sm-14"><label for="sm-14">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>For Worked example 15.02, which tasks form the critical path and how long is it?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>A, C, E, G and H or J: 3 + 6 + 3 + 4 + 3 = 19 days</div><div class="self-mark"><input type="checkbox" id="sm-15"><label for="sm-15">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain what is meant by crashing a task.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Allocating additional resources to a task that needs to be completed earlier than planned, ideally taken from tasks with high float, otherwise at extra cost</div><div class="self-mark"><input type="checkbox" id="sm-16"><label for="sm-16">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Why is PERT more suitable for research and development projects?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>PERT uses estimates of time for tasks rather than actual times, and R&amp;D or non-repetitive projects do not have known task lengths</div><div class="self-mark"><input type="checkbox" id="sm-17"><label for="sm-17">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>What do the black bars and the red line show on a Gantt chart such as Figure 15.13?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>The black bars show how much of each task has been completed; the red line shows the current time (position in the project)</div><div class="self-mark"><input type="checkbox" id="sm-18"><label for="sm-18">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Activity 15.03 scenario (worked out)</span><span class="pts">5 points</span></p><h4>Tasks: A 3 days; B 5; C 4; D 18 (after A); E 16 (after B); F 12 (after C); G 7 (after E, F); H 11 (after D, G); I 2 (after H). Answers calculated using the ES and EF formulas.</h4><div class="sub-q"><label>How many days is the critical path?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>41 days</div><div class="self-mark"><input type="checkbox" id="sm-19"><label for="sm-19">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Which tasks form the critical path?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>B, E, G, H and I (5 + 16 + 7 + 11 + 2 = 41). The other route A, D, H, I is only 3 + 18 + 11 + 2 = 34 days</div><div class="self-mark"><input type="checkbox" id="sm-20"><label for="sm-20">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>What are the ES and EF of task H?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>ES = 28 (the latest EF of its dependents: D finishes day 21, G finishes day 28); EF = 28 + 11 = 39</div><div class="self-mark"><input type="checkbox" id="sm-21"><label for="sm-21">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>How much float does task D have?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>7 days: D finishes on day 21 but H cannot start until day 28</div><div class="self-mark"><input type="checkbox" id="sm-22"><label for="sm-22">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>If the project starts on 1 April 2023 and every day is a working day, on which date does it finish?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Day 41 is 11 May 2023</div><div class="self-mark"><input type="checkbox" id="sm-23"><label for="sm-23">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">8 points</span></p><h4>Click which tool or technique each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="w"><span class="term">Helps when hundreds of tasks are hard to interpret</span><span class="choices"><button data-choice="c">CPM</button><button data-choice="p">PERT</button><button data-choice="g">Gantt chart</button><button data-choice="w">WBS</button></span></div><div class="classify-item" data-answer="p"><span class="term">More suitable for research and development or non-repetitive projects</span><span class="choices"><button data-choice="c">CPM</button><button data-choice="p">PERT</button><button data-choice="g">Gantt chart</button><button data-choice="w">WBS</button></span></div><div class="classify-item" data-answer="c"><span class="term">Can show float times and lists the resources needed</span><span class="choices"><button data-choice="c">CPM</button><button data-choice="p">PERT</button><button data-choice="g">Gantt chart</button><button data-choice="w">WBS</button></span></div><div class="classify-item" data-answer="p"><span class="term">Uses optimistic, likely and pessimistic time estimates</span><span class="choices"><button data-choice="c">CPM</button><button data-choice="p">PERT</button><button data-choice="g">Gantt chart</button><button data-choice="w">WBS</button></span></div><div class="classify-item" data-answer="g"><span class="term">A line shows the current position within the project</span><span class="choices"><button data-choice="c">CPM</button><button data-choice="p">PERT</button><button data-choice="g">Gantt chart</button><button data-choice="w">WBS</button></span></div><div class="classify-item" data-answer="g"><span class="term">Each bar is a task, shaded to show the percentage completed</span><span class="choices"><button data-choice="c">CPM</button><button data-choice="p">PERT</button><button data-choice="g">Gantt chart</button><button data-choice="w">WBS</button></span></div><div class="classify-item" data-answer="w"><span class="term">A hierarchical diagram breaking a large project into phases and sub-tasks</span><span class="choices"><button data-choice="c">CPM</button><button data-choice="p">PERT</button><button data-choice="g">Gantt chart</button><button data-choice="w">WBS</button></span></div><div class="classify-item" data-answer="c"><span class="term">Uses actual times and can only be used when the length of every task is known</span><span class="choices"><button data-choice="c">CPM</button><button data-choice="p">PERT</button><button data-choice="g">Gantt chart</button><button data-choice="w">WBS</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">4 points</span></p><div class="mcq" data-answer="0"><p class="q">1. What is float time?</p><div class="opts"><button class="opt" data-idx="0">Spare time before the next dependent task must start</button><button class="opt" data-idx="1">The total length of the critical path</button><button class="opt" data-idx="2">The cost of a task</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. How is the length of the critical path calculated?</p><div class="opts"><button class="opt" data-idx="0">All sequential tasks plus the longest of each set of parallel tasks</button><button class="opt" data-idx="1">The sum of every task</button><button class="opt" data-idx="2">The shortest of each set of parallel tasks</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. In a network activity diagram, what do the arrows represent?</p><div class="opts"><button class="opt" data-idx="0">Tasks</button><button class="opt" data-idx="1">Milestones</button><button class="opt" data-idx="2">Resources</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">4. What is the ES of the first task?</p><div class="opts"><button class="opt" data-idx="0">0</button><button class="opt" data-idx="1">Its length in days</button><button class="opt" data-idx="2">The project deadline</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-practice"><h2 class="section-title">Practice questions <span class="tag">Exam style</span></h2><p>These exam-style questions were written from the notes. Write each answer in full first, then compare it with the mark points and tick the ones you covered.</p><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p><h4>Describe what happens during project initiation. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>The goals of the project are set: what the project will do and why it is needed</span></label><label class="mp-item"><input type="checkbox"><span>The objectives are identified (and listed, often split into smaller objectives) and agreed by the owner</span></label><label class="mp-item"><input type="checkbox"><span>The resources required are identified, such as equipment, people and time</span></label><label class="mp-item"><input type="checkbox"><span>Success criteria are defined — essential elements that must be completed</span></label><label class="mp-item"><input type="checkbox"><span>Stakeholders and their needs are identified</span></label><label class="mp-item"><input type="checkbox"><span>The project scope and a high-level schedule are set out</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p><h4>Explain two things that a project manager monitors during execution. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Progress against time (tasks completed on schedule)</span></label><label class="mp-item"><input type="checkbox"><span>Explanation: delays to one task delay later tasks, so problems can be found and sections re-planned</span></label><label class="mp-item"><input type="checkbox"><span>Cost compared with the budget</span></label><label class="mp-item"><input type="checkbox"><span>Explanation: this helps make sure the project does not spend more than its allocated budget</span></label><label class="mp-item"><input type="checkbox"><span>Quality of completed tasks</span></label><label class="mp-item"><input type="checkbox"><span>Explanation: mistakes noticed later cost more money and delay the project</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p><h4>Explain how project management software can help to manage the costs of a project. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Each resource is given a cost, such as a cost per hour</span></label><label class="mp-item"><input type="checkbox"><span>The cost of a task is calculated from the hours each resource is used for and its cost per hour</span></label><label class="mp-item"><input type="checkbox"><span>Extra expenses incurred by team members are recorded and added to the overall cost</span></label><label class="mp-item"><input type="checkbox"><span>Spending can be tracked over periods, for example daily, weekly and monthly graphs</span></label><label class="mp-item"><input type="checkbox"><span>Data can be exported to .xlsx or .csv so other software can analyse it</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p><h4>Compare the critical path method (CPM) and PERT. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>CPM uses actual times for tasks; PERT uses estimated times</span></label><label class="mp-item"><input type="checkbox"><span>CPM can only be used when the length of every task is known</span></label><label class="mp-item"><input type="checkbox"><span>PERT is more suitable for research and development or non-repetitive projects</span></label><label class="mp-item"><input type="checkbox"><span>PERT gives optimistic, most likely and pessimistic times</span></label><label class="mp-item"><input type="checkbox"><span>Both can identify a critical path (and both need all dependent activities to be known)</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Question 5 (table)</span><span class="pts">2 points</span></p><h4>A project has four tasks: A takes 3 days; B takes 2 days and depends on A; C takes 5 days and depends on A; D takes 4 days and depends on B and C.</h4><div class="sub-q"><label>Identify the critical path and its length. [2]</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>A, C, D: 3 + 5 + 4 = 12 days (the other route A, B, D is 3 + 2 + 4 = 9 days)</div><div class="self-mark"><input type="checkbox" id="sm-24"><label for="sm-24">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>State the ES of task D and the float of task B. [2]</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>ES of D = 8 (the latest EF of its dependents: B finishes day 5, C finishes day 8); float of B = 8 − 5 = 3 days</div><div class="self-mark"><input type="checkbox" id="sm-25"><label for="sm-25">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">3 points</span></p><h4>Explain the purpose of a work breakdown structure (WBS). (3 marks)</h4><div class="sub-q mp" data-max="3"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 3)</span><label class="mp-item"><input type="checkbox"><span>A hierarchical decomposition of the project into sub-tasks or project phases</span></label><label class="mp-item"><input type="checkbox"><span>Very large projects may have hundreds of tasks that are difficult to interpret, and a WBS makes them easier to manage and understand</span></label><label class="mp-item"><input type="checkbox"><span>It can reduce anxiety for team members worried about the number of tasks</span></label><label class="mp-item"><input type="checkbox"><span>A project manager can be responsible for each stage (for example testing)</span></label><div class="mp-foot"><span class="mp-count">0 / 3 marks</span><span class="mp-note"></span></div></div></div></div></div>
+</div>
+<footer>Cambridge AS &amp; A Level IT · Project Management — built for revision, points are just for you.</footer>
+<script>
+(function(){
+  const scoreValEl = document.getElementById('score-val');
+  const scoreMaxEl = document.getElementById('score-max');
+  let score = 0;
+  function addScore(n){
+    score += n;
+    if(score < 0) score = 0;
+    scoreValEl.textContent = score;
+  }
+
+  // Work out the maximum score from what is actually on the page
+  let max = 0;
+  document.querySelectorAll('.self-mark input[type=checkbox]').forEach(function(cb){
+    max += parseInt(cb.dataset.points || '1', 10);
+  });
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    max += parseInt(sq.dataset.max, 10);
+  });
+  max += document.querySelectorAll('.classify-item').length;
+  max += document.querySelectorAll('.mcq').length;
+  scoreMaxEl.textContent = max;
+
+  // Tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // Written questions with one self-marked point each
+  document.querySelectorAll('.sub-q:not(.mp)').forEach(function(sq){
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const reveal = sq.querySelector('.answer-reveal');
+    const mark = sq.querySelector('.self-mark');
+    const checkbox = mark ? mark.querySelector('input[type=checkbox]') : null;
+    if(!btn || !reveal || !mark) return;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        reveal.classList.remove('show');
+        mark.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      reveal.classList.add('show');
+      mark.classList.add('show');
+    });
+
+    if(checkbox){
+      checkbox.addEventListener('change', function(){
+        const pts = parseInt(checkbox.dataset.points || '1', 10);
+        addScore(checkbox.checked ? pts : -pts);
+      });
+    }
+  });
+
+  // Extended answers: tick the mark points you covered, capped at the maximum
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    const cap = parseInt(sq.dataset.max, 10);
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const panel = sq.querySelector('.markpoints');
+    const note = sq.querySelector('.mp-note');
+    const count = sq.querySelector('.mp-count');
+    const boxes = panel.querySelectorAll('input[type=checkbox]');
+    let awarded = 0;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        panel.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      panel.classList.add('show');
+    });
+
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if(cb.checked){
+          if(awarded >= cap){
+            cb.checked = false;
+            note.textContent = "That's already full marks (" + cap + "). Untick a point first to swap it.";
+            return;
+          }
+          awarded += 1;
+          addScore(1);
+        } else {
+          awarded -= 1;
+          addScore(-1);
+        }
+        note.textContent = '';
+        count.textContent = awarded + ' / ' + cap + ' marks';
+      });
+    });
+  });
+
+  // Sort-it tasks
+  document.querySelectorAll('.classify-item').forEach(function(item){
+    const answer = item.dataset.answer;
+    const buttons = item.querySelectorAll('.choices button');
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){
+        buttons.forEach(function(other){ other.disabled = true; });
+        if(b.dataset.choice === answer){
+          b.classList.add('correct');
+          addScore(1);
+        } else {
+          b.classList.add('incorrect');
+          buttons.forEach(function(other){
+            if(other.dataset.choice === answer) other.classList.add('correct');
+          });
+        }
+      });
+    });
+  });
+
+  // Quick checks
+  document.querySelectorAll('.mcq').forEach(function(mcq){
+    const correctIdx = mcq.dataset.answer;
+    const opts = mcq.querySelectorAll('.opt');
+    const feedback = mcq.querySelector('.mcq-feedback');
+    opts.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        opts.forEach(function(o){ o.disabled = true; });
+        if(opt.dataset.idx === correctIdx){
+          opt.classList.add('correct');
+          feedback.textContent = 'Correct.';
+          feedback.className = 'mcq-feedback ok';
+          addScore(1);
+        } else {
+          opt.classList.add('incorrect');
+          opts.forEach(function(o){
+            if(o.dataset.idx === correctIdx) o.classList.add('correct');
+          });
+          feedback.textContent = 'Not quite — the correct answer is highlighted above.';
+          feedback.className = 'mcq-feedback bad';
+        }
+      });
+    });
+  });
+
+  })();
+</script>
+<script>
+(function(){
+  var STORE_KEY = 'ict-lesson-progress::' + location.pathname + '::' + document.title;
+
+  function load(){
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+    catch(e){ return {}; }
+  }
+  function save(mutator){
+    try {
+      var s = load();
+      mutator(s);
+      localStorage.setItem(STORE_KEY, JSON.stringify(s));
+    } catch(e){ /* storage unavailable or full: fail silently */ }
+  }
+  function all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+
+  // This page has no data-task attributes, so find things by their own classes
+  var subQs      = all('.sub-q:not(.mp)');   // short written answers (self-marked)
+  var mpQs       = all('.sub-q.mp');         // extended answers (mark points)
+  var classifyIt = all('.classify-item');
+  var mcqs       = all('.mcq');
+
+  // ---- SAVE: listen alongside the page's own handlers ----
+
+  subQs.forEach(function(sq, i){
+    var key = 'subq-' + i;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var cb = sq.querySelector('.self-mark input[type=checkbox]');
+    if(ta) ta.addEventListener('input', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+    });
+    if(btn) btn.addEventListener('click', function(){
+      save(function(s){
+        s[key] = s[key] || {};
+        s[key].text = ta ? ta.value : '';
+        s[key].checked = !!(ta && ta.value.trim());
+      });
+    });
+    if(cb) cb.addEventListener('change', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].selfMarked = cb.checked; });
+    });
+  });
+
+  mpQs.forEach(function(sq, i){
+    var key = 'mp-' + i;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var boxes = all_in(sq, '.markpoints input[type=checkbox]');
+    if(ta) ta.addEventListener('input', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+    });
+    if(btn) btn.addEventListener('click', function(){
+      save(function(s){
+        s[key] = s[key] || {};
+        s[key].text = ta ? ta.value : '';
+        s[key].shown = !!(ta && ta.value.trim());
+      });
+    });
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        save(function(s){
+          s[key] = s[key] || {};
+          var ticked = [];
+          boxes.forEach(function(b, bi){ if(b.checked) ticked.push(bi); });
+          s[key].ticked = ticked;
+        });
+      });
+    });
+  });
+  function all_in(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); }
+
+  classifyIt.forEach(function(item, i){
+    all_in(item, '.choices button').forEach(function(b, bi){
+      b.addEventListener('click', function(){
+        save(function(s){ s['classify-' + i] = bi; });
+      });
+    });
+  });
+
+  mcqs.forEach(function(mcq, i){
+    all_in(mcq, '.opt').forEach(function(o, oi){
+      o.addEventListener('click', function(){
+        save(function(s){ s['mcq-' + i] = oi; });
+      });
+    });
+  });
+
+  // ---- RESTORE: replay stored answers as real clicks, so the page's
+  // own scoring logic runs exactly as it did originally ----
+
+  (function restore(){
+    var s = load();
+
+    subQs.forEach(function(sq, i){
+      var rec = s['subq-' + i];
+      if(!rec) return;
+      var ta = sq.querySelector('textarea');
+      var btn = sq.querySelector('.check-btn');
+      var cb = sq.querySelector('.self-mark input[type=checkbox]');
+      if(ta && rec.text) ta.value = rec.text;
+      if(rec.checked && btn) btn.click();
+      if(rec.selfMarked && cb){
+        cb.checked = true;
+        cb.dispatchEvent(new Event('change'));
+      }
+    });
+
+    mpQs.forEach(function(sq, i){
+      var rec = s['mp-' + i];
+      if(!rec) return;
+      var ta = sq.querySelector('textarea');
+      var btn = sq.querySelector('.check-btn');
+      var boxes = all_in(sq, '.markpoints input[type=checkbox]');
+      if(ta && rec.text) ta.value = rec.text;
+      if(rec.shown && btn) btn.click();
+      (rec.ticked || []).forEach(function(bi){
+        if(boxes[bi]){
+          boxes[bi].checked = true;
+          boxes[bi].dispatchEvent(new Event('change'));
+        }
+      });
+    });
+
+    classifyIt.forEach(function(item, i){
+      var bi = s['classify-' + i];
+      if(bi === undefined) return;
+      var buttons = item.querySelectorAll('.choices button');
+      if(buttons[bi]) buttons[bi].click();
+    });
+
+    mcqs.forEach(function(mcq, i){
+      var oi = s['mcq-' + i];
+      if(oi === undefined) return;
+      var opts = mcq.querySelectorAll('.opt');
+      if(opts[oi]) opts[oi].click();
+    });
+  })();
+
+  // ---- Small "reset my answers" control ----
+  var resetBtn = document.createElement('button');
+  resetBtn.textContent = 'Reset my answers';
+  resetBtn.setAttribute('type', 'button');
+  resetBtn.style.cssText = 'position:fixed;bottom:14px;left:14px;z-index:50;font-family:JetBrains Mono,monospace;'
+    + 'font-size:11px;padding:7px 11px;background:#141b2e;border:1px solid #40557d;'
+    + 'color:#9ba4bc;border-radius:3px;cursor:pointer;';
+  resetBtn.addEventListener('mouseenter', function(){ resetBtn.style.color = '#e7e9f1'; });
+  resetBtn.addEventListener('mouseleave', function(){ resetBtn.style.color = '#9ba4bc'; });
+  resetBtn.addEventListener('click', function(){
+    if(confirm('Clear all your saved answers on this page?')){
+      try { localStorage.removeItem(STORE_KEY); } catch(e){}
+      location.reload();
+    }
+  });
+  document.body.appendChild(resetBtn);
+})();
+</script>
+</body>
+</html>
