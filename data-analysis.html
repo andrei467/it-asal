@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Analysis — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --bg-deep:#090d18;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#04141a;}
+
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 24px 120px; }
+
+  nav.theory-nav{
+    max-width:760px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:44px 24px 34px; max-width:760px; margin:0 auto; border-bottom:1px solid var(--trace);
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,38px);
+    line-height:1.15; margin:0 0 14px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
+
+  nav.tabs{
+    max-width:760px; margin:0 auto; padding:14px 24px; display:flex; gap:6px;
+    overflow-x:auto; border-bottom:1px solid var(--trace); position:sticky; top:0;
+    background:rgba(13,18,32,.95); backdrop-filter: blur(4px); z-index:30;
+  }
+  nav.tabs button{
+    font-family:var(--mono); font-size:12.5px; white-space:nowrap; background:transparent;
+    border:1px solid var(--trace); color:var(--paper-dim); padding:8px 13px;
+    border-radius:var(--radius); cursor:pointer; flex-shrink:0;
+  }
+  nav.tabs button:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  nav.tabs button.active{ background:var(--signal); color:#04141a; border-color:var(--signal); font-weight:500; }
+
+  .panel{ display:none; padding:40px 0 8px; }
+  .panel.active{ display:block; }
+
+  h2.section-title{
+    font-family:var(--mono); font-size:22px; color:var(--signal-bright);
+    margin:0 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2.section-title .tag{
+    font-size:12px; color:var(--sage); border:1px solid var(--trace);
+    padding:2px 7px; border-radius:var(--radius);
+  }
+  h3{ font-family:var(--mono); font-size:16px; color:var(--gold); margin:26px 0 8px; font-weight:500; }
+  p{margin:10px 0;}
+  ul, ol{padding-left:22px; margin:10px 0;}
+  li{margin:4px 0;}
+  strong{color:var(--paper); font-weight:600;}
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0 8px; font-size:15px; }
+  th,td{ border:1px solid var(--trace); padding:8px 10px; text-align:left; vertical-align:top; }
+  th{ font-family:var(--mono); font-size:12px; color:var(--sage); font-weight:500; background:rgba(134,201,160,0.06); }
+  .table-scroll{ overflow-x:auto; }
+  .note{ color:var(--paper-dim); font-size:14.5px; }
+
+  .block{ border-left:2px solid var(--trace); padding-left:18px; margin:18px 0; }
+  .block ul, .block ol{ margin:0; padding-left:20px; }
+
+  .proscons{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 8px; }
+  .pc{ border:1px solid var(--trace); border-radius:var(--radius); background:var(--bg-raised); padding:2px 14px 12px; }
+  .pc.pro{ border-top:2px solid var(--sage); }
+  .pc.con{ border-top:2px solid var(--brick); }
+  .pc-title{ font-family:var(--mono); font-size:12.5px; font-weight:500; margin:12px 0 4px; }
+  .pc.pro .pc-title{ color:var(--sage); }
+  .pc.con .pc-title{ color:var(--brick); }
+  .pc ul{ padding-left:18px; margin:6px 0 0; font-size:15px; }
+  @media (max-width:600px){ .proscons{ grid-template-columns:1fr; } }
+
+  details.fold{ border:1px solid var(--trace); border-radius:var(--radius); margin:12px 0; background:var(--bg-raised); }
+  details.fold summary{ font-family:var(--mono); font-size:13.5px; color:var(--gold); padding:11px 14px; cursor:pointer; }
+  details.fold[open] summary{ border-bottom:1px solid var(--trace); }
+  details.fold .fold-body{ padding:2px 14px 12px; }
+
+  .diagram-box{
+    background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius);
+    padding:14px 10px; margin:18px 0 6px; text-align:center;
+  }
+  .diagram-box svg{ width:100%; height:auto; max-width:460px; }
+  .diagram-box svg.wide{ max-width:600px; }
+  .diagram-caption{ font-family:var(--mono); font-size:12px; color:var(--paper-dim); margin-top:6px; }
+  .signal-caption{ font-family: var(--mono); font-size:12.5px; color:var(--paper-dim); margin-top:8px; text-align:center; }
+
+  .task{ margin:32px 0; border:1px solid var(--trace); border-radius:var(--radius); background: var(--bg-raised); padding:20px 20px 22px; }
+  .task-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .task-label .pts{color:var(--sage);}
+  .task h4{ margin:0 0 12px; font-family:var(--serif); font-weight:600; font-size:16.5px; color:var(--paper); }
+  .task .sub-q{margin:18px 0;}
+  .task .sub-q:first-child{margin-top:0;}
+  .sub-q label{ display:block; font-family:var(--serif); font-size:15.5px; margin-bottom:8px; color:var(--paper); }
+
+  textarea{
+    width:100%; min-height:52px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-radius:var(--radius); color:var(--paper); font-family:var(--serif);
+    font-size:15.5px; padding:10px 12px; resize:vertical;
+  }
+  textarea:focus, button:focus-visible, .opt:focus-visible, summary:focus-visible, input[type=checkbox]:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:1px; }
+  .row{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+
+  button{
+    font-family:var(--mono); font-size:13px; background:var(--signal); color:#04141a;
+    border:none; padding:9px 15px; border-radius:var(--radius); cursor:pointer; font-weight:500;
+  }
+  button:hover{background:var(--signal-bright);}
+  button.ghost{ background:transparent; border:1px solid var(--trace); color:var(--paper-dim); }
+  button.ghost:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  button:disabled{opacity:.5; cursor:default;}
+
+  .error-msg{ color:var(--brick); font-family:var(--mono); font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show{display:block;}
+
+  .answer-reveal{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .answer-reveal.show{display:block;}
+  .answer-reveal .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:5px; }
+
+  .self-mark{ display:none; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:13px; color:var(--paper-dim); }
+  .self-mark.show{display:flex;}
+  .self-mark input[type=checkbox]{ width:17px; height:17px; accent-color: var(--gold); cursor:pointer; }
+  .self-mark label{cursor:pointer; margin:0; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+
+  .markpoints{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .markpoints.show{display:block;}
+  .markpoints .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:6px; }
+  .markpoints .mp-item{
+    display:flex; gap:10px; align-items:flex-start; margin:0; padding:7px 0;
+    border-bottom:1px solid var(--trace-dim); font-size:15px; font-weight:400; cursor:pointer;
+  }
+  .markpoints .mp-item:last-of-type{border-bottom:none;}
+  .markpoints .mp-item input{ width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--gold); cursor:pointer; }
+  .mp-foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; font-family:var(--mono); font-size:13px; }
+  .mp-count{ color:var(--gold); }
+  .mp-note{ color:var(--brick); }
+
+  .mcq{margin:20px 0;}
+  .mcq:first-of-type{margin-top:0;}
+  .mcq p.q{ font-family:var(--serif); font-size:15.5px; color:var(--paper); margin:0 0 10px; }
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:10px 13px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer; font-weight:400;
+  }
+  .opt:hover:not(:disabled){border-color:var(--signal); background:var(--bg-deep);}
+  .opt.correct{border-color:var(--sage); background:rgba(134,201,160,0.14);}
+  .opt.incorrect{border-color:var(--brick); background:rgba(224,104,92,0.14);}
+  .opt:disabled{cursor:default;}
+  .mcq-feedback{ font-family:var(--mono); font-size:13px; margin-top:8px; min-height:1.2em; }
+  .mcq-feedback.ok{color:var(--sage);}
+  .mcq-feedback.bad{color:var(--brick);}
+
+  .classify-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 0; border-bottom:1px solid var(--trace-dim); flex-wrap:wrap;
+  }
+  .classify-item:last-child{border-bottom:none;}
+  .classify-item .term{font-size:15px; max-width:60%;}
+  .classify-item .choices{display:flex; gap:8px; flex-wrap:wrap;}
+  .classify-item .choices button{
+    background:transparent; border:1px solid var(--trace); color:var(--paper-dim);
+    font-size:12px; padding:6px 10px;
+  }
+  .classify-item .choices button:hover:not(:disabled){ color:var(--paper); border-color:var(--paper-dim); }
+  .classify-item .choices button.correct{background:rgba(134,201,160,0.16); border-color:var(--sage); color:var(--paper);}
+  .classify-item .choices button.incorrect{background:rgba(224,104,92,0.16); border-color:var(--brick); color:var(--paper);}
+  @media (max-width:600px){ .classify-item .term{max-width:100%;} }
+
+  #score-badge{
+    position:fixed; top:14px; right:14px; z-index:50; font-family:var(--mono); font-size:13px;
+    background:var(--bg-raised); border:1px solid var(--signal); color:var(--signal-bright);
+    padding:8px 13px; border-radius:var(--radius); box-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  #score-badge .n{color:var(--gold); font-weight:700;}
+
+  footer{ max-width:760px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    header.hero{padding:36px 20px 26px;}
+    #score-badge{top:auto; bottom:14px; right:14px;}
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+
+  .diagram-box img{ max-width:100%; height:auto; background:#fff; border-radius:3px; padding:8px; }
+  pre{ background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius); padding:12px 14px; overflow-x:auto; font-family:var(--mono); font-size:13.5px; line-height:1.55; margin:14px 0; color:var(--paper); }
+  code{ font-family:var(--mono); font-size:.9em; color:var(--signal-bright); }
+  pre code{ color:inherit; }
+
+  .dg svg{ width:100%; height:auto; display:block; }
+  .dg .box{ fill:var(--bg-raised); stroke:var(--trace); stroke-width:1.5; }
+  .dg .boxh{ fill:var(--bg-raised); stroke:var(--signal); stroke-width:1.8; }
+  .dg .node{ fill:var(--bg-deep); stroke:var(--signal); stroke-width:1.6; }
+  .dg .ln{ stroke:var(--paper-dim); stroke-width:1.6; fill:none; }
+  .dg .lnc{ stroke:var(--gold); stroke-width:2.6; fill:none; }
+  .dg .bar{ fill:#23365a; stroke:var(--signal); stroke-width:1.2; }
+  .dg .barc{ fill:var(--gold); stroke:var(--gold); stroke-width:1.2; }
+  .dg .grid{ stroke:var(--trace-dim); stroke-width:1; }
+  .dg text{ fill:var(--paper); font-family:var(--mono); font-size:12px; text-anchor:middle; dominant-baseline:central; }
+  .dg text.dim{ fill:var(--paper-dim); font-size:11px; }
+  .dg text.gold{ fill:var(--gold); }
+  .dg text.l{ text-anchor:start; }
+  .dg text.r{ text-anchor:end; }
+  .dg text.dark{ fill:#0d1220; font-weight:700; }
+  .dg-cap{ font-family:var(--mono); font-size:12px; color:var(--paper-dim); margin:8px 0 0; text-align:center; }
+  .diagram-box.dg{ padding:14px; }
+  pre{ background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius); padding:12px 14px; overflow-x:auto; font-family:var(--mono); font-size:13.5px; line-height:1.55; margin:14px 0; color:var(--paper); }
+  code{ font-family:var(--mono); font-size:.9em; color:var(--signal-bright); }
+  .diagram-box.dg svg{ max-width:100%; }
+  .dg text.halo{ paint-order:stroke; stroke:var(--bg-deep); stroke-width:7px; stroke-linejoin:round; fill:var(--paper-dim); font-size:11px; }
+
+  table.sheet{ border-collapse:collapse; margin:0 auto; font-family:var(--mono); font-size:13px; }
+  table.sheet th{ background:var(--trace-dim); color:var(--paper-dim); font-weight:400; border:1px solid var(--trace); padding:5px 12px; }
+  table.sheet td{ border:1px solid var(--trace); padding:5px 12px; text-align:left; white-space:pre; color:var(--paper); }
+  table.sheet td.bad{ background:rgba(224,104,92,0.18); }
+  table.sheet td.ok{ background:rgba(134,201,160,0.16); }
+  table.sheet td.hl{ background:rgba(230,184,92,0.22); }
+  table.sheet td.num{ text-align:right; }
+  table.sheet td.fn{ color:var(--gold); }
+</style>
+</head>
+<body>
+<div id="score-badge">Score: <span class="n" id="score-val">0</span> / <span id="score-max">0</span></div>
+<nav class="theory-nav"><a class="disabled" href="#" aria-disabled="true">← <span class="full">Previous theory</span></a><span class="spacer"></span><a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a></nav>
+<header class="hero"><p class="kicker">Cambridge AS &amp; A Level IT · Data Analysis</p><h1 class="title">Data Analysis</h1><p>This page covers how to clean and transform data in a spreadsheet, how to display it to communicate information, and how to organise data from different sources so it can be used in a database.</p></header>
+<nav class="tabs"><button class="tab-btn active" data-panel="clean">17.1 Cleaning data</button><button class="tab-btn" data-panel="display">17.2 Displaying data</button><button class="tab-btn" data-panel="sources">17.3 Different sources</button><button class="tab-btn" data-panel="practice">Practice questions</button></nav>
+<div class="wrap">
+<div class="panel active" id="panel-clean"><h2 class="section-title">Transforming and cleaning data <span class="tag">17.1</span></h2>
+<p>If the answers provided by processing the data are to be relied on, the data they are based on must be accurate and in a format that can be analysed. There is a saying that if you put garbage in, you will get garbage out.</p><div class="diagram-box dg"><svg viewBox="0 0 760 120" role="img" aria-label="Garbage in, garbage out diagram"><defs><marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/></marker><marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/></marker></defs><rect class="box" x="10" y="40" width="200" height="60" rx="3"/><text x="110.0" y="62.0">Inaccurate or badly</text><text x="110.0" y="79.0">formatted data</text><rect class="box" x="280" y="40" width="200" height="60" rx="3"/><text x="380.0" y="70.0">Processing</text><rect class="box" x="550" y="40" width="200" height="60" rx="3"/><text x="650.0" y="62.0">Meaningless</text><text x="650.0" y="79.0">information</text><path class="ln" d="M210.0,70.0 L275.0,70.0" marker-end="url(#a1)"/><path class="ln" d="M480.0,70.0 L545.0,70.0" marker-end="url(#a1)"/><text x="110" y="22" class="dim">garbage in</text><text x="650" y="22" class="dim">garbage out</text></svg><p class="dg-cap">Figure 17.2 redrawn: if the data put in is not accurate and correctly formatted, the information that comes out cannot be relied on.</p></div>
+<p>A visual inspection of the data can highlight obvious problems such as missing data, dates that are formatted incorrectly, numbers formatted as text, or a percentage given as a number rather than formatted as a percentage.</p>
+<p>The spreadsheet in Figure 17.3 has inconsistencies that must be corrected before meaningful information can be extracted:</p><div class="block"><ul><li>There are extra spaces before, in the middle of and after the employee names.</li><li>There are inconsistencies in the Hire Date column, with most in dd/mm/yyyy format and some in mm/dd/yyyy format.</li><li>The Annual Salary column is formatted as text and so could not be used in calculations.</li><li>The bonus percentage is given as a number rather than a percentage.</li><li>There are duplicates in the data.</li></ul></div><div class="diagram-box"><div class="table-scroll"><table class="sheet"><tr><th>Employee ID</th><th>Full Name</th><th>Hire Date</th><th>Annual Salary</th><th>Bonus</th></tr><tr><td class="">E101</td><td class="bad">·Maria··Lopez·</td><td class="ok">14/03/2019</td><td class="bad">$48,500</td><td class="bad">5</td></tr><tr><td class="">E102</td><td class="ok">John·Smith</td><td class="bad">03/22/2020</td><td class="bad">$52,000</td><td class="bad">8</td></tr><tr><td class="">E103</td><td class="bad">Ana··Costa</td><td class="ok">09/11/2018</td><td class="bad">$39,750</td><td class="bad">4</td></tr><tr><td class="bad">E101</td><td class="bad">·Maria··Lopez·</td><td class="bad">14/03/2019</td><td class="bad">$48,500</td><td class="bad">5</td></tr></table></div><p class="dg-cap">A mock-up of the kind of data in Figure 17.3 (invented values, not the book's data). Red cells show the problems; · marks an extra space; the last row duplicates the first.</p></div>
+<p>Correcting these inconsistencies so that the data can be analysed and displayed is called <strong>cleaning</strong>, part of the <strong>transforming</strong> process. Transforming is converting data from one format or structure to another, to make it more suitable for analysis or processing. Cleaning involves identifying and resolving issues such as missing values, duplicates, errors, inconsistencies and formatting problems in the data.</p>
+<p>Finding duplicates and reformatting data can be difficult just by looking at the spreadsheet, so spreadsheet functions and tools can be used to:</p><div class="block"><ul><li>delete extra spaces</li><li>convert all dates to the same format</li><li>format numbers as a currency or percentage</li><li>remove duplicates</li></ul></div>
+<h3>Deleting extra spaces</h3>
+<p>Instead of going into each cell and removing the extra spaces before, in the middle of and after the employee names, the <code>TRIM()</code> function does the same task. It cannot be done in the Full Name column itself, because a function is needed, so the function is added to an empty column, using data from the Full Name column.</p><div class="block"><ol><li>In cell J2, enter the formula <code>=TRIM(B2)</code>. This removes the extra spaces in the name in cell B2 and copies it into J2.</li><li>Copy the formula to the end of the column, so TRIM() removes the extra spaces from all the names in column B and writes them in column J.</li><li>Paste the corrected names in column J back into column B by copying them and pasting them as values using Paste Special.</li><li>Delete the names in column J.</li></ol></div><div class="diagram-box"><div class="table-scroll"><table class="sheet"><tr><th>B (Full Name)</th><th>J (=TRIM(B2))</th></tr><tr><td class="bad">·Maria··Lopez·</td><td class="ok">Maria Lopez</td></tr><tr><td class="ok">John·Smith</td><td class="ok">John Smith</td></tr><tr><td class="bad">Ana··Costa</td><td class="ok">Ana Costa</td></tr></table></div><p class="dg-cap">A mock-up of Figure 17.4: the TRIM() function copied down column J.</p></div>
+<h3>Converting all dates to the same format</h3>
+<p>Most of the dates in the spreadsheet are in the UK format of dd/mm/yyyy, but some are in the US format of mm/dd/yyyy. These appear as text and are aligned to the left. They need to be changed to the UK format.</p><div class="block"><ol><li>Sort the data according to Hire Date in descending order. This separates the US-format dates from the UK-formatted dates so they can be reformatted; the dates in a different format sit at the top of the column and are formatted as text.</li><li>Highlight the US-formatted dates and select <strong>Text to Columns</strong> in the Data ribbon.</li><li>Select <strong>Delimited</strong> and make sure all the delimiters are deselected, then click Next.</li><li>In the next window, select <strong>MDY</strong> as the date format of the dates to be reformatted to the UK format.</li><li>Click Finish and the dates are converted to the correct format.</li></ol></div>
+<h3>Formatting the Annual Salary column as currency</h3>
+<p>The Annual Salary column is formatted as text even though it has the $ sign, so it cannot be used in calculations. It can be reformatted as currency using Text to Columns.</p><div class="block"><ol><li>Highlight all of column F, but not the Annual Salary column heading, and select Text to Columns, then select <strong>Fixed Width</strong>.</li><li>Select Next and move the delimiter line so that it is just after the $ sign. This is where the text will be split.</li><li>In the next window, set the destination to J2.</li><li>Select Finish: column J will contain the $ signs and column K the numbers.</li><li>Format the numbers in column K as currency, then copy and paste them back into column F, overwriting the data.</li><li>Delete the data in columns J and K.</li></ol></div><div class="diagram-box"><div class="table-scroll"><table class="sheet"><tr><th>F (before)</th><th>J</th><th>K</th></tr><tr><td class="bad">$48,500</td><td class="ok">$</td><td class="ok">48500</td></tr><tr><td class="bad">$52,000</td><td class="ok">$</td><td class="ok">52000</td></tr></table></div><p class="dg-cap">A mock-up of Figures 17.8 and 17.9: the text is split after the $ sign, leaving a number in column K that can be used in calculations.</p></div>
+<h3>Formatting the Bonus column as percentage</h3>
+<p>The data in column G is formatted as numbers rather than percentages, and will give inaccurate results when trying to work out how much bonus an employee has earned.</p><div class="block"><ol><li>Enter 1% into any free cell and copy this cell.</li><li>Highlight the data in column G and select Paste Special.</li><li>Select <strong>multiply</strong> as the operation and click OK.</li><li>The numbers in column G are now formatted as percentages.</li></ol></div>
+<h3>Removing duplicates</h3>
+<p>There are only 44 records in the spreadsheet, but there could be thousands, and it would be impossible to find duplicates by just looking through the data. The Employee ID column is the only one that should contain unique data, identifying a particular employee, so it is the column to check to see whether an employee has been included more than once.</p><div class="block"><ol><li>Highlight all the data in the spreadsheet and select <strong>Remove Duplicates</strong> in the Data ribbon.</li><li>Select Employee ID as the column to check, then click OK.</li><li>You are advised that three duplicates have been removed and 41 unique values remain.</li></ol></div>
+<p>Once data has been transformed and cleaned, it is ready for analysis and visualisation.</p><div class="task"><p class="task-label"><span>Questions from the book and activities</span><span class="pts">6 points</span></p><h4>Answers from the notes.</h4><div class="sub-q"><label>Explain what is meant by transforming data.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Converting data from one format or structure to another, to make it more suitable for analysis or processing</div><div class="self-mark"><input type="checkbox" id="sm-1"><label for="sm-1">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain what is meant by cleaning data.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Identifying and resolving issues such as missing values, duplicates, errors, inconsistencies and formatting problems in the data</div><div class="self-mark"><input type="checkbox" id="sm-2"><label for="sm-2">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>What does the saying "garbage in, garbage out" mean?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>If the data put in is not accurate and in a format that can be analysed, the information that comes out cannot be relied on</div><div class="self-mark"><input type="checkbox" id="sm-3"><label for="sm-3">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Why is the TRIM() function not entered in the Full Name column itself?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>A function is needed to do the task, so it must be added to an empty column that uses the data from the Full Name column</div><div class="self-mark"><input type="checkbox" id="sm-4"><label for="sm-4">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Describe how the Bonus column can be formatted as percentages.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Enter 1% in a free cell and copy it; highlight column G, use Paste Special and select multiply</div><div class="self-mark"><input type="checkbox" id="sm-5"><label for="sm-5">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Why is the Employee ID column the one checked for duplicates?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>It is the only column that should contain unique data, identifying a particular employee</div><div class="self-mark"><input type="checkbox" id="sm-6"><label for="sm-6">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">10 points</span></p><h4>Click the tool or function used to fix each problem.</h4><div class="classify-list"><div class="classify-item" data-answer="d"><span class="term">Checking the Employee ID column for repeats</span><span class="choices"><button data-choice="t">TRIM()</button><button data-choice="c">Text to Columns</button><button data-choice="p">Paste Special</button><button data-choice="d">Remove Duplicates</button></span></div><div class="classify-item" data-answer="p"><span class="term">Bonus numbers that need to be percentages (multiply by 1%)</span><span class="choices"><button data-choice="t">TRIM()</button><button data-choice="c">Text to Columns</button><button data-choice="p">Paste Special</button><button data-choice="d">Remove Duplicates</button></span></div><div class="classify-item" data-answer="p"><span class="term">Pasting the corrected names back as values</span><span class="choices"><button data-choice="t">TRIM()</button><button data-choice="c">Text to Columns</button><button data-choice="p">Paste Special</button><button data-choice="d">Remove Duplicates</button></span></div><div class="classify-item" data-answer="t"><span class="term">A function entered in an empty column to clean another column</span><span class="choices"><button data-choice="t">TRIM()</button><button data-choice="c">Text to Columns</button><button data-choice="p">Paste Special</button><button data-choice="d">Remove Duplicates</button></span></div><div class="classify-item" data-answer="c"><span class="term">Annual Salary stored as text with a $ sign (fixed width)</span><span class="choices"><button data-choice="t">TRIM()</button><button data-choice="c">Text to Columns</button><button data-choice="p">Paste Special</button><button data-choice="d">Remove Duplicates</button></span></div><div class="classify-item" data-answer="d"><span class="term">The same employee appears in three rows</span><span class="choices"><button data-choice="t">TRIM()</button><button data-choice="c">Text to Columns</button><button data-choice="p">Paste Special</button><button data-choice="d">Remove Duplicates</button></span></div><div class="classify-item" data-answer="p"><span class="term">Choosing multiply as the operation</span><span class="choices"><button data-choice="t">TRIM()</button><button data-choice="c">Text to Columns</button><button data-choice="p">Paste Special</button><button data-choice="d">Remove Duplicates</button></span></div><div class="classify-item" data-answer="c"><span class="term">Choosing MDY as the date format</span><span class="choices"><button data-choice="t">TRIM()</button><button data-choice="c">Text to Columns</button><button data-choice="p">Paste Special</button><button data-choice="d">Remove Duplicates</button></span></div><div class="classify-item" data-answer="c"><span class="term">US-format mm/dd/yyyy dates stored as text</span><span class="choices"><button data-choice="t">TRIM()</button><button data-choice="c">Text to Columns</button><button data-choice="p">Paste Special</button><button data-choice="d">Remove Duplicates</button></span></div><div class="classify-item" data-answer="t"><span class="term">Extra spaces before, in the middle of and after names</span><span class="choices"><button data-choice="t">TRIM()</button><button data-choice="c">Text to Columns</button><button data-choice="p">Paste Special</button><button data-choice="d">Remove Duplicates</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="1"><p class="q">1. Which date format do most of the dates in the example use?</p><div class="opts"><button class="opt" data-idx="0">mm/dd/yyyy</button><button class="opt" data-idx="1">dd/mm/yyyy</button><button class="opt" data-idx="2">yyyy/mm/dd</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="2"><p class="q">2. How many records remained after the three duplicates were removed?</p><div class="opts"><button class="opt" data-idx="0">44</button><button class="opt" data-idx="1">47</button><button class="opt" data-idx="2">41</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. What do text-formatted salaries prevent you doing?</p><div class="opts"><button class="opt" data-idx="0">Using them in calculations</button><button class="opt" data-idx="1">Typing them in</button><button class="opt" data-idx="2">Printing them</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-display"><h2 class="section-title">Displaying data to communicate information <span class="tag">17.2</span></h2>
+<p>There are various ways of analysing data and displaying the results, including <strong>pivot tables</strong> and <strong>pivot charts</strong> (covered in Chapter 8). Specific data may be highlighted using <strong>conditional formatting</strong>. Functions such as <code>COUNTIF</code> and <code>COUNTIFS</code> can also be used to create summaries of the data, which can then be displayed as charts and graphs.</p>
+<h3>Activity 17.09: analyse and visualise the clean employee data</h3>
+<p>Using the cleaned employee data, the data is analysed and visualised in these ways:</p><div class="block"><ol><li><strong>Conditional formatting</strong> is added so that the data of Brazil is highlighted when the name is written into cell J2. The whole row must be highlighted, not just the country cells.</li><li>In case users misspell a country name, a <strong>list box</strong> is added where they can select a country name.</li><li>A worksheet named <strong>Information</strong> is created to analyse and visualise the data using the COUNTIFS function and pivot tables and charts.</li></ol></div>
+<p>The tables and charts on the Information worksheet should show:</p><div class="block"><ul><li>the salary ranges of employees of different ages</li><li>the employees from different countries working in the different departments of the company</li></ul></div><div class="diagram-box"><div class="table-scroll"><table class="sheet"><tr><th>Name</th><th>Country</th><th>Department</th></tr><tr><td class="">Ana Costa</td><td class="hl">Brazil</td><td class="">Sales</td></tr><tr><td class="">John Smith</td><td class="">UK</td><td class="">Finance</td></tr><tr><td class="">Luiz Alves</td><td class="hl">Brazil</td><td class="">Support</td></tr><tr><td class="">Maria Lopez</td><td class="">Spain</td><td class="">Sales</td></tr></table></div><p class="dg-cap">A mock-up of the conditional formatting task (invented data): with Brazil entered in J2, every row where the country is Brazil is highlighted, not just the country cell.</p></div><div class="task"><p class="task-label"><span>Questions from the book and activities</span><span class="pts">5 points</span></p><h4>Answers from the notes (the book asks you to explain visualising data).</h4><div class="sub-q"><label>Explain what is meant by visualising data.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Displaying the results of analysing data in ways that communicate information, such as charts, graphs, pivot charts and highlighted data</div><div class="self-mark"><input type="checkbox" id="sm-7"><label for="sm-7">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Why is a list box added so users can select a country name?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>In case users misspell a country name</div><div class="self-mark"><input type="checkbox" id="sm-8"><label for="sm-8">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Name two functions that can create summaries of the data.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>COUNTIF and COUNTIFS</div><div class="self-mark"><input type="checkbox" id="sm-9"><label for="sm-9">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>What must be highlighted when conditional formatting is used for Brazil in Activity 17.09?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>The whole row, not just the country cells</div><div class="self-mark"><input type="checkbox" id="sm-10"><label for="sm-10">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain the difference between an absolute and a relative cell reference when using spreadsheet software. (From earlier chapters, not in these notes.)</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>A relative reference (such as A1) changes when the formula is copied to another cell; an absolute reference (such as $A$1) always refers to the same cell, however the formula is copied</div><div class="self-mark"><input type="checkbox" id="sm-11"><label for="sm-11">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">8 points</span></p><h4>Click the feature that each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="l"><span class="term">Lets users select a country name instead of typing it</span><span class="choices"><button data-choice="c">Conditional formatting</button><button data-choice="p">Pivot table or chart</button><button data-choice="f">COUNTIF / COUNTIFS</button><button data-choice="l">List box</button></span></div><div class="classify-item" data-answer="p"><span class="term">Analyses and displays results, as covered in Chapter 8</span><span class="choices"><button data-choice="c">Conditional formatting</button><button data-choice="p">Pivot table or chart</button><button data-choice="f">COUNTIF / COUNTIFS</button><button data-choice="l">List box</button></span></div><div class="classify-item" data-answer="c"><span class="term">Changes how cells look based on their data</span><span class="choices"><button data-choice="c">Conditional formatting</button><button data-choice="p">Pivot table or chart</button><button data-choice="f">COUNTIF / COUNTIFS</button><button data-choice="l">List box</button></span></div><div class="classify-item" data-answer="l"><span class="term">Helps when users might misspell a country name</span><span class="choices"><button data-choice="c">Conditional formatting</button><button data-choice="p">Pivot table or chart</button><button data-choice="f">COUNTIF / COUNTIFS</button><button data-choice="l">List box</button></span></div><div class="classify-item" data-answer="f"><span class="term">Counts the data that meets one or more conditions</span><span class="choices"><button data-choice="c">Conditional formatting</button><button data-choice="p">Pivot table or chart</button><button data-choice="f">COUNTIF / COUNTIFS</button><button data-choice="l">List box</button></span></div><div class="classify-item" data-answer="p"><span class="term">Used to show employees from different countries in different departments</span><span class="choices"><button data-choice="c">Conditional formatting</button><button data-choice="p">Pivot table or chart</button><button data-choice="f">COUNTIF / COUNTIFS</button><button data-choice="l">List box</button></span></div><div class="classify-item" data-answer="f"><span class="term">Creates summaries of the data that can be displayed as charts and graphs</span><span class="choices"><button data-choice="c">Conditional formatting</button><button data-choice="p">Pivot table or chart</button><button data-choice="f">COUNTIF / COUNTIFS</button><button data-choice="l">List box</button></span></div><div class="classify-item" data-answer="c"><span class="term">Highlights specific data, such as the whole row for Brazil</span><span class="choices"><button data-choice="c">Conditional formatting</button><button data-choice="p">Pivot table or chart</button><button data-choice="f">COUNTIF / COUNTIFS</button><button data-choice="l">List box</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="1"><p class="q">1. Which function would you use to summarise data with several conditions?</p><div class="opts"><button class="opt" data-idx="0">TRIM</button><button class="opt" data-idx="1">COUNTIFS</button><button class="opt" data-idx="2">MDY</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. Why is a whole row highlighted in Activity 17.09?</p><div class="opts"><button class="opt" data-idx="0">So the whole record can be seen, not just the country cells</button><button class="opt" data-idx="1">Because cells cannot be highlighted</button><button class="opt" data-idx="2">To hide the data</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. Where are the analysis tables and charts displayed in Activity 17.09?</p><div class="opts"><button class="opt" data-idx="0">On a new worksheet named Information</button><button class="opt" data-idx="1">In cell J2</button><button class="opt" data-idx="2">In the Countries worksheet</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-sources"><h2 class="section-title">Getting data from different sources <span class="tag">17.3</span></h2>
+<p>Often, the data to be analysed and displayed may come from different sources and may need to be organised before it can be used. For example, the data may need to be split into fields so that it can be imported and merged.</p>
+<p>If the data is being imported into a database, you need to consider the fields and tables required so that the database can be <strong>normalised to third normal form (3NF)</strong>. Data held in a csv or spreadsheet file does not have to follow the rules imposed on databases, and there may be repeating and redundant data. The database will require <strong>key fields</strong>, and suitable ones may need to be added.</p>
+<h3>Activity 17.10: cat rescue centre</h3>
+<p>A cat rescue centre holds data about the cats it has and the people who adopt them. It has used a spreadsheet to store its data but now wants to use a database, because:</p><div class="block"><ul><li>data is being repeated in the spreadsheet when the same person adopts several cats</li><li>a cat may be returned to the centre if the adoption is not successful, and so could be adopted several times</li></ul></div>
+<p>All cats are checked to see whether they have a microchip and, if not, one is inserted. Each microchip has a unique identification number. The database should allow data about new cats and owners to be entered, as well as importing the existing data. To make it relational, extra fields may be needed.</p><div class="diagram-box dg"><svg viewBox="0 0 760 310" role="img" aria-label="Three related tables: cat, customer and adoption"><defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/></marker><marker id="c2" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/></marker></defs><rect class="boxh" x="20" y="20" width="220" height="106" rx="3"/><text x="130.0" y="40" class="gold">Cat</text><line class="grid" x1="20" y1="56" x2="240" y2="56"/><text x="130.0" y="76">Microchip ID (PK)</text><text x="130.0" y="96" class="dim">cat details</text><rect class="boxh" x="520" y="20" width="220" height="106" rx="3"/><text x="630.0" y="40" class="gold">Customer</text><line class="grid" x1="520" y1="56" x2="740" y2="56"/><text x="630.0" y="76">Customer ID (PK)</text><text x="630.0" y="96" class="dim">customer details</text><rect class="boxh" x="270" y="170" width="220" height="126" rx="3"/><text x="380.0" y="190" class="gold">Adoption</text><line class="grid" x1="270" y1="206" x2="490" y2="206"/><text x="380.0" y="226">Adoption ID (PK)</text><text x="380.0" y="246">Microchip ID (FK)</text><text x="380.0" y="266">Customer ID (FK)</text><text x="380.0" y="286" class="dim">adoption details</text><path class="ln" d="M130.0,126.0 L297.1,169.2" marker-end="url(#a2)"/><path class="ln" d="M630.0,126.0 L462.9,169.2" marker-end="url(#a2)"/><text x="122" y="146" class="gold">1</text><text x="272" y="150" class="gold">many</text><text x="640" y="146" class="gold">1</text><text x="488" y="150" class="gold">many</text></svg><p class="dg-cap">One possible design for Activity 17.10, based on the notes: a cat can be adopted several times, and a person can adopt several cats, so adoptions sit in their own table linked by keys. The activity asks you to design the real fields yourself.</p></div>
+<p>The activity steps are:</p><div class="block"><ol><li>Using the data, create the fields and tables required for a relational database normalised to 3NF.</li><li>Import the data from the spreadsheet into the appropriate tables.</li><li>Create forms to display the data about the cats, the customers and the adoptions and allow new data to be entered.</li><li>Access these forms from a main switchboard form.</li><li>Open the other forms by clicking command buttons, as pop-up forms.</li><li>The adoptions form should have the cats and customers forms as sub-forms, but they must be protected so that they cannot be edited when they are sub-forms.</li><li>When a new adoption record is being created, the user should be able to select the customer and cat from drop-down lists.</li></ol></div><div class="diagram-box dg"><svg viewBox="0 0 800 300" role="img" aria-label="Form structure for the cat rescue database"><defs><marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/></marker><marker id="c3" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/></marker></defs><rect class="boxh" x="290" y="12" width="200" height="44" rx="3"/><text x="390.0" y="34.0">Main switchboard</text><rect class="box" x="30" y="100" width="180" height="50" rx="3"/><text x="120.0" y="117.0">Cats form</text><text x="120.0" y="134.0">pop-up</text><path class="ln" d="M390.0,56.0 L123.0,99.5" marker-end="url(#a3)"/><rect class="box" x="300" y="100" width="180" height="50" rx="3"/><text x="390.0" y="117.0">Customers form</text><text x="390.0" y="134.0">pop-up</text><path class="ln" d="M390.0,56.0 L390.0,97.0" marker-end="url(#a3)"/><rect class="box" x="570" y="100" width="180" height="50" rx="3"/><text x="660.0" y="117.0">Adoptions form</text><text x="660.0" y="134.0">pop-up</text><path class="ln" d="M390.0,56.0 L657.0,99.5" marker-end="url(#a3)"/><rect class="box" x="440" y="200" width="160" height="50" rx="3"/><text x="520.0" y="217.0">Cats sub-form</text><text x="520.0" y="234.0">read-only</text><rect class="box" x="620" y="200" width="160" height="50" rx="3"/><text x="700.0" y="217.0">Customers sub-form</text><text x="700.0" y="234.0">read-only</text><path class="ln" d="M630.0,150.0 L542.6,196.6" marker-end="url(#a3)"/><path class="ln" d="M680.0,150.0 L698.8,195.2" marker-end="url(#a3)"/><text x="20" y="275" class="l dim">New adoption record: customer and cat chosen from drop-down lists</text></svg><p class="dg-cap">Activity 17.10 form structure: the switchboard opens each form with a command button, and the adoptions form shows the cats and customers forms as protected sub-forms.</p></div><div class="task"><p class="task-label"><span>Questions from the book and activities</span><span class="pts">6 points</span></p><h4>Answers from the notes (the normal forms come from earlier chapters, not these notes).</h4><div class="sub-q"><label>Why might data from different sources need to be organised before it is used?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>It may need to be split into fields so that it can be imported and merged</div><div class="self-mark"><input type="checkbox" id="sm-12"><label for="sm-12">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Why does the cat rescue centre want to move from a spreadsheet to a database?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Data is repeated in the spreadsheet when the same person adopts several cats, and a cat could be adopted several times if returned</div><div class="self-mark"><input type="checkbox" id="sm-13"><label for="sm-13">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Why does a database need key fields, and what might need to be added?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Key fields identify the records; suitable ones may need to be added, because the spreadsheet may not have them</div><div class="self-mark"><input type="checkbox" id="sm-14"><label for="sm-14">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>What identifies each cat uniquely at the centre?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Each cat's microchip has a unique identification number</div><div class="self-mark"><input type="checkbox" id="sm-15"><label for="sm-15">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain what is meant by third normal form (3NF). (From earlier chapters.)</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>The data is in second normal form (no partial dependencies) and has no transitive dependencies, so every non-key field depends only on the key</div><div class="self-mark"><input type="checkbox" id="sm-16"><label for="sm-16">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Why must the cats and customers sub-forms be protected on the adoptions form?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>So that the data cannot be edited when it is shown as a sub-form</div><div class="self-mark"><input type="checkbox" id="sm-17"><label for="sm-17">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p><h4>Click whether each statement describes a spreadsheet or csv file, or a relational database.</h4><div class="classify-list"><div class="classify-item" data-answer="s"><span class="term">May contain repeating and redundant data</span><span class="choices"><button data-choice="s">Spreadsheet / csv</button><button data-choice="d">Relational database</button></span></div><div class="classify-item" data-answer="d"><span class="term">Can show cats and customers as sub-forms on an adoptions form</span><span class="choices"><button data-choice="s">Spreadsheet / csv</button><button data-choice="d">Relational database</button></span></div><div class="classify-item" data-answer="s"><span class="term">Used by the rescue centre before it changed</span><span class="choices"><button data-choice="s">Spreadsheet / csv</button><button data-choice="d">Relational database</button></span></div><div class="classify-item" data-answer="s"><span class="term">Does not have to follow rules about repeated data</span><span class="choices"><button data-choice="s">Spreadsheet / csv</button><button data-choice="d">Relational database</button></span></div><div class="classify-item" data-answer="d"><span class="term">Requires key fields to identify records</span><span class="choices"><button data-choice="s">Spreadsheet / csv</button><button data-choice="d">Relational database</button></span></div><div class="classify-item" data-answer="d"><span class="term">Needs fields and tables designed so it is normalised to 3NF</span><span class="choices"><button data-choice="s">Spreadsheet / csv</button><button data-choice="d">Relational database</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="2"><p class="q">1. To what form should the rescue centre database be normalised?</p><div class="opts"><button class="opt" data-idx="0">First normal form</button><button class="opt" data-idx="1">Second normal form</button><button class="opt" data-idx="2">Third normal form</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. Why is the microchip number useful in the database?</p><div class="opts"><button class="opt" data-idx="0">It is a unique identification number for each cat</button><button class="opt" data-idx="1">It stores the adopter's name</button><button class="opt" data-idx="2">It is the date of adoption</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. How are the forms opened from the main switchboard?</p><div class="opts"><button class="opt" data-idx="0">By clicking command buttons</button><button class="opt" data-idx="1">By typing a country name</button><button class="opt" data-idx="2">By using the TRIM function</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-practice"><h2 class="section-title">Practice questions <span class="tag">Exam style</span></h2><p>These exam-style questions were written from the notes (the book's own practice questions need a spreadsheet file). Write each answer in full first, then compare it with the mark points and tick the ones you covered.</p><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p><h4>Describe what is meant by cleaning data, giving two examples of problems that need correcting. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Cleaning is identifying and resolving issues in the data so it can be analysed (part of transforming data)</span></label><label class="mp-item"><input type="checkbox"><span>Issues include missing values, duplicates, errors, inconsistencies and formatting problems</span></label><label class="mp-item"><input type="checkbox"><span>Example: extra spaces before, in or after names</span></label><label class="mp-item"><input type="checkbox"><span>Example: dates in different formats (dd/mm/yyyy and mm/dd/yyyy), numbers stored as text, percentages given as numbers, or duplicate records</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p><h4>Explain how the TRIM() function and Paste Special can be used to remove the extra spaces from the names in column B. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>A function cannot be used in the column itself, so the formula is entered in an empty column, for example =TRIM(B2) in J2</span></label><label class="mp-item"><input type="checkbox"><span>TRIM() removes the extra spaces before, in the middle of and after the name</span></label><label class="mp-item"><input type="checkbox"><span>The formula is copied to the end of the column</span></label><label class="mp-item"><input type="checkbox"><span>The corrected names are copied and pasted back into column B as values using Paste Special, and the names in column J are deleted</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p><h4>Describe how dates in the US format that are stored as text can be converted to the UK format. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Sort the data by Hire Date in descending order to separate the US-format dates (at the top, formatted as text) from the UK dates</span></label><label class="mp-item"><input type="checkbox"><span>Highlight the US-format dates and select Text to Columns from the Data ribbon</span></label><label class="mp-item"><input type="checkbox"><span>Select Delimited and deselect all the delimiters</span></label><label class="mp-item"><input type="checkbox"><span>Select MDY as the date format and click Finish</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">3 points</span></p><h4>Explain how duplicate records can be removed from a spreadsheet. (3 marks)</h4><div class="sub-q mp" data-max="3"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 3)</span><label class="mp-item"><input type="checkbox"><span>The Employee ID column is the one to check, as it should be the only column with unique data</span></label><label class="mp-item"><input type="checkbox"><span>Highlight all the data and select Remove Duplicates in the Data ribbon, choosing Employee ID as the column to check</span></label><label class="mp-item"><input type="checkbox"><span>The software reports how many duplicates were removed and how many unique values remain</span></label><div class="mp-foot"><span class="mp-count">0 / 3 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p><h4>Describe two ways in which spreadsheet features can be used to display data to communicate information. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Conditional formatting highlights specific data, for example the whole row for a country written in a cell</span></label><label class="mp-item"><input type="checkbox"><span>A list box lets users select a country name, in case they misspell it</span></label><label class="mp-item"><input type="checkbox"><span>COUNTIF/COUNTIFS create summaries of the data, which can be displayed as charts and graphs</span></label><label class="mp-item"><input type="checkbox"><span>Pivot tables and pivot charts analyse and display the data</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Extended answer</span><span class="pts">4 points</span></p><h4>Explain why a business that stores data in a spreadsheet may move it into a relational database normalised to third normal form. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Data is repeated in the spreadsheet, for example when the same person adopts several cats</span></label><label class="mp-item"><input type="checkbox"><span>Data held in a csv or spreadsheet file does not have to follow rules, so there may be repeating and redundant data</span></label><label class="mp-item"><input type="checkbox"><span>A database is organised into fields and tables so that it is normalised to 3NF, reducing repeated data</span></label><label class="mp-item"><input type="checkbox"><span>The database needs key fields to identify records, such as a unique identifier (like the microchip number), and suitable ones may need to be added</span></label><label class="mp-item"><input type="checkbox"><span>The same cat could be adopted several times, which a relational database can record using linked tables</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div></div>
+</div>
+<footer>Cambridge AS &amp; A Level IT · Data Analysis — built for revision, points are just for you.</footer>
+<script>
+(function(){
+  const scoreValEl = document.getElementById('score-val');
+  const scoreMaxEl = document.getElementById('score-max');
+  let score = 0;
+  function addScore(n){
+    score += n;
+    if(score < 0) score = 0;
+    scoreValEl.textContent = score;
+  }
+
+  // Work out the maximum score from what is actually on the page
+  let max = 0;
+  document.querySelectorAll('.self-mark input[type=checkbox]').forEach(function(cb){
+    max += parseInt(cb.dataset.points || '1', 10);
+  });
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    max += parseInt(sq.dataset.max, 10);
+  });
+  max += document.querySelectorAll('.classify-item').length;
+  max += document.querySelectorAll('.mcq').length;
+  scoreMaxEl.textContent = max;
+
+  // Tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // Written questions with one self-marked point each
+  document.querySelectorAll('.sub-q:not(.mp)').forEach(function(sq){
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const reveal = sq.querySelector('.answer-reveal');
+    const mark = sq.querySelector('.self-mark');
+    const checkbox = mark ? mark.querySelector('input[type=checkbox]') : null;
+    if(!btn || !reveal || !mark) return;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        reveal.classList.remove('show');
+        mark.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      reveal.classList.add('show');
+      mark.classList.add('show');
+    });
+
+    if(checkbox){
+      checkbox.addEventListener('change', function(){
+        const pts = parseInt(checkbox.dataset.points || '1', 10);
+        addScore(checkbox.checked ? pts : -pts);
+      });
+    }
+  });
+
+  // Extended answers: tick the mark points you covered, capped at the maximum
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    const cap = parseInt(sq.dataset.max, 10);
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const panel = sq.querySelector('.markpoints');
+    const note = sq.querySelector('.mp-note');
+    const count = sq.querySelector('.mp-count');
+    const boxes = panel.querySelectorAll('input[type=checkbox]');
+    let awarded = 0;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        panel.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      panel.classList.add('show');
+    });
+
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if(cb.checked){
+          if(awarded >= cap){
+            cb.checked = false;
+            note.textContent = "That's already full marks (" + cap + "). Untick a point first to swap it.";
+            return;
+          }
+          awarded += 1;
+          addScore(1);
+        } else {
+          awarded -= 1;
+          addScore(-1);
+        }
+        note.textContent = '';
+        count.textContent = awarded + ' / ' + cap + ' marks';
+      });
+    });
+  });
+
+  // Sort-it tasks
+  document.querySelectorAll('.classify-item').forEach(function(item){
+    const answer = item.dataset.answer;
+    const buttons = item.querySelectorAll('.choices button');
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){
+        buttons.forEach(function(other){ other.disabled = true; });
+        if(b.dataset.choice === answer){
+          b.classList.add('correct');
+          addScore(1);
+        } else {
+          b.classList.add('incorrect');
+          buttons.forEach(function(other){
+            if(other.dataset.choice === answer) other.classList.add('correct');
+          });
+        }
+      });
+    });
+  });
+
+  // Quick checks
+  document.querySelectorAll('.mcq').forEach(function(mcq){
+    const correctIdx = mcq.dataset.answer;
+    const opts = mcq.querySelectorAll('.opt');
+    const feedback = mcq.querySelector('.mcq-feedback');
+    opts.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        opts.forEach(function(o){ o.disabled = true; });
+        if(opt.dataset.idx === correctIdx){
+          opt.classList.add('correct');
+          feedback.textContent = 'Correct.';
+          feedback.className = 'mcq-feedback ok';
+          addScore(1);
+        } else {
+          opt.classList.add('incorrect');
+          opts.forEach(function(o){
+            if(o.dataset.idx === correctIdx) o.classList.add('correct');
+          });
+          feedback.textContent = 'Not quite — the correct answer is highlighted above.';
+          feedback.className = 'mcq-feedback bad';
+        }
+      });
+    });
+  });
+
+  })();
+</script>
+<script>
+(function(){
+  var STORE_KEY = 'ict-lesson-progress::' + location.pathname + '::' + document.title;
+
+  function load(){
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+    catch(e){ return {}; }
+  }
+  function save(mutator){
+    try {
+      var s = load();
+      mutator(s);
+      localStorage.setItem(STORE_KEY, JSON.stringify(s));
+    } catch(e){ /* storage unavailable or full: fail silently */ }
+  }
+  function all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+
+  // This page has no data-task attributes, so find things by their own classes
+  var subQs      = all('.sub-q:not(.mp)');   // short written answers (self-marked)
+  var mpQs       = all('.sub-q.mp');         // extended answers (mark points)
+  var classifyIt = all('.classify-item');
+  var mcqs       = all('.mcq');
+
+  // ---- SAVE: listen alongside the page's own handlers ----
+
+  subQs.forEach(function(sq, i){
+    var key = 'subq-' + i;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var cb = sq.querySelector('.self-mark input[type=checkbox]');
+    if(ta) ta.addEventListener('input', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+    });
+    if(btn) btn.addEventListener('click', function(){
+      save(function(s){
+        s[key] = s[key] || {};
+        s[key].text = ta ? ta.value : '';
+        s[key].checked = !!(ta && ta.value.trim());
+      });
+    });
+    if(cb) cb.addEventListener('change', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].selfMarked = cb.checked; });
+    });
+  });
+
+  mpQs.forEach(function(sq, i){
+    var key = 'mp-' + i;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var boxes = all_in(sq, '.markpoints input[type=checkbox]');
+    if(ta) ta.addEventListener('input', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+    });
+    if(btn) btn.addEventListener('click', function(){
+      save(function(s){
+        s[key] = s[key] || {};
+        s[key].text = ta ? ta.value : '';
+        s[key].shown = !!(ta && ta.value.trim());
+      });
+    });
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        save(function(s){
+          s[key] = s[key] || {};
+          var ticked = [];
+          boxes.forEach(function(b, bi){ if(b.checked) ticked.push(bi); });
+          s[key].ticked = ticked;
+        });
+      });
+    });
+  });
+  function all_in(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); }
+
+  classifyIt.forEach(function(item, i){
+    all_in(item, '.choices button').forEach(function(b, bi){
+      b.addEventListener('click', function(){
+        save(function(s){ s['classify-' + i] = bi; });
+      });
+    });
+  });
+
+  mcqs.forEach(function(mcq, i){
+    all_in(mcq, '.opt').forEach(function(o, oi){
+      o.addEventListener('click', function(){
+        save(function(s){ s['mcq-' + i] = oi; });
+      });
+    });
+  });
+
+  // ---- RESTORE: replay stored answers as real clicks, so the page's
+  // own scoring logic runs exactly as it did originally ----
+
+  (function restore(){
+    var s = load();
+
+    subQs.forEach(function(sq, i){
+      var rec = s['subq-' + i];
+      if(!rec) return;
+      var ta = sq.querySelector('textarea');
+      var btn = sq.querySelector('.check-btn');
+      var cb = sq.querySelector('.self-mark input[type=checkbox]');
+      if(ta && rec.text) ta.value = rec.text;
+      if(rec.checked && btn) btn.click();
+      if(rec.selfMarked && cb){
+        cb.checked = true;
+        cb.dispatchEvent(new Event('change'));
+      }
+    });
+
+    mpQs.forEach(function(sq, i){
+      var rec = s['mp-' + i];
+      if(!rec) return;
+      var ta = sq.querySelector('textarea');
+      var btn = sq.querySelector('.check-btn');
+      var boxes = all_in(sq, '.markpoints input[type=checkbox]');
+      if(ta && rec.text) ta.value = rec.text;
+      if(rec.shown && btn) btn.click();
+      (rec.ticked || []).forEach(function(bi){
+        if(boxes[bi]){
+          boxes[bi].checked = true;
+          boxes[bi].dispatchEvent(new Event('change'));
+        }
+      });
+    });
+
+    classifyIt.forEach(function(item, i){
+      var bi = s['classify-' + i];
+      if(bi === undefined) return;
+      var buttons = item.querySelectorAll('.choices button');
+      if(buttons[bi]) buttons[bi].click();
+    });
+
+    mcqs.forEach(function(mcq, i){
+      var oi = s['mcq-' + i];
+      if(oi === undefined) return;
+      var opts = mcq.querySelectorAll('.opt');
+      if(opts[oi]) opts[oi].click();
+    });
+  })();
+
+  // ---- Small "reset my answers" control ----
+  var resetBtn = document.createElement('button');
+  resetBtn.textContent = 'Reset my answers';
+  resetBtn.setAttribute('type', 'button');
+  resetBtn.style.cssText = 'position:fixed;bottom:14px;left:14px;z-index:50;font-family:JetBrains Mono,monospace;'
+    + 'font-size:11px;padding:7px 11px;background:#141b2e;border:1px solid #40557d;'
+    + 'color:#9ba4bc;border-radius:3px;cursor:pointer;';
+  resetBtn.addEventListener('mouseenter', function(){ resetBtn.style.color = '#e7e9f1'; });
+  resetBtn.addEventListener('mouseleave', function(){ resetBtn.style.color = '#9ba4bc'; });
+  resetBtn.addEventListener('click', function(){
+    if(confirm('Clear all your saved answers on this page?')){
+      try { localStorage.removeItem(STORE_KEY); } catch(e){}
+      location.reload();
+    }
+  });
+  document.body.appendChild(resetBtn);
+})();
+</script>
+</body>
+</html>
