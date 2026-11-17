@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AS &amp; A Level IT — Revision Menu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220; --bg-raised:#141b2e; --bg-deep:#090d18;
+    --trace:#40557d; --trace-dim:#212b45;
+    --paper:#e7e9f1; --paper-dim:#9ba4bc;
+    --signal:#45b8cf; --signal-bright:#7fd9ea;
+    --gold:#e6b85c; --brick:#e0685c; --sage:#86c9a0;
+    --mono:'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif:'Source Serif 4', Georgia, serif; --radius:3px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg);
+    background-image:linear-gradient(var(--trace-dim) 1px, transparent 1px),linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size:42px 42px; background-position:-1px -1px;
+    color:var(--paper); font-family:var(--serif); font-size:17px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--signal); color:#04141a;}
+  header.hero{ padding:56px 24px 34px; max-width:1000px; margin:0 auto; border-bottom:1px solid var(--trace); }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{ font-family:var(--mono); font-weight:700; font-size:clamp(26px,5vw,42px); line-height:1.15; margin:0 0 14px; }
+  .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
+  .wrap{ max-width:1000px; margin:0 auto; padding:36px 24px 100px; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:14px; }
+  .card{
+    position:relative; display:flex; flex-direction:column; gap:6px; min-height:190px;
+    padding:18px 18px 16px; background:var(--bg-raised); border:1px solid var(--trace);
+    border-radius:var(--radius); text-decoration:none; color:var(--paper);
+    transition:border-color .15s, transform .15s;
+  }
+  a.card:hover{ border-color:var(--signal); transform:translateY(-2px); }
+  a.card:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:2px; }
+  .card .num{ font-family:var(--mono); font-size:30px; font-weight:700; color:var(--signal-bright); line-height:1; }
+  .card .tag{
+    align-self:flex-start; font-family:var(--mono); font-size:11px; color:var(--sage);
+    border:1px solid var(--trace); padding:1px 7px; border-radius:var(--radius);
+  }
+  .card .name{ font-family:var(--mono); font-size:14px; font-weight:500; line-height:1.35; min-height:2.7em; color:var(--gold); }
+  .card .blurb{ font-size:14.5px; color:var(--paper-dim); line-height:1.45; }
+  .card.disabled{ opacity:.4; border-style:dashed; cursor:not-allowed; }
+  .card.disabled .num{ color:var(--paper-dim); }
+  .card.disabled .name{ color:var(--paper-dim); }
+  .card .go{ margin-top:auto; font-family:var(--mono); font-size:12.5px; color:var(--signal-bright); }
+  footer{ text-align:center; padding:0 24px 50px; font-family:var(--mono); font-size:12px; color:var(--paper-dim); }
+  @media (max-width:600px){ header.hero{padding:40px 20px 26px;} .wrap{padding:28px 16px 80px;} .grid{grid-template-columns:1fr; gap:10px;} .card{min-height:0;} }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <p class="kicker">AS &amp; A Level IT · Revision</p>
+  <h1 class="title">Revision Menu</h1>
+  <p>Choose a page to start revising. More pages will be added as they are ready.</p>
+</header>
+
+<main class="wrap">
+  <div class="grid">
+    <a class="card" href="expert-systems.html">
+      <span class="num">01</span>
+      <span class="tag">Theory</span>
+      <span class="name">Expert Systems</span>
+      <span class="blurb">How expert systems work, where they are used, and their strengths and limits.</span>
+      <span class="go">Open →</span>
+    </a>
+    <div class="card disabled" aria-disabled="true">
+      <span class="num">#</span>
+      <span class="tag">Coming soon</span>
+      <span class="name">#</span>
+      <span class="blurb">Reserved for a future page.</span>
+    </div>
+    <div class="card disabled" aria-disabled="true">
+      <span class="num">#</span>
+      <span class="tag">Coming soon</span>
+      <span class="name">#</span>
+      <span class="blurb">Reserved for a future page.</span>
+    </div>
+    <div class="card disabled" aria-disabled="true">
+      <span class="num">#</span>
+      <span class="tag">Coming soon</span>
+      <span class="name">#</span>
+      <span class="blurb">Reserved for a future page.</span>
+    </div>
+    <div class="card disabled" aria-disabled="true">
+      <span class="num">#</span>
+      <span class="tag">Coming soon</span>
+      <span class="name">#</span>
+      <span class="blurb">Reserved for a future page.</span>
+    </div>
+    <div class="card disabled" aria-disabled="true">
+      <span class="num">#</span>
+      <span class="tag">Coming soon</span>
+      <span class="name">#</span>
+      <span class="blurb">Reserved for a future page.</span>
+    </div>
+  </div>
+</main>
+
+<footer>AS &amp; A Level IT · Revision pages</footer>
+
+</body>
+</html>
