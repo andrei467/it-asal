@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protocols, Wireless, Security and Recovery — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --bg-deep:#090d18;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#04141a;}
+
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 24px 120px; }
+
+  nav.theory-nav{
+    max-width:760px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:44px 24px 34px; max-width:760px; margin:0 auto; border-bottom:1px solid var(--trace);
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,38px);
+    line-height:1.15; margin:0 0 14px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
+
+  nav.tabs{
+    max-width:760px; margin:0 auto; padding:14px 24px; display:flex; gap:6px;
+    overflow-x:auto; border-bottom:1px solid var(--trace); position:sticky; top:0;
+    background:rgba(13,18,32,.95); backdrop-filter: blur(4px); z-index:30;
+  }
+  nav.tabs button{
+    font-family:var(--mono); font-size:12.5px; white-space:nowrap; background:transparent;
+    border:1px solid var(--trace); color:var(--paper-dim); padding:8px 13px;
+    border-radius:var(--radius); cursor:pointer; flex-shrink:0;
+  }
+  nav.tabs button:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  nav.tabs button.active{ background:var(--signal); color:#04141a; border-color:var(--signal); font-weight:500; }
+
+  .panel{ display:none; padding:40px 0 8px; }
+  .panel.active{ display:block; }
+
+  h2.section-title{
+    font-family:var(--mono); font-size:22px; color:var(--signal-bright);
+    margin:0 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2.section-title .tag{
+    font-size:12px; color:var(--sage); border:1px solid var(--trace);
+    padding:2px 7px; border-radius:var(--radius);
+  }
+  h3{ font-family:var(--mono); font-size:16px; color:var(--gold); margin:26px 0 8px; font-weight:500; }
+  p{margin:10px 0;}
+  ul, ol{padding-left:22px; margin:10px 0;}
+  li{margin:4px 0;}
+  strong{color:var(--paper); font-weight:600;}
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0 8px; font-size:15px; }
+  th,td{ border:1px solid var(--trace); padding:8px 10px; text-align:left; vertical-align:top; }
+  th{ font-family:var(--mono); font-size:12px; color:var(--sage); font-weight:500; background:rgba(134,201,160,0.06); }
+  .table-scroll{ overflow-x:auto; }
+  .note{ color:var(--paper-dim); font-size:14.5px; }
+
+  .block{ border-left:2px solid var(--trace); padding-left:18px; margin:18px 0; }
+  .block ul, .block ol{ margin:0; padding-left:20px; }
+
+  .proscons{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 8px; }
+  .pc{ border:1px solid var(--trace); border-radius:var(--radius); background:var(--bg-raised); padding:2px 14px 12px; }
+  .pc.pro{ border-top:2px solid var(--sage); }
+  .pc.con{ border-top:2px solid var(--brick); }
+  .pc-title{ font-family:var(--mono); font-size:12.5px; font-weight:500; margin:12px 0 4px; }
+  .pc.pro .pc-title{ color:var(--sage); }
+  .pc.con .pc-title{ color:var(--brick); }
+  .pc ul{ padding-left:18px; margin:6px 0 0; font-size:15px; }
+  @media (max-width:600px){ .proscons{ grid-template-columns:1fr; } }
+
+  details.fold{ border:1px solid var(--trace); border-radius:var(--radius); margin:12px 0; background:var(--bg-raised); }
+  details.fold summary{ font-family:var(--mono); font-size:13.5px; color:var(--gold); padding:11px 14px; cursor:pointer; }
+  details.fold[open] summary{ border-bottom:1px solid var(--trace); }
+  details.fold .fold-body{ padding:2px 14px 12px; }
+
+  .diagram-box{
+    background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius);
+    padding:14px 10px; margin:18px 0 6px; text-align:center;
+  }
+  .diagram-box svg{ width:100%; height:auto; max-width:460px; }
+  .diagram-box svg.wide{ max-width:600px; }
+  .diagram-caption{ font-family:var(--mono); font-size:12px; color:var(--paper-dim); margin-top:6px; }
+  .signal-caption{ font-family: var(--mono); font-size:12.5px; color:var(--paper-dim); margin-top:8px; text-align:center; }
+
+  .task{ margin:32px 0; border:1px solid var(--trace); border-radius:var(--radius); background: var(--bg-raised); padding:20px 20px 22px; }
+  .task-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .task-label .pts{color:var(--sage);}
+  .task h4{ margin:0 0 12px; font-family:var(--serif); font-weight:600; font-size:16.5px; color:var(--paper); }
+  .task .sub-q{margin:18px 0;}
+  .task .sub-q:first-child{margin-top:0;}
+  .sub-q label{ display:block; font-family:var(--serif); font-size:15.5px; margin-bottom:8px; color:var(--paper); }
+
+  textarea{
+    width:100%; min-height:52px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-radius:var(--radius); color:var(--paper); font-family:var(--serif);
+    font-size:15.5px; padding:10px 12px; resize:vertical;
+  }
+  textarea:focus, button:focus-visible, .opt:focus-visible, summary:focus-visible, input[type=checkbox]:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:1px; }
+  .row{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+
+  button{
+    font-family:var(--mono); font-size:13px; background:var(--signal); color:#04141a;
+    border:none; padding:9px 15px; border-radius:var(--radius); cursor:pointer; font-weight:500;
+  }
+  button:hover{background:var(--signal-bright);}
+  button.ghost{ background:transparent; border:1px solid var(--trace); color:var(--paper-dim); }
+  button.ghost:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  button:disabled{opacity:.5; cursor:default;}
+
+  .error-msg{ color:var(--brick); font-family:var(--mono); font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show{display:block;}
+
+  .answer-reveal{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .answer-reveal.show{display:block;}
+  .answer-reveal .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:5px; }
+
+  .self-mark{ display:none; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:13px; color:var(--paper-dim); }
+  .self-mark.show{display:flex;}
+  .self-mark input[type=checkbox]{ width:17px; height:17px; accent-color: var(--gold); cursor:pointer; }
+  .self-mark label{cursor:pointer; margin:0; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+
+  .markpoints{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .markpoints.show{display:block;}
+  .markpoints .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:6px; }
+  .markpoints .mp-item{
+    display:flex; gap:10px; align-items:flex-start; margin:0; padding:7px 0;
+    border-bottom:1px solid var(--trace-dim); font-size:15px; font-weight:400; cursor:pointer;
+  }
+  .markpoints .mp-item:last-of-type{border-bottom:none;}
+  .markpoints .mp-item input{ width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--gold); cursor:pointer; }
+  .mp-foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; font-family:var(--mono); font-size:13px; }
+  .mp-count{ color:var(--gold); }
+  .mp-note{ color:var(--brick); }
+
+  .mcq{margin:20px 0;}
+  .mcq:first-of-type{margin-top:0;}
+  .mcq p.q{ font-family:var(--serif); font-size:15.5px; color:var(--paper); margin:0 0 10px; }
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:10px 13px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer; font-weight:400;
+  }
+  .opt:hover:not(:disabled){border-color:var(--signal); background:var(--bg-deep);}
+  .opt.correct{border-color:var(--sage); background:rgba(134,201,160,0.14);}
+  .opt.incorrect{border-color:var(--brick); background:rgba(224,104,92,0.14);}
+  .opt:disabled{cursor:default;}
+  .mcq-feedback{ font-family:var(--mono); font-size:13px; margin-top:8px; min-height:1.2em; }
+  .mcq-feedback.ok{color:var(--sage);}
+  .mcq-feedback.bad{color:var(--brick);}
+
+  .classify-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 0; border-bottom:1px solid var(--trace-dim); flex-wrap:wrap;
+  }
+  .classify-item:last-child{border-bottom:none;}
+  .classify-item .term{font-size:15px; max-width:60%;}
+  .classify-item .choices{display:flex; gap:8px; flex-wrap:wrap;}
+  .classify-item .choices button{
+    background:transparent; border:1px solid var(--trace); color:var(--paper-dim);
+    font-size:12px; padding:6px 10px;
+  }
+  .classify-item .choices button:hover:not(:disabled){ color:var(--paper); border-color:var(--paper-dim); }
+  .classify-item .choices button.correct{background:rgba(134,201,160,0.16); border-color:var(--sage); color:var(--paper);}
+  .classify-item .choices button.incorrect{background:rgba(224,104,92,0.16); border-color:var(--brick); color:var(--paper);}
+  @media (max-width:600px){ .classify-item .term{max-width:100%;} }
+
+  #score-badge{
+    position:fixed; top:14px; right:14px; z-index:50; font-family:var(--mono); font-size:13px;
+    background:var(--bg-raised); border:1px solid var(--signal); color:var(--signal-bright);
+    padding:8px 13px; border-radius:var(--radius); box-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  #score-badge .n{color:var(--gold); font-weight:700;}
+
+  footer{ max-width:760px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    header.hero{padding:36px 20px 26px;}
+    #score-badge{top:auto; bottom:14px; right:14px;}
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+
+  .diagram-box img{ max-width:100%; height:auto; background:#fff; border-radius:3px; padding:8px; }
+  pre{ background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius); padding:12px 14px; overflow-x:auto; font-family:var(--mono); font-size:13.5px; line-height:1.55; margin:14px 0; color:var(--paper); }
+  code{ font-family:var(--mono); font-size:.9em; color:var(--signal-bright); }
+  pre code{ color:inherit; }
+
+  .dg svg{ width:100%; height:auto; display:block; }
+  .dg .box{ fill:var(--bg-raised); stroke:var(--trace); stroke-width:1.5; }
+  .dg .boxh{ fill:var(--bg-raised); stroke:var(--signal); stroke-width:1.8; }
+  .dg .node{ fill:var(--bg-deep); stroke:var(--signal); stroke-width:1.6; }
+  .dg .ln{ stroke:var(--paper-dim); stroke-width:1.6; fill:none; }
+  .dg .lnc{ stroke:var(--gold); stroke-width:2.6; fill:none; }
+  .dg .bar{ fill:#23365a; stroke:var(--signal); stroke-width:1.2; }
+  .dg .barc{ fill:var(--gold); stroke:var(--gold); stroke-width:1.2; }
+  .dg .grid{ stroke:var(--trace-dim); stroke-width:1; }
+  .dg text{ fill:var(--paper); font-family:var(--mono); font-size:12px; text-anchor:middle; dominant-baseline:central; }
+  .dg text.dim{ fill:var(--paper-dim); font-size:11px; }
+  .dg text.gold{ fill:var(--gold); }
+  .dg text.l{ text-anchor:start; }
+  .dg text.r{ text-anchor:end; }
+  .dg text.dark{ fill:#0d1220; font-weight:700; }
+  .dg-cap{ font-family:var(--mono); font-size:12px; color:var(--paper-dim); margin:8px 0 0; text-align:center; }
+  .diagram-box.dg{ padding:14px; }
+  pre{ background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius); padding:12px 14px; overflow-x:auto; font-family:var(--mono); font-size:13.5px; line-height:1.55; margin:14px 0; color:var(--paper); }
+  code{ font-family:var(--mono); font-size:.9em; color:var(--signal-bright); }
+  .diagram-box.dg svg{ max-width:100%; }
+  .dg text.halo{ paint-order:stroke; stroke:var(--bg-deep); stroke-width:7px; stroke-linejoin:round; fill:var(--paper-dim); font-size:11px; }
+
+  table.sheet{ border-collapse:collapse; margin:0 auto; font-family:var(--mono); font-size:13px; }
+  table.sheet th{ background:var(--trace-dim); color:var(--paper-dim); font-weight:400; border:1px solid var(--trace); padding:5px 12px; }
+  table.sheet td{ border:1px solid var(--trace); padding:5px 12px; text-align:left; white-space:pre; color:var(--paper); }
+  table.sheet td.bad{ background:rgba(224,104,92,0.18); }
+  table.sheet td.ok{ background:rgba(134,201,160,0.16); }
+  table.sheet td.hl{ background:rgba(230,184,92,0.22); }
+  table.sheet td.num{ text-align:right; }
+  table.sheet td.fn{ color:var(--gold); }
+</style>
+
+</head>
+<body>
+<div id="score-badge">Score: <span class="n" id="score-val">0</span> / <span id="score-max">0</span></div>
+<nav class="theory-nav"><a href="networks-as-a-level-it.html">← <span class="full">Previous theory:</span> Networks and transmission</a><span class="spacer"></span><a class="disabled" href="#" aria-disabled="true"><span class="full">Next theory</span> →</a></nav>
+<header class="hero"><p class="kicker">Cambridge AS &amp; A Level IT · Protocols, Wireless, Security and Recovery</p><h1 class="title">Protocols, Wireless and Security</h1><p>This page covers network protocols and how data is switched and routed, wireless and mobile communication, satellites and GPS, network security threats and defences, and disaster recovery management.</p></header>
+<nav class="tabs"><button class="tab-btn active" data-panel="protocols">14.6 Protocols</button><button class="tab-btn" data-panel="wireless">14.7 Wireless</button><button class="tab-btn" data-panel="mobile">14.8 Mobile &amp; satellite</button><button class="tab-btn" data-panel="security">14.9 Network security</button><button class="tab-btn" data-panel="recovery">14.10 Disaster recovery</button></nav>
+<div class="wrap">
+<div class="panel active" id="panel-protocols"><h2 class="section-title">Network protocols <span class="tag">14.6</span></h2>
+<p>Protocols are instructions for how different computers in a network communicate with each other. They are essential to ensure data is transferred efficiently and securely across a network.</p>
+<h3>Purposes and uses of protocols</h3>
+<p>Protocols are a set of rules that govern how data is formatted and processed, and allow computers to communicate with each other regardless of the software and hardware differences they may have.</p><div class="table-scroll"><table><tr><th>Protocol</th><th>Function</th></tr><tr><td>Transmission control protocol (TCP)</td><td>Allows two computers to establish a connection.</td></tr><tr><td>Internet protocol (IP)</td><td>Sets out rules for communicating over the internet. TCP/IP are mentioned together because they were designed to complement each other. IP sets the rules for the transmission of data but cannot error check the packets; TCP provides reliable, ordered and error-checked delivery of the packets.</td></tr><tr><td>Internet control message protocol (ICMP)</td><td>An error reporting protocol used to generate error messages to send to the sender when network problems cause delivery problems with data packets.</td></tr><tr><td>Address resolution protocol (ARP)</td><td>Responsible for translating an IP address into a MAC address for a device. It is used between the network layer and the data link layer of the OSI model.</td></tr><tr><td>Inverse address resolution protocol (InARP)</td><td>Performs the opposite role to ARP: it translates a MAC address into an IP address.</td></tr><tr><td>Dynamic host configuration protocol (DHCP)</td><td>A network management protocol used to assign IP addresses to devices on a network, so a network administrator does not need to do it manually.</td></tr><tr><td>User datagram protocol (UDP)</td><td>Often used for time-sensitive communication such as video playback. It does not formally establish a connection before data is sent, so packets go directly to their target without checking the order of the packets or whether they have arrived safely, which makes it quite unreliable.</td></tr><tr><td>Hypertext transfer protocols (HTTP and HTTPS)</td><td>HTTP is used for transferring the content of web pages across the internet, from a web server to a browser. HTTPS is the secure version of HTTP that uses the SSL protocol.</td></tr><tr><td>File transfer protocol (FTP)</td><td>Responsible for the transfer of files between a client and a server in a network.</td></tr><tr><td>Tunnelling protocol, e.g. L2TP</td><td>Designed to increase the privacy and security of data by allowing secure transmission of data from one network to another. Private data packets are sent across a public network by <strong>encapsulation</strong>: the private packets are made to look like public data packets. An important protocol in VPNs.</td></tr><tr><td>Simple mail transfer protocol (SMTP)</td><td>Used to send email from a computer to a mail server, and between different mail servers.</td></tr><tr><td>Post office protocol (POP), e.g. POP3</td><td>Used to retrieve emails from a mail server. When the user checks their mailbox the email is sent from the server to their device, and the protocol then deletes the email from the server.</td></tr><tr><td>Internet message access protocol (IMAP)</td><td>Also retrieves email from a mail server, but the email is not deleted from the server by the protocol. It is only deleted when the user chooses to delete it.</td></tr><tr><td>Telnet</td><td>Allows a user to connect remotely to another computer using the internet, via a command-line interpreter, which processes commands and outputs results.</td></tr><tr><td>Secure shell (SSH)</td><td>Provides a secure way to access a computer over an unsecure network, using strong authentication and encryption methods for communication.</td></tr><tr><td>Internet protocol security (IPSec)</td><td>Designed to encrypt and authenticate data packets sent across the internet. Also part of the tunnelling process for a VPN.</td></tr><tr><td>Secure sockets layer (SSL)</td><td>Ensures connections between web clients (such as user devices) and web/mail servers are secure, using both public and private keys to encrypt the data. Still used in some applications but now mostly replaced by TLS.</td></tr><tr><td>Transport layer security (TLS)</td><td>The updated version of SSL, which uses updated and more secure encryption algorithms.</td></tr></table></div>
+<h3>Methods of sending data over a network</h3>
+<p>Transmitting data packets across a network is called <strong>switching</strong>. There are three main types: packet switching, circuit switching and message switching.</p>
+<h4>Packet switching</h4>
+<p>Instead of being sent bit by bit, data is normally transmitted across networks in small bundles, or packets. Packets vary depending on the type of network (a packet sent over the internet contains more elements to allow it to be directed to the right place), but most contain at least a header, a payload and a trailer. You could think of packets as separate envelopes, each with a stamp, an address and a letter inside.</p><div class="diagram-box dg"><svg viewBox="0 0 760 180" role="img" aria-label="Structure of a data packet"><defs><marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/></marker><marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/></marker></defs><rect class="boxh" x="10" y="14" width="290" height="150" rx="3"/><text x="155.0" y="34" class="gold">Header</text><line class="grid" x1="10" y1="50" x2="300" y2="50"/><text x="155.0" y="72">Source IP address</text><text x="155.0" y="92">Destination IP address</text><text x="155.0" y="112">Sequence number</text><text x="155.0" y="132">MAC addresses</text><text x="155.0" y="152">Protocols used</text><rect class="box" x="310" y="14" width="200" height="150" rx="3"/><text x="410.0" y="34" class="gold">Payload</text><line class="grid" x1="310" y1="50" x2="510" y2="50"/><text x="410.0" y="72">The actual data</text><text x="410.0" y="92">from the file being</text><text x="410.0" y="112">transmitted</text><rect class="box" x="520" y="14" width="230" height="150" rx="3"/><text x="635.0" y="34" class="gold">Trailer</text><line class="grid" x1="520" y1="50" x2="750" y2="50"/><text x="635.0" y="72">End-of-packet flag</text><text x="635.0" y="92">Error checking methods</text></svg><p class="dg-cap">The structure of a data packet: a header, a payload and a trailer. The header and trailer help make sure the payload arrives at its destination without errors.</p></div>
+<p>The header includes the sender's <strong>source IP address</strong>, the <strong>destination IP address</strong>, the <strong>sequence number</strong> (so the receiving device can reorder the packets to obtain the original data), the <strong>MAC addresses</strong> (if the packet passes through a router these are removed, as they are only used by a switch) and any protocols used. The payload is the actual data from the file being transmitted. The trailer includes a flag telling a device it has reached the end of the packet, and any error checking methods used. The data in the header and trailer is designed to make sure the payload arrives at its destination without errors.</p>
+<p>In packet switching, packets can take any available path. There is no set pathway and each packet could be sent along a different route, for example via any of the switches in the network. The packets are collated and reordered when they reach Computer B. It is normally used when packets are sent across the internet, via routers.</p>
+<p>There are two modes of transmission. In <strong>connection mode</strong> (virtual circuit switching), a session is created before any data is transferred and becomes a fixed channel for the data. In <strong>connectionless mode</strong> (datagram switching), there does not need to be any prior arrangement between devices. Frame relay and TCP are connection types; Ethernet, IP and UDP are connectionless types.</p><div class="table-scroll"><table><tr><th>Mode</th><th>Protocol</th><th>Function</th></tr><tr><td>Connection</td><td>Frame relay</td><td>Data is separated into units called frames. Error correction is carried out by the devices at the end points, which speeds up transmission. If an error is detected in a frame, it is dropped and the endpoint devices detect the dropped frames and retransmit them, so it suits data where the error rate is likely to be low. <strong>Permanent virtual circuits (PVC)</strong> are intended to exist for long periods, even when no data is being exchanged; <strong>switched virtual circuits (SVC)</strong> are temporary and exist for a single session.</td></tr><tr><td>Connection</td><td>TCP</td><td>A connection is created and maintained until the application software at each endpoint has finished exchanging data. TCP determines how the data is broken into packets, which it gives to and receives from the network layer in the TCP/IP model, and is responsible for error-free transmission and managing the flow of data.</td></tr><tr><td>Connectionless</td><td>Ethernet</td><td>A traditional protocol used to connect devices via a wired connection to form a network, making sure devices format and transmit data in a way other devices will understand. Most networks in a home or school use it.</td></tr><tr><td>Connectionless</td><td>IP</td><td>Used when data is sent across the internet; responsible for delivering the packets of data to the receiving device.</td></tr><tr><td>Connectionless</td><td>UDP</td><td>An alternative to TCP. It sends data in units called datagrams and does not control the flow of data or carry out error checking, so exchange of data using UDP is often faster than using TCP.</td></tr></table></div>
+<h4>Circuit switching</h4>
+<p>A direct path is created between the sending and receiving device, and the data is transmitted each time using this dedicated path. While data is being transmitted from Computer A to Computer B, no other computers in the network can use the same pathway. When the transmission is completed, the path is released for use by other data transmission across the network.</p><div class="diagram-box dg"><svg viewBox="0 0 640 330" role="img" aria-label="Circuit switching between two computers through five switches"><defs><marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/></marker><marker id="c2" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/></marker></defs><path class="lnc" d="M60.0,170.0 L190.0,60.0"/><path class="ln" d="M60.0,170.0 L190.0,280.0"/><path class="lnc" d="M190.0,60.0 L320.0,170.0"/><path class="ln" d="M190.0,280.0 L320.0,170.0"/><path class="lnc" d="M320.0,170.0 L450.0,60.0"/><path class="ln" d="M320.0,170.0 L450.0,280.0"/><path class="lnc" d="M450.0,60.0 L580.0,170.0"/><path class="ln" d="M450.0,280.0 L580.0,170.0"/><rect class="boxh" x="156" y="40" width="68" height="40" rx="3"/><text x="190.0" y="60.0">Switch</text><rect class="box" x="156" y="260" width="68" height="40" rx="3"/><text x="190.0" y="280.0">Switch</text><rect class="boxh" x="286" y="150" width="68" height="40" rx="3"/><text x="320.0" y="170.0">Switch</text><rect class="boxh" x="416" y="40" width="68" height="40" rx="3"/><text x="450.0" y="60.0">Switch</text><rect class="box" x="416" y="260" width="68" height="40" rx="3"/><text x="450.0" y="280.0">Switch</text><rect class="box" x="28.0" y="150.0" width="64" height="40" rx="3"/><path class="ln" d="M48,196.0 H72 M60,190.0 V196.0"/><text x="60" y="214" class="dim">Computer A</text><rect class="box" x="548.0" y="150.0" width="64" height="40" rx="3"/><path class="ln" d="M568,196.0 H592 M580,190.0 V196.0"/><text x="580" y="214" class="dim">Computer B</text><text x="320" y="18" class="gold">gold path = the dedicated path</text></svg><p class="dg-cap">Figure 14.20 redrawn: circuit switching. A direct path (gold) is created between Computer A and Computer B, and no other computer can use it until the transmission is complete.</p></div>
+<h4>Message switching</h4>
+<p>Message switching is an intermediate method between circuit switching and packet switching. It is like circuit switching in that all the data packets are sent along the same path, and like packet switching in that any path from Computer A to Computer B can be taken. The packets are sent from Computer A to the first switch, which holds them until all of them have arrived, and then sends them to the next switch, which also holds them until all have arrived. They are sent from switch to switch in this way until they reach Computer B. This is the <strong>store and forward</strong> method.</p>
+<h3>Network addressing systems</h3>
+<p>IP addresses are unique identifiers given to a device on a network. There are two versions: <strong>IP4</strong>, the original, is a 32-bit numerical address. As more devices connected to the internet, we started to run out of combinations, so <strong>IP6</strong> was developed: a 128-bit address that allows many more combinations.</p>
+<p>An IP address can be <strong>static</strong> (the device will always have the same IP address) or <strong>dynamic</strong> (the IP address could change for each internet session). Most devices use a dynamic IP address, and a user will normally need to request a static IP address from the internet provider.</p>
+<p>A <strong>MAC address</strong> is a unique number assigned to each network interface controller (NIC), the circuit board inside a computer that enables it to be connected to a network. Although a device's dynamic IP address changes depending on the network currently being used, a MAC address is specific and unique to the device.</p>
+<h3>Static and dynamic routing</h3>
+<p>Routers use <strong>routing tables</strong> to work out the most efficient path for network traffic to reach its destination. A routing table is stored on the router and lists all the available routes to particular network destinations. Routers use routing protocols to specify how they communicate with each other, and these help select the route that data travels.</p><div class="block"><ul><li><strong>Static routing</strong> is used when there is a single or preferred route for network traffic. The route is preconfigured (arranged in a set way), using small routing tables.</li><li><strong>Dynamic routing</strong> uses algorithms to compute multiple different routes for network traffic and decide the best one.</li></ul></div><div class="table-scroll"><table><tr><th>Routing</th><th>Advantage</th><th>Disadvantage</th></tr><tr><td>Static</td><td>• Easy to implement in a small network<br>• Very secure<br>• Predictable, because the same route is always used<br>• No update mechanisms required, as it is done manually<br>• Requires less time to compute than a dynamic route</td><td>• Only useful for simple networks<br>• Manually updating the route can be difficult and time-consuming if the network changes<br>• If the link fails, manual intervention is needed; no alternative routes are available</td></tr><tr><td>Dynamic</td><td>• Useful in larger, more complex networks<br>• Automatically adapts if the network changes or a link fails</td><td>• Can be difficult to implement initially<br>• Requires more bandwidth, CPU and memory for update mechanisms</td></tr></table></div>
+<h4>Functions of routing protocols</h4><div class="block"><ul><li><strong>Interior gateway protocols</strong> specify how routers communicate with each other within a network, such as a LAN.</li><li><strong>Exterior gateway protocols</strong> specify how routers communicate with each other between different networks.</li><li><strong>Border gateway protocols</strong> are a specific kind of exterior gateway protocol that manage the process of exchanging packets of data across the largest network, the internet.</li></ul></div>
+<h3>Use of protocol layering</h3>
+<p>There are two main network models that many networks are built on: the <strong>TCP/IP suite</strong> and the <strong>OSI model</strong> (open systems interconnection). Both outline rules and standards about how communications should take place over a network, and each is split into layers so that each layer can operate independently of another, which allows the functions at each layer to be easily adapted.</p><details class="fold"><summary>Did you know?</summary><div class="fold-body"><p>In 1969, ARPANET was one of the first networks created, and one of the first to use the TCP/IP protocol suite. Many consider ARPANET to have influenced the internet we know today.</p></div></details><div class="diagram-box dg"><svg viewBox="0 0 740 330" role="img" aria-label="OSI model compared with the TCP/IP suite"><defs><marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/></marker><marker id="c3" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/></marker></defs><text x="145" y="12" class="gold">OSI model (7 layers)</text><text x="550" y="12" class="gold">TCP/IP suite (4 layers)</text><rect class="box" x="20" y="26" width="250" height="38" rx="3"/><text x="145.0" y="45.0">7  Application</text><rect class="box" x="20" y="68" width="250" height="38" rx="3"/><text x="145.0" y="87.0">6  Presentation</text><rect class="box" x="20" y="110" width="250" height="38" rx="3"/><text x="145.0" y="129.0">5  Session</text><rect class="box" x="20" y="152" width="250" height="38" rx="3"/><text x="145.0" y="171.0">4  Transport</text><rect class="box" x="20" y="194" width="250" height="38" rx="3"/><text x="145.0" y="213.0">3  Network (router)</text><rect class="box" x="20" y="236" width="250" height="38" rx="3"/><text x="145.0" y="255.0">2  Data link (switch)</text><rect class="box" x="20" y="278" width="250" height="38" rx="3"/><text x="145.0" y="297.0">1  Physical</text><rect class="boxh" x="380" y="26" width="340" height="122" rx="3"/><text x="550.0" y="79.0">Application</text><text x="550.0" y="96.0">HTTP · SMTP · POP · FTP</text><rect class="boxh" x="380" y="152" width="340" height="38" rx="3"/><text x="550.0" y="163.0">Transport</text><text x="550.0" y="180.0">TCP · UDP</text><rect class="boxh" x="380" y="194" width="340" height="38" rx="3"/><text x="550.0" y="205.0">Network (internet)</text><text x="550.0" y="222.0">IP · ICMP</text><rect class="boxh" x="380" y="236" width="340" height="80" rx="3"/><text x="550.0" y="268.0">Link</text><text x="550.0" y="285.0">ARP</text><path class="grid" d="M270.0,47.0 L380.0,87.0"/><path class="grid" d="M270.0,89.0 L380.0,87.0"/><path class="grid" d="M270.0,131.0 L380.0,87.0"/><path class="grid" d="M270.0,171.0 L380.0,171.0"/><path class="grid" d="M270.0,213.0 L380.0,213.0"/><path class="grid" d="M270.0,255.0 L380.0,276.0"/><path class="grid" d="M270.0,297.0 L380.0,276.0"/></svg><p class="dg-cap">Tables 14.11 and 14.12 redrawn: the seven OSI layers and how they map onto the four layers of the TCP/IP suite.</p></div><div class="table-scroll"><table><tr><th>OSI layer</th><th>Function</th></tr><tr><td>Application</td><td>The top layer, which directly interacts with data from the user. Software applications such as web applications and email clients rely on it to communicate (user applications such as word processors are not included). It manages protocols such as HTTP and SMTP.</td></tr><tr><td>Presentation</td><td>Prepares data ready for use in the application layer: translation (into a form the receiving device understands), encryption (decrypting received data) and compression to increase the speed of transmission.</td></tr><tr><td>Session</td><td>A session is the time between a communication link being opened and closed. The session layer makes sure it stays open long enough for all the data to be transmitted and then closes it immediately afterwards.</td></tr><tr><td>Transport</td><td>Breaks down the data from the session layer into segments and gives them to the network layer; reassembles segments at the receiving device. Responsible for flow control (the best speed for transmission) and error checking, requesting a retransmission if the data is not complete.</td></tr><tr><td>Network</td><td>Breaks the segments down into data packets and reassembles them after transmission. Responsible for routing: finding the best path across the network, from network to network. A router is a key component in this layer.</td></tr><tr><td>Data link</td><td>Similar to the network layer, but transmits data from node to node within a network. Converts the packets from the network layer into frames. A switch is a key component in this layer.</td></tr><tr><td>Physical</td><td>The physical equipment used to transmit the data, such as the cables. Data is broken down into bits to be transmitted as binary, and the bits are reassembled into frames after transmission.</td></tr></table></div><div class="table-scroll"><table><tr><th>TCP/IP layer</th><th>Function</th></tr><tr><td>Application</td><td>Condenses the roles of the application, presentation and session layers of the OSI model. Uses protocols including HTTP, SMTP, POP and FTP to provide a standardised exchange of data.</td></tr><tr><td>Transport</td><td>Comparable to the OSI transport layer: maintains end-to-end communications between devices. Two main protocols: TCP and UDP.</td></tr><tr><td>Network</td><td>Also known as the internet layer; comparable to the OSI network layer. Breaks data down into packets and transmits it from network to network. Two main protocols: IP and ICMP.</td></tr><tr><td>Link</td><td>Also known as the physical layer; merges the roles of the data link layer and physical layer of the OSI model. A protocol used at this level is ARP.</td></tr></table></div>
+<p>The OSI model is a logical model that can be applied when creating a network. The TCP/IP suite is a condensed version of it, with four layers rather than seven. It was developed by the US Department of Defense and is intended to be a more advanced version of the OSI model.</p><div class="task"><p class="task-label"><span>Questions from the book</span><span class="pts">9 points</span></p><h4>Answers from the notes.</h4><div class="sub-q"><label>List two things that might be contained in the header of a data packet.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: source IP address; destination IP address; sequence number; MAC addresses; protocols used</div><div class="self-mark"><input type="checkbox" id="sm-1"><label for="sm-1">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Briefly explain what a network protocol is.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>A set of rules that govern how data is formatted and processed, allowing computers to communicate with each other regardless of software and hardware differences</div><div class="self-mark"><input type="checkbox" id="sm-2"><label for="sm-2">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>List three network protocols and state their purpose.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any three, for example: TCP — allows two computers to establish a connection; SMTP — sends email to a mail server and between mail servers; FTP — transfers files between a client and a server; DHCP — assigns IP addresses to devices</div><div class="self-mark"><input type="checkbox" id="sm-3"><label for="sm-3">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>What is post office protocol (POP) used for?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>To retrieve emails from a mail server; the email is sent to the device and then deleted from the server</div><div class="self-mark"><input type="checkbox" id="sm-4"><label for="sm-4">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Which protocol is responsible for the transfer of files from a server to a client?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>File transfer protocol (FTP)</div><div class="self-mark"><input type="checkbox" id="sm-5"><label for="sm-5">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>What is the purpose of an IP address?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>A unique identifier given to a device on a network, so the device can be identified as unique when connected to a network</div><div class="self-mark"><input type="checkbox" id="sm-6"><label for="sm-6">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>List the four layers of the TCP/IP protocol.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Application, transport, network (internet) and link</div><div class="self-mark"><input type="checkbox" id="sm-7"><label for="sm-7">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain the difference between static and dynamic routing.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Static routing uses a preconfigured, single or preferred route with small routing tables; dynamic routing uses algorithms to compute multiple routes and decide the best one</div><div class="self-mark"><input type="checkbox" id="sm-8"><label for="sm-8">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>List two advantages and two disadvantages of static routing.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Advantages (any two): easy to implement in a small network; very secure; predictable; no update mechanisms needed; less time to compute. Disadvantages (any two): only useful for simple networks; manual updating is difficult and time-consuming; if the link fails manual intervention is needed</div><div class="self-mark"><input type="checkbox" id="sm-9"><label for="sm-9">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">10 points</span></p><h4>Click the group each protocol belongs to.</h4><div class="classify-list"><div class="classify-item" data-answer="s"><span class="term">IPSec</span><span class="choices"><button data-choice="e">Email</button><button data-choice="w">Web &amp; files</button><button data-choice="s">Security</button><button data-choice="a">Addressing</button></span></div><div class="classify-item" data-answer="e"><span class="term">SMTP</span><span class="choices"><button data-choice="e">Email</button><button data-choice="w">Web &amp; files</button><button data-choice="s">Security</button><button data-choice="a">Addressing</button></span></div><div class="classify-item" data-answer="s"><span class="term">TLS</span><span class="choices"><button data-choice="e">Email</button><button data-choice="w">Web &amp; files</button><button data-choice="s">Security</button><button data-choice="a">Addressing</button></span></div><div class="classify-item" data-answer="w"><span class="term">FTP</span><span class="choices"><button data-choice="e">Email</button><button data-choice="w">Web &amp; files</button><button data-choice="s">Security</button><button data-choice="a">Addressing</button></span></div><div class="classify-item" data-answer="e"><span class="term">IMAP</span><span class="choices"><button data-choice="e">Email</button><button data-choice="w">Web &amp; files</button><button data-choice="s">Security</button><button data-choice="a">Addressing</button></span></div><div class="classify-item" data-answer="e"><span class="term">POP</span><span class="choices"><button data-choice="e">Email</button><button data-choice="w">Web &amp; files</button><button data-choice="s">Security</button><button data-choice="a">Addressing</button></span></div><div class="classify-item" data-answer="a"><span class="term">DHCP</span><span class="choices"><button data-choice="e">Email</button><button data-choice="w">Web &amp; files</button><button data-choice="s">Security</button><button data-choice="a">Addressing</button></span></div><div class="classify-item" data-answer="s"><span class="term">SSL</span><span class="choices"><button data-choice="e">Email</button><button data-choice="w">Web &amp; files</button><button data-choice="s">Security</button><button data-choice="a">Addressing</button></span></div><div class="classify-item" data-answer="a"><span class="term">ARP</span><span class="choices"><button data-choice="e">Email</button><button data-choice="w">Web &amp; files</button><button data-choice="s">Security</button><button data-choice="a">Addressing</button></span></div><div class="classify-item" data-answer="w"><span class="term">HTTP</span><span class="choices"><button data-choice="e">Email</button><button data-choice="w">Web &amp; files</button><button data-choice="s">Security</button><button data-choice="a">Addressing</button></span></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">8 points</span></p><h4>Click the type of switching each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="p"><span class="term">Each packet can take a different path</span><span class="choices"><button data-choice="p">Packet</button><button data-choice="c">Circuit</button><button data-choice="m">Message</button></span></div><div class="classify-item" data-answer="c"><span class="term">The path is released when the transmission is complete</span><span class="choices"><button data-choice="p">Packet</button><button data-choice="c">Circuit</button><button data-choice="m">Message</button></span></div><div class="classify-item" data-answer="p"><span class="term">Normally used when packets are sent across the internet</span><span class="choices"><button data-choice="p">Packet</button><button data-choice="c">Circuit</button><button data-choice="m">Message</button></span></div><div class="classify-item" data-answer="c"><span class="term">Data travels along a direct path between the sending and receiving device</span><span class="choices"><button data-choice="p">Packet</button><button data-choice="c">Circuit</button><button data-choice="m">Message</button></span></div><div class="classify-item" data-answer="p"><span class="term">The packets are reordered when they reach Computer B</span><span class="choices"><button data-choice="p">Packet</button><button data-choice="c">Circuit</button><button data-choice="m">Message</button></span></div><div class="classify-item" data-answer="m"><span class="term">Like circuit switching, all the packets are sent along the same path</span><span class="choices"><button data-choice="p">Packet</button><button data-choice="c">Circuit</button><button data-choice="m">Message</button></span></div><div class="classify-item" data-answer="c"><span class="term">A dedicated path is created and no other computer can use it</span><span class="choices"><button data-choice="p">Packet</button><button data-choice="c">Circuit</button><button data-choice="m">Message</button></span></div><div class="classify-item" data-answer="m"><span class="term">Each switch holds the data until all of it has arrived (store and forward)</span><span class="choices"><button data-choice="p">Packet</button><button data-choice="c">Circuit</button><button data-choice="m">Message</button></span></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p><h4>Click whether each statement describes static or dynamic routing.</h4><div class="classify-list"><div class="classify-item" data-answer="s"><span class="term">Easy to implement in a small network</span><span class="choices"><button data-choice="s">Static</button><button data-choice="d">Dynamic</button></span></div><div class="classify-item" data-answer="s"><span class="term">Manual intervention is needed if the link fails</span><span class="choices"><button data-choice="s">Static</button><button data-choice="d">Dynamic</button></span></div><div class="classify-item" data-answer="d"><span class="term">Requires more bandwidth, CPU and memory for updates</span><span class="choices"><button data-choice="s">Static</button><button data-choice="d">Dynamic</button></span></div><div class="classify-item" data-answer="s"><span class="term">Uses small, preconfigured routing tables</span><span class="choices"><button data-choice="s">Static</button><button data-choice="d">Dynamic</button></span></div><div class="classify-item" data-answer="d"><span class="term">Uses algorithms to compute multiple routes and decide the best one</span><span class="choices"><button data-choice="s">Static</button><button data-choice="d">Dynamic</button></span></div><div class="classify-item" data-answer="d"><span class="term">Automatically adapts if a link fails</span><span class="choices"><button data-choice="s">Static</button><button data-choice="d">Dynamic</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">4 points</span></p><div class="mcq" data-answer="1"><p class="q">1. Which protocol does not delete email from the server unless the user chooses to?</p><div class="opts"><button class="opt" data-idx="0">POP</button><button class="opt" data-idx="1">IMAP</button><button class="opt" data-idx="2">SMTP</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="2"><p class="q">2. How many bits is an IP6 address?</p><div class="opts"><button class="opt" data-idx="0">32</button><button class="opt" data-idx="1">64</button><button class="opt" data-idx="2">128</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="1"><p class="q">3. Which layer of the OSI model has a router as a key component?</p><div class="opts"><button class="opt" data-idx="0">Data link</button><button class="opt" data-idx="1">Network</button><button class="opt" data-idx="2">Transport</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">4. Which protocol does not control flow or carry out error checking, so is often faster than TCP?</p><div class="opts"><button class="opt" data-idx="0">UDP</button><button class="opt" data-idx="1">FTP</button><button class="opt" data-idx="2">ICMP</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-wireless"><h2 class="section-title">Wireless technology <span class="tag">14.7</span></h2>
+<h3>Telecommunications</h3>
+<p><strong>Telecommunications</strong> (often shortened to telecoms) is the transmission of information instantly over long distances, such as a phone call. It includes phones, cellphones/mobile phones, satellites, radio and the internet. Post or mail is not telecommunications, because the information is not received instantly. Data is transferred via telecommunications circuits. A single circuit comprises two stations, and each station has a <strong>receiver</strong> (which receives data) and a <strong>transmitter</strong> (which sends data). The signals can be transmitted via wire, cables, optical fibre, or wirelessly through electromagnetic fields or light.</p>
+<h3>Methods of wireless data transmission</h3>
+<p>Wireless methods that can be used to connect devices in a network include Wi-Fi, Bluetooth, infrared, microwaves, radio and near field communication.</p>
+<h4>Wi-Fi</h4>
+<p>Wi-Fi uses radio signals and is the most commonly used wireless communication method. Each device that wants to make a wireless connection broadcasts a radio signal, which a router or WAP receives and processes. The router or WAP also broadcasts radio signals that are received and processed by each device when it is receiving data. Wi-Fi currently transmits data at frequencies of <strong>2.4 GHz and 5 GHz</strong>, much higher than those used by mobile networks. These high frequencies are required to send larger amounts of data. The current limit for Wi-Fi data transmission is approximately 450 Mbps.</p>
+<h4>Bluetooth</h4>
+<p>Bluetooth also uses radio signals to create a wireless connection between two devices, at the radio frequency <strong>2.45 GHz</strong>. Devices need to be within <strong>10 m</strong> of each other, and there is a limit of <strong>eight devices</strong> connected at any given time.</p>
+<p>The two devices must have matching <strong>profiles</strong>: a set of rules that allow devices to complete a specific task. For example, a mobile phone and a headset share the profile that allows sound to be transmitted, so they can be paired. The profile system stops pointless connections: a wireless mouse and a digital camera do not have the same profiles and cannot be paired, because the mouse cannot be used to control the camera.</p>
+<p>To create a connection, the Bluetooth transmitter is turned on in a device and begins to transmit radio signals. Any device with a matching profile, within range, picks up the signals and identifies with the sender as a possible device to connect to. The required device can then be chosen and the devices are paired. Sometimes pairing requires entering a pin code for added security. For example, to send a photo your phone transmits a radio signal to a receiving phone with Bluetooth switched on; you select the correct device from the menu, and the recipient gets a notification asking if they wish to accept the photo.</p>
+<h4>Infrared</h4>
+<p>Infrared connections use infrared radiation, in two modes. In <strong>line-of-sight mode</strong>, there must be a direct line of sight between the sending and receiving device, with no obstacles in the way. In <strong>scatter mode</strong>, a device broadcasts infrared into an area and any device may receive it directly or through reflection off an obstacle. The sending device needs the ability to produce an infrared signal, and the receiving device needs an infrared sensor to capture it.</p>
+<p>Infrared lasers can also transmit data between devices. Laser data transmission works in a similar way to fibre optic, using the properties of light, but rather than travelling through physical transmission media it travels through free space.</p>
+<h4>Microwaves and radio waves</h4>
+<p>The terms are often used interchangeably, because both are types of electromagnetic radiation that can be used to transmit data and power. Microwaves have shorter wavelengths and are generally used for short-distance communications; radio waves have longer wavelengths and are generally used for long-distance communications. The waves used in both Wi-Fi and Bluetooth are technically microwaves, but historically the term 'radio waves' has been applied to the technology used in wireless data transmission.</p>
+<h4>Near field communication (NFC)</h4>
+<p>NFC allows devices near each other to communicate without the need for an internet connection. An NFC chip is one part of a wireless link. Once activated by another chip, small packets of data can be shared or transferred when the devices are held no more than a few centimetres from each other. There is no pairing code or internet connection required, because NFCs use chips that run on small amounts of power. An example is contactless payment through your phone or watch.</p>
+<h3>The Internet of Things</h3>
+<p>The <strong>Internet of Things (IoT)</strong> connects devices over the internet, allowing them to share data. It is a system of connected devices, such as smart phones, smart watches and smart technology such as smart heaters in our homes, enabling them to collect and exchange data. It gives us the ability to connect objects that have historically not been connected, such as weather stations and phones, or mail boxes and watches. The devices often rely on wireless transmission methods like Wi-Fi: for example, via Wi-Fi you can use your phone to control your thermostat at home. Access to wireless transmission has meant that the IoT has gained traction as a concept in recent years.</p>
+<h3>Advantages and disadvantages of wireless transmission methods</h3><div class="table-scroll"><table><tr><th>Method</th><th>Advantages</th><th>Disadvantages</th></tr><tr><td>Wi-Fi</td><td>• Several wireless capable devices can connect to a single router or WAP<br>• The high frequency means large amounts of data can be transmitted at a time<br>• More recent Wi-Fi standards are backward compatible with previous ones<br>• Quite a large range of approximately 100 m<br>• Does not require a line of sight, so it can work through obstacles</td><td>• The speed of data transfer decreases as more devices connect<br>• Less secure than a wired connection<br>• Radio signals can be subject to interference</td></tr><tr><td>Bluetooth</td><td>• Low power consumption<br>• Does not require a line of sight<br>• Can be made more secure by requiring a pin code<br>• Less interference, as other wireless connections transmit on different frequencies</td><td>• Limit of 10 m for a connection<br>• Limit of eight devices connected at a time<br>• Lower bandwidth than Wi-Fi</td></tr><tr><td>Infrared</td><td>• The most secure form of connection<br>• Low cost to manufacture and purchase<br>• Low power consumption<br>• No interference from radio frequencies</td><td>• Cannot be transmitted through obstacles<br>• In line-of-sight mode, needs a direct line of sight<br>• Can only connect two devices<br>• Short range, a limit of approximately 1 m<br>• May be subject to interference from bright sources</td></tr><tr><td>NFC</td><td>• Efficient and less power intensive than other wireless types<br>• Quick and easy to use<br>• Using NFC to make payments is generally more secure</td><td>• Very low data transfer rates<br>• Expensive for companies to adopt<br>• Only useful for very short distances of 10–20 cm</td></tr></table></div>
+<h3>Security issues</h3>
+<p>Wireless connections do not have the same level of protection as a wired connection. Wired networks are normally limited to a building or single site, often with locks and other security methods to stop an unauthorised person entering the area and gaining access. Two main protocols improve the security of a wireless network:</p><div class="block"><ul><li><strong>Wired equivalent privacy (WEP)</strong> is designed to provide a wireless network with a similar level of security to a wired LAN, by encrypting data transmissions sent using a wireless connection.</li><li><strong>Wi-Fi protected access (WPA)</strong> is a standard required of devices equipped with a wireless internet connection, designed to provide a more sophisticated encryption method than WEP.</li><li><strong>Firewalls</strong> can be configured to control access to networks, by setting rules about which stations on a network can send or receive packets, or by limiting which devices can join a network.</li></ul></div>
+<p>Other preventative security methods, such as strong passwords and good practice, apply to wireless connections too.</p><div class="task"><p class="task-label"><span>Questions from the book</span><span class="pts">6 points</span></p><h4>Answers from the notes.</h4><div class="sub-q"><label>Define telecommunications.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>The transmission of information instantly over long distances, such as a phone call</div><div class="self-mark"><input type="checkbox" id="sm-10"><label for="sm-10">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Briefly outline how Bluetooth pairing works.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>The Bluetooth transmitter is turned on and broadcasts radio signals; a device with a matching profile within range picks them up and identifies with the sender; the required device is chosen and the devices are paired, sometimes with a pin code</div><div class="self-mark"><input type="checkbox" id="sm-11"><label for="sm-11">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Identify two examples where an infrared wireless connection could be used.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two sensible examples of short range, line-of-sight connections, such as a remote control for a television, or sending data between two devices a short distance apart</div><div class="self-mark"><input type="checkbox" id="sm-12"><label for="sm-12">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Give one example of where NFC could be used.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Contactless payment using a phone or watch</div><div class="self-mark"><input type="checkbox" id="sm-13"><label for="sm-13">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>What is the Internet of Things?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>A system of connected devices, such as smart phones, smart watches and smart heaters, connected via the internet so they can collect and exchange data</div><div class="self-mark"><input type="checkbox" id="sm-14"><label for="sm-14">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Why do Bluetooth devices need matching profiles?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>The profile is a set of rules for a specific task; it stops pointless connections, for example a wireless mouse and a camera cannot be paired</div><div class="self-mark"><input type="checkbox" id="sm-15"><label for="sm-15">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">10 points</span></p><h4>Click which wireless method each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="w"><span class="term">Frequencies of 2.4 GHz and 5 GHz</span><span class="choices"><button data-choice="w">Wi-Fi</button><button data-choice="b">Bluetooth</button><button data-choice="i">Infrared</button><button data-choice="n">NFC</button></span></div><div class="classify-item" data-answer="w"><span class="term">Range of approximately 100 m, working through obstacles</span><span class="choices"><button data-choice="w">Wi-Fi</button><button data-choice="b">Bluetooth</button><button data-choice="i">Infrared</button><button data-choice="n">NFC</button></span></div><div class="classify-item" data-answer="i"><span class="term">The most secure form of connection</span><span class="choices"><button data-choice="w">Wi-Fi</button><button data-choice="b">Bluetooth</button><button data-choice="i">Infrared</button><button data-choice="n">NFC</button></span></div><div class="classify-item" data-answer="n"><span class="term">Devices held a few centimetres apart; used for contactless payment</span><span class="choices"><button data-choice="w">Wi-Fi</button><button data-choice="b">Bluetooth</button><button data-choice="i">Infrared</button><button data-choice="n">NFC</button></span></div><div class="classify-item" data-answer="i"><span class="term">Line-of-sight mode and scatter mode</span><span class="choices"><button data-choice="w">Wi-Fi</button><button data-choice="b">Bluetooth</button><button data-choice="i">Infrared</button><button data-choice="n">NFC</button></span></div><div class="classify-item" data-answer="n"><span class="term">Does not need a pairing code or internet connection</span><span class="choices"><button data-choice="w">Wi-Fi</button><button data-choice="b">Bluetooth</button><button data-choice="i">Infrared</button><button data-choice="n">NFC</button></span></div><div class="classify-item" data-answer="i"><span class="term">Can only connect two devices</span><span class="choices"><button data-choice="w">Wi-Fi</button><button data-choice="b">Bluetooth</button><button data-choice="i">Infrared</button><button data-choice="n">NFC</button></span></div><div class="classify-item" data-answer="b"><span class="term">Needs matching profiles to pair</span><span class="choices"><button data-choice="w">Wi-Fi</button><button data-choice="b">Bluetooth</button><button data-choice="i">Infrared</button><button data-choice="n">NFC</button></span></div><div class="classify-item" data-answer="b"><span class="term">Devices must be within 10 m, with a limit of eight devices</span><span class="choices"><button data-choice="w">Wi-Fi</button><button data-choice="b">Bluetooth</button><button data-choice="i">Infrared</button><button data-choice="n">NFC</button></span></div><div class="classify-item" data-answer="w"><span class="term">Speed decreases as more devices connect</span><span class="choices"><button data-choice="w">Wi-Fi</button><button data-choice="b">Bluetooth</button><button data-choice="i">Infrared</button><button data-choice="n">NFC</button></span></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p><h4>Click the wireless security measure each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="wpa"><span class="term">A more sophisticated encryption method than WEP</span><span class="choices"><button data-choice="wep">WEP</button><button data-choice="wpa">WPA</button><button data-choice="f">Firewall</button></span></div><div class="classify-item" data-answer="f"><span class="term">Can limit which devices can join a network</span><span class="choices"><button data-choice="wep">WEP</button><button data-choice="wpa">WPA</button><button data-choice="f">Firewall</button></span></div><div class="classify-item" data-answer="wep"><span class="term">Wired equivalent privacy</span><span class="choices"><button data-choice="wep">WEP</button><button data-choice="wpa">WPA</button><button data-choice="f">Firewall</button></span></div><div class="classify-item" data-answer="wep"><span class="term">Encrypts data to give a similar level of security to a wired LAN</span><span class="choices"><button data-choice="wep">WEP</button><button data-choice="wpa">WPA</button><button data-choice="f">Firewall</button></span></div><div class="classify-item" data-answer="wpa"><span class="term">A standard required of devices with a wireless internet connection</span><span class="choices"><button data-choice="wep">WEP</button><button data-choice="wpa">WPA</button><button data-choice="f">Firewall</button></span></div><div class="classify-item" data-answer="f"><span class="term">Rules control which stations can send or receive packets</span><span class="choices"><button data-choice="wep">WEP</button><button data-choice="wpa">WPA</button><button data-choice="f">Firewall</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="1"><p class="q">1. Which wireless method needs a direct line of sight in one of its modes?</p><div class="opts"><button class="opt" data-idx="0">Wi-Fi</button><button class="opt" data-idx="1">Infrared</button><button class="opt" data-idx="2">Bluetooth</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. Which has the greatest range of these?</p><div class="opts"><button class="opt" data-idx="0">Wi-Fi at about 100 m</button><button class="opt" data-idx="1">Bluetooth at 10 m</button><button class="opt" data-idx="2">Infrared at about 1 m</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. What makes the Internet of Things possible for many devices?</p><div class="opts"><button class="opt" data-idx="0">Wireless methods like Wi-Fi</button><button class="opt" data-idx="1">Infrared only</button><button class="opt" data-idx="2">Post and mail</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-mobile"><h2 class="section-title">Mobile communications systems <span class="tag">14.8</span></h2>
+<h3>Cellular networks</h3>
+<p>Mobile networks are broken down into small areas called <strong>cells</strong>. At the centre of each cell is a radio <strong>base station</strong> that transmits and receives messages. The base stations connect to public telecommunications services, allowing access to the internet. This is where the term 'cellphone' in American English comes from.</p><div class="diagram-box dg"><svg viewBox="0 0 580 340" role="img" aria-label="Hexagonal cells each with a base station"><defs><marker id="a4" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/></marker><marker id="c4" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/></marker></defs><polygon class="boxh" points="328.5,198.0 280.0,226.0 231.5,198.0 231.5,142.0 280.0,114.0 328.5,142.0"/><circle cx="280.0" cy="170.0" r="5" style="fill:var(--gold)"/><polygon class="box" points="425.5,198.0 377.0,226.0 328.5,198.0 328.5,142.0 377.0,114.0 425.5,142.0"/><circle cx="377.0" cy="170.0" r="5" style="fill:var(--gold)"/><polygon class="box" points="377.0,282.0 328.5,310.0 280.0,282.0 280.0,226.0 328.5,198.0 377.0,226.0"/><circle cx="328.5" cy="254.0" r="5" style="fill:var(--gold)"/><polygon class="box" points="280.0,282.0 231.5,310.0 183.0,282.0 183.0,226.0 231.5,198.0 280.0,226.0"/><circle cx="231.5" cy="254.0" r="5" style="fill:var(--gold)"/><polygon class="box" points="231.5,198.0 183.0,226.0 134.5,198.0 134.5,142.0 183.0,114.0 231.5,142.0"/><circle cx="183.0" cy="170.0" r="5" style="fill:var(--gold)"/><polygon class="box" points="280.0,114.0 231.5,142.0 183.0,114.0 183.0,58.0 231.5,30.0 280.0,58.0"/><circle cx="231.5" cy="86.0" r="5" style="fill:var(--gold)"/><polygon class="box" points="377.0,114.0 328.5,142.0 280.0,114.0 280.0,58.0 328.5,30.0 377.0,58.0"/><circle cx="328.5" cy="86.0" r="5" style="fill:var(--gold)"/><text x="280" y="192" class="dim">base station</text><text x="560" y="60" class="dim">each hexagon is a cell</text></svg><p class="dg-cap">A mobile (cellular) network is divided into cells. Each cell has its own base station with a low-power transmitter, and neighbouring cells use different frequencies so the same frequencies can be reused further away.</p></div>
+<p>Cells vary in size:</p><div class="block"><ul><li><strong>picocells</strong> cover an area of less than 200 metres</li><li><strong>microcells</strong> cover an area up to 2 kilometres</li><li><strong>macrocells</strong> cover larger regions</li></ul></div>
+<p>There have been several generations of mobile networks, each providing faster access speeds and greater reliability:</p><div class="table-scroll"><table><tr><th>Generation</th><th>Description</th></tr><tr><td>1G</td><td>The first generation. Uses analogue signals and is largely limited to voice and text message communications.</td></tr><tr><td>2G</td><td>Switched from analogue to digital transmission, improving signal quality. 2G networks were able to connect with each other, allowing a phone to use other networks.</td></tr><tr><td>3G</td><td>Increased data transmission speeds up to 2 Mbps, allowing internet access, video transmission and online gaming.</td></tr><tr><td>4G</td><td>In theory, data transmission speeds of up to 1 Gbps, allowing greater use of video streaming facilities.</td></tr><tr><td>5G</td><td>The fifth and most recent generation, offering the fastest and most reliable connections available. When fully established the average download speed should be approximately 1 Gbps; speeds up to 1.5 Gbps have been tested, and it could prove capable of even faster speeds.</td></tr></table></div>
+<h3>How satellite communication systems transfer data</h3>
+<p>A communications satellite is a machine transported into space and set to orbit the Earth. Satellites transmit radio waves from one place on Earth to another, which can carry most things radio waves on Earth are used for, including telephone calls, internet data and television broadcasts. Satellites are complex machinery; their main components are a <strong>solar powered battery</strong>, a <strong>transponder</strong> and various <strong>antennas</strong>.</p>
+<p>Any data to be sent using satellite communications needs to be converted to radio waves. The data is transmitted as radio waves from a ground station on Earth; this is the <strong>uplink</strong>. The radio waves travel through the atmosphere up to the intended satellite (a chosen satellite, or the nearest in orbit). The antennas on the satellite initially receive the radio waves. The transponder processes the data, which can often involve boosting the signal. The antenna then transmits the radio waves back to the destination ground station on Earth; this is the <strong>downlink</strong>.</p><div class="diagram-box dg"><svg viewBox="0 0 560 310" role="img" aria-label="Satellite communication with two ground stations"><defs><marker id="a5" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/></marker><marker id="c5" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/></marker></defs><rect class="boxh" x="210" y="20" width="140" height="56" rx="3"/><text x="280.0" y="48.0">Satellite</text><text x="280" y="100" class="dim">orbits the Earth</text><rect class="box" x="30" y="230" width="130" height="60" rx="3"/><text x="95.0" y="252.0">Ground</text><text x="95.0" y="269.0">station</text><rect class="box" x="400" y="230" width="130" height="60" rx="3"/><text x="465.0" y="252.0">Ground</text><text x="465.0" y="269.0">station</text><path class="lnc" d="M95.0,228.0 L228.0,82.2" stroke-dasharray="6 5" marker-end="url(#c5)"/><text x="120" y="140" class="gold">Upload</text><path class="lnc" d="M330.0,80.0 L463.0,225.8" stroke-dasharray="6 5" marker-end="url(#c5)"/><text x="440" y="140" class="gold">Download</text></svg><p class="dg-cap">Figure 14.26 redrawn: a ground station uploads (transmits) a signal to a satellite, which sends it down to another ground station.</p></div>
+<h3>Global positioning systems (GPS)</h3>
+<p>Satellites are also used in navigation systems such as GPS, which uses satellites to work out a user's current location.</p><details class="fold"><summary>Did you know?</summary><div class="fold-body"><p>One of the most well-known satellite navigation systems is the Navstar GPS, which has 24 satellites in orbit. At any time on Earth, a user will usually be in the line of sight of at least ten of these satellites, but only three or four are needed to work out a user's location.</p></div></details>
+<p>A process called <strong>triangulation</strong> (pinpointing the location of a device using radio signals from a satellite) finds the location of a user. Each navigation satellite constantly beams radio waves towards Earth, and the user's device, such as a mobile telephone, receives them. A device must pick up radio waves from at least three satellites for the GPS to pinpoint the location. If the device receives a signal from satellite A, the user must be somewhere in the area currently covered by satellite A. If it also receives signals from satellites B and C, the user must be at the point where the areas covered by all three satellites meet.</p><div class="diagram-box dg"><svg viewBox="0 0 520 400" role="img" aria-label="GPS position found from three satellites"><defs><marker id="a6" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="10" markerHeight="10" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--paper-dim)"/></marker><marker id="c6" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--gold)"/></marker></defs><circle cx="150" cy="150" r="120.8" class="ln" stroke-dasharray="5 4"/><circle cx="370" cy="150" r="120.8" class="ln" stroke-dasharray="5 4"/><circle cx="260" cy="290" r="90.0" class="ln" stroke-dasharray="5 4"/><rect class="boxh" x="110" y="136" width="80" height="28" rx="3"/><text x="150" y="150">Satellite A</text><rect class="boxh" x="330" y="136" width="80" height="28" rx="3"/><text x="370" y="150">Satellite B</text><rect class="boxh" x="220" y="276" width="80" height="28" rx="3"/><text x="260" y="290">Satellite C</text><circle cx="260" cy="200" r="7" style="fill:var(--gold)"/><text x="322" y="204" class="gold">your device</text></svg><p class="dg-cap">Figure 14.27 idea redrawn: a device is a known distance from each of three satellites. Where the three circles meet is the device's position (trilateration).</p></div>
+<h3>Global mapping systems</h3>
+<p>Web mapping platforms (global mapping systems) offer satellite imagery, street maps, aerial photography and sometimes street views of the entire planet. They can be used for route planning, including information on when and where you can catch a bus or train. Google Maps maps the Earth by superimposing satellite images and aerial photography onto a 3D globe, allowing users to see a birds-eye view of locations. The satellite images are collected by purpose-built imaging satellites. Their resolutions vary, so the images are often supplemented with aerial photography, which is higher resolution but more expensive per square metre.</p>
+<h3>Surveillance</h3>
+<p>Many devices are equipped with GPS, including mobile telephones and cars. As well as letting the user find their location, this technology can be used by others for surveillance. It is possible to use a GPS to find out where another person is by tracking their device. These devices often keep a log of all GPS activity, so it is possible for a person to gain access to that log and see exactly where the device (and therefore possibly the user) has been.</p>
+<h3>Ultra-high-definition television</h3>
+<p>Satellites are used in broadcasting ultra-high-definition TV (UHD TV), which needs a lot of bandwidth to sustain the quality. Satellites, with their large bandwidth availability and wide coverage, allow viewers to receive consistent quality wherever they are, as long as they are within the satellite coverage. The UHD TV signal is caught and reflected back to the satellite dish, then connected with coaxial cables that feed the UHD TV receiver.</p><div class="task"><p class="task-label"><span>Check your understanding</span><span class="pts">6 points</span></p><h4>Answers from the notes.</h4><div class="sub-q"><label>What is at the centre of each cell in a mobile network?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>A radio base station that transmits and receives messages</div><div class="self-mark"><input type="checkbox" id="sm-16"><label for="sm-16">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Give the size of picocells, microcells and macrocells.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Picocells: less than 200 metres; microcells: up to 2 kilometres; macrocells: larger regions</div><div class="self-mark"><input type="checkbox" id="sm-17"><label for="sm-17">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Describe the uplink and downlink in satellite communication.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>The uplink is the transmission of radio waves from a ground station up to the satellite; the downlink is the satellite's transmission of the radio waves back down to the destination ground station</div><div class="self-mark"><input type="checkbox" id="sm-18"><label for="sm-18">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>What is the role of the transponder in a satellite?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>It processes the data received by the antennas, often boosting the signal</div><div class="self-mark"><input type="checkbox" id="sm-19"><label for="sm-19">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>How many satellites must a device receive signals from for GPS to pinpoint its location?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>At least three</div><div class="self-mark"><input type="checkbox" id="sm-20"><label for="sm-20">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain how GPS tracking could be used for surveillance.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>A GPS can find out where another person is by tracking their device, and devices often keep a log of all GPS activity, so someone gaining access to the log can see exactly where the device (and possibly the user) has been</div><div class="self-mark"><input type="checkbox" id="sm-21"><label for="sm-21">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">8 points</span></p><h4>Click which generation of mobile network each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="1"><span class="term">Used analogue signals, largely limited to voice and text messages</span><span class="choices"><button data-choice="1">1G</button><button data-choice="2">2G</button><button data-choice="3">3G</button><button data-choice="4">4G</button><button data-choice="5">5G</button></span></div><div class="classify-item" data-answer="2"><span class="term">Networks could connect with each other, so a phone could use other networks</span><span class="choices"><button data-choice="1">1G</button><button data-choice="2">2G</button><button data-choice="3">3G</button><button data-choice="4">4G</button><button data-choice="5">5G</button></span></div><div class="classify-item" data-answer="1"><span class="term">First generation of mobile networks</span><span class="choices"><button data-choice="1">1G</button><button data-choice="2">2G</button><button data-choice="3">3G</button><button data-choice="4">4G</button><button data-choice="5">5G</button></span></div><div class="classify-item" data-answer="5"><span class="term">The most recent generation, with speeds tested up to 1.5 Gbps</span><span class="choices"><button data-choice="1">1G</button><button data-choice="2">2G</button><button data-choice="3">3G</button><button data-choice="4">4G</button><button data-choice="5">5G</button></span></div><div class="classify-item" data-answer="2"><span class="term">Switched from analogue to digital transmission</span><span class="choices"><button data-choice="1">1G</button><button data-choice="2">2G</button><button data-choice="3">3G</button><button data-choice="4">4G</button><button data-choice="5">5G</button></span></div><div class="classify-item" data-answer="5"><span class="term">Offers the fastest and most reliable connections available</span><span class="choices"><button data-choice="1">1G</button><button data-choice="2">2G</button><button data-choice="3">3G</button><button data-choice="4">4G</button><button data-choice="5">5G</button></span></div><div class="classify-item" data-answer="3"><span class="term">Speeds up to 2 Mbps, allowing internet access and online gaming</span><span class="choices"><button data-choice="1">1G</button><button data-choice="2">2G</button><button data-choice="3">3G</button><button data-choice="4">4G</button><button data-choice="5">5G</button></span></div><div class="classify-item" data-answer="4"><span class="term">In theory speeds up to 1 Gbps, for greater use of video streaming</span><span class="choices"><button data-choice="1">1G</button><button data-choice="2">2G</button><button data-choice="3">3G</button><button data-choice="4">4G</button><button data-choice="5">5G</button></span></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">6 points</span></p><h4>Click which cell size each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="a"><span class="term">Covers larger regions</span><span class="choices"><button data-choice="p">Picocell</button><button data-choice="m">Microcell</button><button data-choice="a">Macrocell</button></span></div><div class="classify-item" data-answer="p"><span class="term">The smallest cells</span><span class="choices"><button data-choice="p">Picocell</button><button data-choice="m">Microcell</button><button data-choice="a">Macrocell</button></span></div><div class="classify-item" data-answer="p"><span class="term">Covers an area of less than 200 metres</span><span class="choices"><button data-choice="p">Picocell</button><button data-choice="m">Microcell</button><button data-choice="a">Macrocell</button></span></div><div class="classify-item" data-answer="a"><span class="term">The largest cells</span><span class="choices"><button data-choice="p">Picocell</button><button data-choice="m">Microcell</button><button data-choice="a">Macrocell</button></span></div><div class="classify-item" data-answer="m"><span class="term">Between the smallest and largest cell sizes</span><span class="choices"><button data-choice="p">Picocell</button><button data-choice="m">Microcell</button><button data-choice="a">Macrocell</button></span></div><div class="classify-item" data-answer="m"><span class="term">Covers an area up to 2 kilometres</span><span class="choices"><button data-choice="p">Picocell</button><button data-choice="m">Microcell</button><button data-choice="a">Macrocell</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="0"><p class="q">1. Which satellite component processes data and can boost the signal?</p><div class="opts"><button class="opt" data-idx="0">Transponder</button><button class="opt" data-idx="1">Solar battery</button><button class="opt" data-idx="2">Ground station</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. What is triangulation?</p><div class="opts"><button class="opt" data-idx="0">Pinpointing the location of a device using radio signals from satellites</button><button class="opt" data-idx="1">Boosting a satellite signal</button><button class="opt" data-idx="2">Converting data to radio waves</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. Why are satellites used to broadcast UHD TV?</p><div class="opts"><button class="opt" data-idx="0">They have large bandwidth and wide coverage</button><button class="opt" data-idx="1">They are cheaper than cables</button><button class="opt" data-idx="2">UHD TV needs very little bandwidth</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-security"><h2 class="section-title">Network security <span class="tag">14.9</span></h2>
+<h3>Network security threats</h3>
+<p>Data is an organisation's or individual's most important asset, which makes it vulnerable to theft and misuse. There are a range of network security threats.</p>
+<p><strong>Brute force.</strong> Individuals may try to break into a computer system to gain unauthorised access. This may involve stealing a user's login details and then guessing their password using many different possible combinations, or building software that can work out the password. Obtaining unauthorised access in this way is a <strong>brute force attack</strong>. Users or organisations with poor network policies are often most at risk. Using strong passwords generated by a password manager can help reduce the risk.</p>
+<p><strong>Denial of service.</strong> A <strong>distributed denial of service (DDoS)</strong> attack is a cyber attack that overwhelms a website with traffic, usually across many devices, with the intention of taking the website offline. It can be a form of protest against an organisation. A website going offline, even temporarily, can affect sales by blocking access of legitimate customers, damage reputation and damage the distribution of a message or campaign.</p>
+<p><strong>Malware</strong> is any software designed to disrupt or damage a computer system or gain unauthorised access. It includes worms, spyware and ransomware. A user will normally unknowingly download the malware onto their computer; it is often disguised in a file download or a link that the user is enticed into clicking.</p>
+<p><strong>Botnets.</strong> An attack may come from a single third party and computer, or be distributed across many computers. A botnet is a group of computers controlled by software to perform harmful acts. Any user's computer could be made part of a botnet, often by downloading malware, which will often stay dormant until the third party wants to use the computer in an attack. Each infected computer is called a <strong>bot</strong>. When the attacker wants to carry out an attack, they 'wake up' the malware in the bots and use them to form a botnet, which can carry out attacks such as a DDoS attack.</p>
+<p><strong>Malicious actors.</strong> People who steal data to use it for criminal activity such as identity theft, or to cause damage to data and therefore to the company, are called malicious actors (perpetrators): a group or entity whose mission is to affect or cause harm in the digital world, performing deliberately hurtful acts against individuals or organisations, usually with a personal agenda. The use of networks has made accessing data through malicious means a greater risk.</p>
+<p><strong>Structured query language (SQL) injection.</strong> SQL is a programming language used to maintain databases. An SQL injection is a technique used to destroy, modify or retrieve data. By inserting SQL code as data, an attacker can execute commands that retrieve data from the database. SQL injections usually happen over the internet, and the result can be the destruction of important data or other problematic behaviours. In its most extreme form, an SQL injection can give an attacker complete control of a device.</p>
+<p><strong>Poor network policies</strong> may increase the likelihood of an attack on a network. As well as using a password manager, individuals and organisations can put a range of other preventative methods in place to help protect their data.</p>
+<h3>Impact of network security threats</h3>
+<p>There are two main reasons why unauthorised users carry out security attacks: to obtain personal data, or as an act of sabotage or revenge.</p><div class="block"><ul><li><strong>Individuals</strong> need to be cautious of their personal data being accessed and stolen, which could lead to criminal acts such as fraud and theft of their identity, in turn leading to financial or personal consequences.</li><li><strong>Organisations</strong> need to be cautious of their stored data being accessed and stolen, or manipulated, modified and destroyed. Data is a very important asset used in the day-to-day functioning of the organisation, and without it they are unlikely to be able to function at all. Not being in operation could lead to a loss of business and profits. If data is stolen because security has been breached, this could also damage the organisation's reputation.</li></ul></div>
+<h3>Methods of preventing network security issues</h3>
+<h4>Physical methods</h4>
+<p>The simplest way to protect data is to use physical methods. Organisations can install a digital door lock or entry system so that only employees who know the code or have a door pass can enter. Other physical methods are <strong>CCTV</strong> (lets an organisation see who is trying to gain unauthorised access), <strong>security guards</strong> (should allow only authorised users into a place where data is stored, for example a server room) and <strong>alarm systems</strong> (alert the organisation if an unauthorised person tries to gain access).</p>
+<h4>Software methods</h4><div class="table-scroll"><table><tr><th>Method</th><th>How it prevents unauthorised access</th></tr><tr><td>Biometric methods</td><td>An employee provides biometric data such as a fingerprint, iris or facial features. A biometric device scans it and checks whether it matches data stored in a database; if it does, the employee is allowed access. Biological data is unique to the user and very difficult to fake. Modern mobile telephones have biometric devices to secure the device.</td></tr><tr><td>Anti-malware, anti-virus and anti-spyware</td><td>Scans a computer system for malware. If it finds malicious files, it quarantines the malware (puts it in a designated safe area) and allows the user to delete it. It can sometimes monitor downloaded data in real time, scanning each download and alerting the user before the file is downloaded. The quicker malware is found, the less damage it can do.</td></tr><tr><td>Firewall</td><td>Can be hardware based or software based. It examines incoming and outgoing traffic to a computer or network. It can be configured (set) to recognise malicious traffic by giving it rules and criteria to check the traffic; traffic that does not meet them can be rejected.</td></tr><tr><td>Encryption</td><td>Will not stop the data from being stolen, but if it is stolen it will be meaningless to the third party, unless they are able to get the key to decrypt it.</td></tr><tr><td>Access rights</td><td>Only allowing access to those who directly need the data. The username an employee is given often indicates their access rights, and permission to access the data they need is attached to it, so they cannot see data that needs to remain confidential. This can prevent data being damaged.</td></tr></table></div><div class="task"><p class="task-label"><span>Questions from the book</span><span class="pts">6 points</span></p><h4>Answers from the notes.</h4><div class="sub-q"><label>Describe a DDoS attack.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>A cyber attack that overwhelms a website with traffic, usually across many devices, intending to take the website offline</div><div class="self-mark"><input type="checkbox" id="sm-22"><label for="sm-22">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Define the term malicious actor.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>A group or entity whose mission is to affect or cause harm in the digital world, performing deliberately hurtful acts against individuals or organisations, usually with a personal agenda</div><div class="self-mark"><input type="checkbox" id="sm-23"><label for="sm-23">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>List two impacts of a cyber attack.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Any two of: fraud and identity theft for individuals; loss of business and profits; damage to reputation; data stolen, modified or destroyed so the organisation cannot function</div><div class="self-mark"><input type="checkbox" id="sm-24"><label for="sm-24">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>How can a brute force attack be made less likely to succeed?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Using strong passwords generated by a password manager (and having good network policies)</div><div class="self-mark"><input type="checkbox" id="sm-25"><label for="sm-25">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain what a botnet is.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>A group of computers (bots) infected with dormant malware, controlled by software to perform harmful acts such as a DDoS attack</div><div class="self-mark"><input type="checkbox" id="sm-26"><label for="sm-26">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain why encryption is useful even if data is stolen.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>The data will be meaningless to the third party unless they can get the key to decrypt it</div><div class="self-mark"><input type="checkbox" id="sm-27"><label for="sm-27">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">8 points</span></p><h4>Click which threat each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="t"><span class="term">Dormant malware on many computers that is "woken up" to attack together</span><span class="choices"><button data-choice="b">Brute force</button><button data-choice="d">DDoS</button><button data-choice="t">Botnet</button><button data-choice="s">SQL injection</button></span></div><div class="classify-item" data-answer="s"><span class="term">Inserting SQL code as data to retrieve or destroy data in a database</span><span class="choices"><button data-choice="b">Brute force</button><button data-choice="d">DDoS</button><button data-choice="t">Botnet</button><button data-choice="s">SQL injection</button></span></div><div class="classify-item" data-answer="t"><span class="term">Each infected computer is called a bot</span><span class="choices"><button data-choice="b">Brute force</button><button data-choice="d">DDoS</button><button data-choice="t">Botnet</button><button data-choice="s">SQL injection</button></span></div><div class="classify-item" data-answer="s"><span class="term">In its most extreme form can give an attacker complete control of a device</span><span class="choices"><button data-choice="b">Brute force</button><button data-choice="d">DDoS</button><button data-choice="t">Botnet</button><button data-choice="s">SQL injection</button></span></div><div class="classify-item" data-answer="d"><span class="term">Can affect sales by blocking legitimate customers</span><span class="choices"><button data-choice="b">Brute force</button><button data-choice="d">DDoS</button><button data-choice="t">Botnet</button><button data-choice="s">SQL injection</button></span></div><div class="classify-item" data-answer="b"><span class="term">Strong passwords from a password manager reduce the risk</span><span class="choices"><button data-choice="b">Brute force</button><button data-choice="d">DDoS</button><button data-choice="t">Botnet</button><button data-choice="s">SQL injection</button></span></div><div class="classify-item" data-answer="d"><span class="term">Overwhelming a website with traffic to take it offline</span><span class="choices"><button data-choice="b">Brute force</button><button data-choice="d">DDoS</button><button data-choice="t">Botnet</button><button data-choice="s">SQL injection</button></span></div><div class="classify-item" data-answer="b"><span class="term">Guessing many different password combinations</span><span class="choices"><button data-choice="b">Brute force</button><button data-choice="d">DDoS</button><button data-choice="t">Botnet</button><button data-choice="s">SQL injection</button></span></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">8 points</span></p><h4>Click whether each method is a physical or a software method of protecting data.</h4><div class="classify-list"><div class="classify-item" data-answer="s"><span class="term">Access rights</span><span class="choices"><button data-choice="p">Physical</button><button data-choice="s">Software</button></span></div><div class="classify-item" data-answer="p"><span class="term">Security guard</span><span class="choices"><button data-choice="p">Physical</button><button data-choice="s">Software</button></span></div><div class="classify-item" data-answer="p"><span class="term">Alarm system</span><span class="choices"><button data-choice="p">Physical</button><button data-choice="s">Software</button></span></div><div class="classify-item" data-answer="s"><span class="term">Biometric scanning</span><span class="choices"><button data-choice="p">Physical</button><button data-choice="s">Software</button></span></div><div class="classify-item" data-answer="p"><span class="term">CCTV</span><span class="choices"><button data-choice="p">Physical</button><button data-choice="s">Software</button></span></div><div class="classify-item" data-answer="s"><span class="term">Firewall</span><span class="choices"><button data-choice="p">Physical</button><button data-choice="s">Software</button></span></div><div class="classify-item" data-answer="s"><span class="term">Encryption</span><span class="choices"><button data-choice="p">Physical</button><button data-choice="s">Software</button></span></div><div class="classify-item" data-answer="p"><span class="term">Digital door lock</span><span class="choices"><button data-choice="p">Physical</button><button data-choice="s">Software</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="0"><p class="q">1. What does a firewall do?</p><div class="opts"><button class="opt" data-idx="0">Examines incoming and outgoing traffic using rules and criteria</button><button class="opt" data-idx="1">Encrypts all stored data</button><button class="opt" data-idx="2">Guesses passwords</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. What does anti-malware software do with malicious files it finds?</p><div class="opts"><button class="opt" data-idx="0">Quarantines them and lets the user delete them</button><button class="opt" data-idx="1">Copies them to other computers</button><button class="opt" data-idx="2">Ignores them until downloaded</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. Why can access rights prevent data being damaged?</p><div class="opts"><button class="opt" data-idx="0">Users cannot see data that must remain confidential</button><button class="opt" data-idx="1">They remove the need for passwords</button><button class="opt" data-idx="2">They encrypt the data</button></div><p class="mcq-feedback"></p></div></div></div>
+<div class="panel" id="panel-recovery"><h2 class="section-title">Disaster recovery management <span class="tag">14.10</span></h2>
+<p>In an organisation, a <strong>disaster</strong> is anything that may put the operations of the organisation at risk through data loss and business disruption. <strong>Disaster recovery</strong> is a planning process that allows an organisation to plan for disaster and put in place measures that will minimise the risks. To plan for protection against a disaster, the possible disaster first needs to be identified. Disasters include:</p><div class="block"><ul><li>cybercrime or malware infection, which can block access to a computer and data</li><li>equipment or power failure, which can result in the loss of work/data</li><li>natural disasters, which may result in the loss of equipment or data</li><li>criminal activity, such as theft</li><li>accidental events that disrupt standard practice, such as dropping equipment or spilling a drink over a keyboard or tower</li></ul></div>
+<h3>Identification of threats and risks</h3>
+<p>There are several stages that can be used to identify threats and risks that could cause a disaster:</p><div class="table-scroll"><table><tr><th>Stage</th><th>Description</th></tr><tr><td>Risk analysis</td><td>Also known as a risk assessment. The organisation first identifies what could be a potential disaster, then considers what or who could be harmed as a result and how it could affect the organisation. Finally they develop methods to control the possibility and impact of the disaster. All parts of a company are assessed, including its infrastructure, networks, hardware, software and people. Things that could cause disaster include a power cut, cybercrime, fire, flood, denial of access to data, theft of data, corruption of data and hardware failure.</td></tr><tr><td>Perpetrator analysis</td><td>Often carried out as part of the risk analysis. The organisation identifies who they think could be a perpetrator that could cause a disaster to occur.</td></tr><tr><td>Risk testing</td><td>The organisation rehearses the plans and strategies developed during the risk analysis, so employees understand exactly what to do in the event of a disaster. The organisation can monitor what happens during testing and amend plans, or correct employees' behaviour. Plans that could be tested: restoration of data; replacement of hardware; re-installation of software; emergency evacuation of offices; emergency protection methods for data.</td></tr><tr><td>Quantifying the risk</td><td>Evaluating the risk and prevention methods in terms of cost and time. Two key measurements: <strong>maximum tolerable downtime (MTD)</strong>, the maximum time each part of the organisation could tolerate not having access to the essential parts of a network that they require; and <strong>recovery time objective (RTO)</strong>, the estimated maximum amount of time an organisation has in which to recover its network and resume operations.</td></tr></table></div>
+<h3>Control of threats</h3>
+<p>In the event of a disaster, data and resources will need to be restored. This can often mean the restoration of data from back-ups, the re-installation of software, and the replacement or repair of hardware. All these areas are planned and assessed in a <strong>disaster recovery plan</strong>, which considers how they will be carried out and what timescales to expect.</p>
+<p>Organisations and individuals also need to be able to detect potential threats that may cause disruption. For example, an organisation in a region vulnerable to flooding or earthquake may have protocols to protect their computer systems, data and files if a threat is imminent, and may regularly review their network practice to make sure it is as robust as possible.</p>
+<h3>Strategies to minimise risk</h3>
+<p>As well as the methods to protect data and a network against cybercrime, an organisation needs methods to prevent against other disasters. Strategies include:</p><div class="block"><ul><li><strong>Power surge protection devices</strong> to stop a surge in power damaging hardware.</li><li>A <strong>back-up generator</strong> ready for use if the organisation suffers power failure.</li><li><strong>Back-ups of data</strong> stored in fire and flood proof cases so that data is not lost in a fire or flood. Back-ups could also be stored off site, as long as they are kept away from the site of the threat (for example external hard drives and memory cards).</li><li><strong>Policies and procedures</strong> for staff to follow to prevent disaster such as fire and damage to equipment.</li><li><strong>Cloud computing</strong> as a back-up for data and possible hardware resources.</li></ul></div><div class="task"><p class="task-label"><span>Check your understanding</span><span class="pts">6 points</span></p><h4>Answers from the notes.</h4><div class="sub-q"><label>What is a disaster for an organisation?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Anything that may put the operations of the organisation at risk through data loss and business disruption</div><div class="self-mark"><input type="checkbox" id="sm-28"><label for="sm-28">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>What is the purpose of risk testing?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>The organisation rehearses its plans and strategies so employees know exactly what to do in a disaster, and plans or behaviour can be amended if needed</div><div class="self-mark"><input type="checkbox" id="sm-29"><label for="sm-29">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Explain the difference between MTD and RTO.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>MTD is the maximum time each part of the organisation could tolerate not having access to the essential parts of a network; RTO is the estimated maximum time the organisation has to recover its network and resume operations</div><div class="self-mark"><input type="checkbox" id="sm-30"><label for="sm-30">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Give three things restored after a disaster.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Data from back-ups, re-installation of software, and replacement or repair of hardware</div><div class="self-mark"><input type="checkbox" id="sm-31"><label for="sm-31">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Give two strategies to minimise the risk of power failure or a power surge.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Power surge protection devices and a back-up generator</div><div class="self-mark"><input type="checkbox" id="sm-32"><label for="sm-32">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Why should back-ups be kept away from the site of a threat?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>If they are kept at the same site, a fire or flood could destroy the back-ups as well as the original data</div><div class="self-mark"><input type="checkbox" id="sm-33"><label for="sm-33">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">8 points</span></p><h4>Click the stage of identifying threats and risks that each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="r"><span class="term">Identifying potential disasters and who or what could be harmed</span><span class="choices"><button data-choice="r">Risk analysis</button><button data-choice="p">Perpetrator analysis</button><button data-choice="t">Risk testing</button><button data-choice="q">Quantifying the risk</button></span></div><div class="classify-item" data-answer="p"><span class="term">Identifying who could cause a disaster to occur</span><span class="choices"><button data-choice="r">Risk analysis</button><button data-choice="p">Perpetrator analysis</button><button data-choice="t">Risk testing</button><button data-choice="q">Quantifying the risk</button></span></div><div class="classify-item" data-answer="q"><span class="term">Evaluating the risk and prevention methods in terms of cost and time</span><span class="choices"><button data-choice="r">Risk analysis</button><button data-choice="p">Perpetrator analysis</button><button data-choice="t">Risk testing</button><button data-choice="q">Quantifying the risk</button></span></div><div class="classify-item" data-answer="q"><span class="term">Considers MTD and RTO</span><span class="choices"><button data-choice="r">Risk analysis</button><button data-choice="p">Perpetrator analysis</button><button data-choice="t">Risk testing</button><button data-choice="q">Quantifying the risk</button></span></div><div class="classify-item" data-answer="r"><span class="term">Also known as a risk assessment</span><span class="choices"><button data-choice="r">Risk analysis</button><button data-choice="p">Perpetrator analysis</button><button data-choice="t">Risk testing</button><button data-choice="q">Quantifying the risk</button></span></div><div class="classify-item" data-answer="p"><span class="term">Often carried out as part of the risk analysis</span><span class="choices"><button data-choice="r">Risk analysis</button><button data-choice="p">Perpetrator analysis</button><button data-choice="t">Risk testing</button><button data-choice="q">Quantifying the risk</button></span></div><div class="classify-item" data-answer="t"><span class="term">Plans can be amended if employees are not acting correctly</span><span class="choices"><button data-choice="r">Risk analysis</button><button data-choice="p">Perpetrator analysis</button><button data-choice="t">Risk testing</button><button data-choice="q">Quantifying the risk</button></span></div><div class="classify-item" data-answer="t"><span class="term">Rehearsing plans so employees know what to do</span><span class="choices"><button data-choice="r">Risk analysis</button><button data-choice="p">Perpetrator analysis</button><button data-choice="t">Risk testing</button><button data-choice="q">Quantifying the risk</button></span></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">8 points</span></p><h4>Click which disaster each example is.</h4><div class="classify-list"><div class="classify-item" data-answer="a"><span class="term">A drink is spilled over a keyboard</span><span class="choices"><button data-choice="c">Cybercrime / malware</button><button data-choice="e">Equipment or power failure</button><button data-choice="n">Natural disaster</button><button data-choice="a">Accidental event</button></span></div><div class="classify-item" data-answer="n"><span class="term">An earthquake damages the server room</span><span class="choices"><button data-choice="c">Cybercrime / malware</button><button data-choice="e">Equipment or power failure</button><button data-choice="n">Natural disaster</button><button data-choice="a">Accidental event</button></span></div><div class="classify-item" data-answer="n"><span class="term">A flood destroys equipment</span><span class="choices"><button data-choice="c">Cybercrime / malware</button><button data-choice="e">Equipment or power failure</button><button data-choice="n">Natural disaster</button><button data-choice="a">Accidental event</button></span></div><div class="classify-item" data-answer="e"><span class="term">A power cut causes work to be lost</span><span class="choices"><button data-choice="c">Cybercrime / malware</button><button data-choice="e">Equipment or power failure</button><button data-choice="n">Natural disaster</button><button data-choice="a">Accidental event</button></span></div><div class="classify-item" data-answer="c"><span class="term">A malware infection blocks access to data</span><span class="choices"><button data-choice="c">Cybercrime / malware</button><button data-choice="e">Equipment or power failure</button><button data-choice="n">Natural disaster</button><button data-choice="a">Accidental event</button></span></div><div class="classify-item" data-answer="c"><span class="term">Ransomware blocks access to a computer and data</span><span class="choices"><button data-choice="c">Cybercrime / malware</button><button data-choice="e">Equipment or power failure</button><button data-choice="n">Natural disaster</button><button data-choice="a">Accidental event</button></span></div><div class="classify-item" data-answer="a"><span class="term">A computer is dropped</span><span class="choices"><button data-choice="c">Cybercrime / malware</button><button data-choice="e">Equipment or power failure</button><button data-choice="n">Natural disaster</button><button data-choice="a">Accidental event</button></span></div><div class="classify-item" data-answer="e"><span class="term">Hardware failure stops a server</span><span class="choices"><button data-choice="c">Cybercrime / malware</button><button data-choice="e">Equipment or power failure</button><button data-choice="n">Natural disaster</button><button data-choice="a">Accidental event</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">3 points</span></p><div class="mcq" data-answer="0"><p class="q">1. Which strategy helps if an organisation suffers a power failure?</p><div class="opts"><button class="opt" data-idx="0">A back-up generator</button><button class="opt" data-idx="1">A firewall</button><button class="opt" data-idx="2">A biometric lock</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. What does a disaster recovery plan consider?</p><div class="opts"><button class="opt" data-idx="0">How restoration will be carried out and what timescales to expect</button><button class="opt" data-idx="1">Only how to prevent hackers</button><button class="opt" data-idx="2">How to remove back-ups</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. Where could back-ups be stored to avoid loss in a fire or flood?</p><div class="opts"><button class="opt" data-idx="0">Fire and flood proof cases or off site</button><button class="opt" data-idx="1">Next to the original computer</button><button class="opt" data-idx="2">On the same hard drive</button></div><p class="mcq-feedback"></p></div></div></div>
+</div>
+<footer>Cambridge AS &amp; A Level IT · Protocols, Wireless and Security — built for revision, points are just for you.</footer>
+<script>
+(function(){
+  const scoreValEl = document.getElementById('score-val');
+  const scoreMaxEl = document.getElementById('score-max');
+  let score = 0;
+  function addScore(n){
+    score += n;
+    if(score < 0) score = 0;
+    scoreValEl.textContent = score;
+  }
+
+  // Work out the maximum score from what is actually on the page
+  let max = 0;
+  document.querySelectorAll('.self-mark input[type=checkbox]').forEach(function(cb){
+    max += parseInt(cb.dataset.points || '1', 10);
+  });
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    max += parseInt(sq.dataset.max, 10);
+  });
+  max += document.querySelectorAll('.classify-item').length;
+  max += document.querySelectorAll('.mcq').length;
+  scoreMaxEl.textContent = max;
+
+  // Tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // Written questions with one self-marked point each
+  document.querySelectorAll('.sub-q:not(.mp)').forEach(function(sq){
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const reveal = sq.querySelector('.answer-reveal');
+    const mark = sq.querySelector('.self-mark');
+    const checkbox = mark ? mark.querySelector('input[type=checkbox]') : null;
+    if(!btn || !reveal || !mark) return;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        reveal.classList.remove('show');
+        mark.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      reveal.classList.add('show');
+      mark.classList.add('show');
+    });
+
+    if(checkbox){
+      checkbox.addEventListener('change', function(){
+        const pts = parseInt(checkbox.dataset.points || '1', 10);
+        addScore(checkbox.checked ? pts : -pts);
+      });
+    }
+  });
+
+  // Extended answers: tick the mark points you covered, capped at the maximum
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    const cap = parseInt(sq.dataset.max, 10);
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const panel = sq.querySelector('.markpoints');
+    const note = sq.querySelector('.mp-note');
+    const count = sq.querySelector('.mp-count');
+    const boxes = panel.querySelectorAll('input[type=checkbox]');
+    let awarded = 0;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        panel.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      panel.classList.add('show');
+    });
+
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if(cb.checked){
+          if(awarded >= cap){
+            cb.checked = false;
+            note.textContent = "That's already full marks (" + cap + "). Untick a point first to swap it.";
+            return;
+          }
+          awarded += 1;
+          addScore(1);
+        } else {
+          awarded -= 1;
+          addScore(-1);
+        }
+        note.textContent = '';
+        count.textContent = awarded + ' / ' + cap + ' marks';
+      });
+    });
+  });
+
+  // Sort-it tasks
+  document.querySelectorAll('.classify-item').forEach(function(item){
+    const answer = item.dataset.answer;
+    const buttons = item.querySelectorAll('.choices button');
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){
+        buttons.forEach(function(other){ other.disabled = true; });
+        if(b.dataset.choice === answer){
+          b.classList.add('correct');
+          addScore(1);
+        } else {
+          b.classList.add('incorrect');
+          buttons.forEach(function(other){
+            if(other.dataset.choice === answer) other.classList.add('correct');
+          });
+        }
+      });
+    });
+  });
+
+  // Quick checks
+  document.querySelectorAll('.mcq').forEach(function(mcq){
+    const correctIdx = mcq.dataset.answer;
+    const opts = mcq.querySelectorAll('.opt');
+    const feedback = mcq.querySelector('.mcq-feedback');
+    opts.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        opts.forEach(function(o){ o.disabled = true; });
+        if(opt.dataset.idx === correctIdx){
+          opt.classList.add('correct');
+          feedback.textContent = 'Correct.';
+          feedback.className = 'mcq-feedback ok';
+          addScore(1);
+        } else {
+          opt.classList.add('incorrect');
+          opts.forEach(function(o){
+            if(o.dataset.idx === correctIdx) o.classList.add('correct');
+          });
+          feedback.textContent = 'Not quite — the correct answer is highlighted above.';
+          feedback.className = 'mcq-feedback bad';
+        }
+      });
+    });
+  });
+
+  })();
+</script>
+<script>
+(function(){
+  var STORE_KEY = 'ict-lesson-progress::' + location.pathname + '::' + document.title;
+
+  function load(){
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+    catch(e){ return {}; }
+  }
+  function save(mutator){
+    try {
+      var s = load();
+      mutator(s);
+      localStorage.setItem(STORE_KEY, JSON.stringify(s));
+    } catch(e){ /* storage unavailable or full: fail silently */ }
+  }
+  function all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+
+  // This page has no data-task attributes, so find things by their own classes
+  var subQs      = all('.sub-q:not(.mp)');   // short written answers (self-marked)
+  var mpQs       = all('.sub-q.mp');         // extended answers (mark points)
+  var classifyIt = all('.classify-item');
+  var mcqs       = all('.mcq');
+
+  // ---- SAVE: listen alongside the page's own handlers ----
+
+  subQs.forEach(function(sq, i){
+    var key = 'subq-' + i;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var cb = sq.querySelector('.self-mark input[type=checkbox]');
+    if(ta) ta.addEventListener('input', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+    });
+    if(btn) btn.addEventListener('click', function(){
+      save(function(s){
+        s[key] = s[key] || {};
+        s[key].text = ta ? ta.value : '';
+        s[key].checked = !!(ta && ta.value.trim());
+      });
+    });
+    if(cb) cb.addEventListener('change', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].selfMarked = cb.checked; });
+    });
+  });
+
+  mpQs.forEach(function(sq, i){
+    var key = 'mp-' + i;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var boxes = all_in(sq, '.markpoints input[type=checkbox]');
+    if(ta) ta.addEventListener('input', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+    });
+    if(btn) btn.addEventListener('click', function(){
+      save(function(s){
+        s[key] = s[key] || {};
+        s[key].text = ta ? ta.value : '';
+        s[key].shown = !!(ta && ta.value.trim());
+      });
+    });
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        save(function(s){
+          s[key] = s[key] || {};
+          var ticked = [];
+          boxes.forEach(function(b, bi){ if(b.checked) ticked.push(bi); });
+          s[key].ticked = ticked;
+        });
+      });
+    });
+  });
+  function all_in(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); }
+
+  classifyIt.forEach(function(item, i){
+    all_in(item, '.choices button').forEach(function(b, bi){
+      b.addEventListener('click', function(){
+        save(function(s){ s['classify-' + i] = bi; });
+      });
+    });
+  });
+
+  mcqs.forEach(function(mcq, i){
+    all_in(mcq, '.opt').forEach(function(o, oi){
+      o.addEventListener('click', function(){
+        save(function(s){ s['mcq-' + i] = oi; });
+      });
+    });
+  });
+
+  // ---- RESTORE: replay stored answers as real clicks, so the page's
+  // own scoring logic runs exactly as it did originally ----
+
+  (function restore(){
+    var s = load();
+
+    subQs.forEach(function(sq, i){
+      var rec = s['subq-' + i];
+      if(!rec) return;
+      var ta = sq.querySelector('textarea');
+      var btn = sq.querySelector('.check-btn');
+      var cb = sq.querySelector('.self-mark input[type=checkbox]');
+      if(ta && rec.text) ta.value = rec.text;
+      if(rec.checked && btn) btn.click();
+      if(rec.selfMarked && cb){
+        cb.checked = true;
+        cb.dispatchEvent(new Event('change'));
+      }
+    });
+
+    mpQs.forEach(function(sq, i){
+      var rec = s['mp-' + i];
+      if(!rec) return;
+      var ta = sq.querySelector('textarea');
+      var btn = sq.querySelector('.check-btn');
+      var boxes = all_in(sq, '.markpoints input[type=checkbox]');
+      if(ta && rec.text) ta.value = rec.text;
+      if(rec.shown && btn) btn.click();
+      (rec.ticked || []).forEach(function(bi){
+        if(boxes[bi]){
+          boxes[bi].checked = true;
+          boxes[bi].dispatchEvent(new Event('change'));
+        }
+      });
+    });
+
+    classifyIt.forEach(function(item, i){
+      var bi = s['classify-' + i];
+      if(bi === undefined) return;
+      var buttons = item.querySelectorAll('.choices button');
+      if(buttons[bi]) buttons[bi].click();
+    });
+
+    mcqs.forEach(function(mcq, i){
+      var oi = s['mcq-' + i];
+      if(oi === undefined) return;
+      var opts = mcq.querySelectorAll('.opt');
+      if(opts[oi]) opts[oi].click();
+    });
+  })();
+
+  // ---- Small "reset my answers" control ----
+  var resetBtn = document.createElement('button');
+  resetBtn.textContent = 'Reset my answers';
+  resetBtn.setAttribute('type', 'button');
+  resetBtn.style.cssText = 'position:fixed;bottom:14px;left:14px;z-index:50;font-family:JetBrains Mono,monospace;'
+    + 'font-size:11px;padding:7px 11px;background:#141b2e;border:1px solid #40557d;'
+    + 'color:#9ba4bc;border-radius:3px;cursor:pointer;';
+  resetBtn.addEventListener('mouseenter', function(){ resetBtn.style.color = '#e7e9f1'; });
+  resetBtn.addEventListener('mouseleave', function(){ resetBtn.style.color = '#9ba4bc'; });
+  resetBtn.addEventListener('click', function(){
+    if(confirm('Clear all your saved answers on this page?')){
+      try { localStorage.removeItem(STORE_KEY); } catch(e){}
+      location.reload();
+    }
+  });
+  document.body.appendChild(resetBtn);
+})();
+</script>
+</body>
+</html>
