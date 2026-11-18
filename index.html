@@ -25,11 +25,28 @@
     color:var(--paper); font-family:var(--serif); font-size:17px; line-height:1.65; -webkit-font-smoothing:antialiased;
   }
   ::selection{background:var(--signal); color:#04141a;}
-  header.hero{ padding:56px 24px 34px; max-width:1000px; margin:0 auto; border-bottom:1px solid var(--trace); }
+  header.hero{ padding:56px 24px 34px; max-width:1240px; margin:0 auto; border-bottom:1px solid var(--trace); }
   .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
   h1.title{ font-family:var(--mono); font-weight:700; font-size:clamp(26px,5vw,42px); line-height:1.15; margin:0 0 14px; }
   .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
-  .wrap{ max-width:1000px; margin:0 auto; padding:36px 24px 100px; }
+  .wrap{ max-width:1240px; margin:0 auto; padding:36px 24px 100px; }
+  .layout{ display:flex; gap:28px; align-items:flex-start; }
+  .layout .grid{ flex:1; min-width:0; }
+  aside.side{
+    flex:0 0 250px; position:sticky; top:24px; align-self:flex-start;
+    background:var(--bg-raised); border:1px solid var(--trace); border-radius:var(--radius); padding:16px 16px 12px;
+  }
+  aside.side h2{ font-family:var(--mono); font-size:14px; font-weight:700; color:var(--gold); margin:0 0 4px; }
+  aside.side .sub{ font-family:var(--mono); font-size:11px; color:var(--paper-dim); margin:0 0 10px; line-height:1.4; }
+  aside.side ul{ list-style:none; margin:0; padding:0; }
+  aside.side li{ border-top:1px solid var(--trace-dim); }
+  aside.side li a{
+    display:block; padding:9px 2px; font-family:var(--mono); font-size:13px; line-height:1.35;
+    color:var(--paper); text-decoration:none; transition:color .15s, padding-left .15s;
+  }
+  aside.side li a:hover{ color:var(--signal-bright); padding-left:6px; }
+  aside.side li a:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:2px; }
+  aside.side li a.empty{ color:var(--paper-dim); }
   .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(230px, 1fr)); gap:14px; }
   .card{
     position:relative; display:flex; flex-direction:column; gap:6px; min-height:190px;
@@ -51,6 +68,7 @@
   .card.disabled .name{ color:var(--paper-dim); }
   .card .go{ margin-top:auto; font-family:var(--mono); font-size:12.5px; color:var(--signal-bright); }
   footer{ text-align:center; padding:0 24px 50px; font-family:var(--mono); font-size:12px; color:var(--paper-dim); }
+  @media (max-width:860px){ .layout{ flex-direction:column; } aside.side{ position:static; flex:none; width:100%; } }
   @media (max-width:600px){ header.hero{padding:40px 20px 26px;} .wrap{padding:28px 16px 80px;} .grid{grid-template-columns:1fr; gap:10px;} .card{min-height:0;} }
 </style>
 </head>
@@ -62,7 +80,20 @@
   <p>Choose a page to start revising. More pages will be added as they are ready.</p>
 </header>
 
-<main class="wrap">
+<main class="wrap layout">
+  <aside class="side" aria-label="Mock exams">
+    <h2>Mock exams</h2>
+    <p class="sub">Add your links here: change the href and the text of any line below.</p>
+    <ul>
+      <!-- To add a mock exam: copy a <li> line, set href to the page and write its name.
+           Change class="empty" to nothing once the link is filled in. -->
+      <li><a class="empty" href="#">Mock exam 1: add link</a></li>
+      <li><a class="empty" href="#">Mock exam 2: add link</a></li>
+      <li><a class="empty" href="#">Mock exam 3: add link</a></li>
+      <li><a class="empty" href="#">Mock exam 4: add link</a></li>
+      <li><a class="empty" href="#">Mock exam 5: add link</a></li>
+    </ul>
+  </aside>
   <div class="grid">
     <a class="card" href="data-information.html">
       <span class="num">Ch.1</span>
