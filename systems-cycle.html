@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The System Life Cycle — AS &amp; A Level IT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1220;
+    --bg-raised:#141b2e;
+    --bg-deep:#090d18;
+    --trace:#40557d;
+    --trace-dim:#212b45;
+    --paper:#e7e9f1;
+    --paper-dim:#9ba4bc;
+    --signal:#45b8cf;
+    --signal-bright:#7fd9ea;
+    --gold:#e6b85c;
+    --brick:#e0685c;
+    --sage:#86c9a0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --radius: 3px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:
+      linear-gradient(var(--trace-dim) 1px, transparent 1px),
+      linear-gradient(90deg, var(--trace-dim) 1px, transparent 1px);
+    background-size: 42px 42px;
+    background-position: -1px -1px;
+    color:var(--paper);
+    font-family: var(--serif);
+    font-size:17px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--signal-bright);}
+  ::selection{background:var(--signal); color:#04141a;}
+
+  .wrap{ max-width:760px; margin:0 auto; padding: 0 24px 120px; }
+
+  nav.theory-nav{
+    max-width:760px; margin:0 auto; padding:14px 24px 0;
+    display:flex; justify-content:space-between; gap:12px;
+  }
+  nav.theory-nav a{
+    font-family:var(--mono); font-size:12.5px; text-decoration:none; color:var(--paper-dim);
+    border:1px solid var(--trace); padding:8px 13px; border-radius:var(--radius);
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  nav.theory-nav a:hover{ color:var(--paper); border-color:var(--paper-dim); }
+  nav.theory-nav a.disabled{ opacity:.4; pointer-events:none; }
+  nav.theory-nav .spacer{flex:1;}
+  @media (max-width:600px){ nav.theory-nav a span.full{display:none;} }
+
+  header.hero{
+    padding:44px 24px 34px; max-width:760px; margin:0 auto; border-bottom:1px solid var(--trace);
+  }
+  .kicker{ font-family:var(--mono); font-size:13px; color:var(--sage); margin:0 0 10px; }
+  h1.title{
+    font-family:var(--mono); font-weight:700; font-size:clamp(24px,5vw,38px);
+    line-height:1.15; margin:0 0 14px; color:var(--paper);
+  }
+  .hero p{ color:var(--paper-dim); max-width:60ch; margin:0; font-size:17.5px; }
+
+  nav.tabs{
+    max-width:760px; margin:0 auto; padding:14px 24px; display:flex; gap:6px;
+    overflow-x:auto; border-bottom:1px solid var(--trace); position:sticky; top:0;
+    background:rgba(13,18,32,.95); backdrop-filter: blur(4px); z-index:30;
+  }
+  nav.tabs button{
+    font-family:var(--mono); font-size:12.5px; white-space:nowrap; background:transparent;
+    border:1px solid var(--trace); color:var(--paper-dim); padding:8px 13px;
+    border-radius:var(--radius); cursor:pointer; flex-shrink:0;
+  }
+  nav.tabs button:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  nav.tabs button.active{ background:var(--signal); color:#04141a; border-color:var(--signal); font-weight:500; }
+
+  .panel{ display:none; padding:40px 0 8px; }
+  .panel.active{ display:block; }
+
+  h2.section-title{
+    font-family:var(--mono); font-size:22px; color:var(--signal-bright);
+    margin:0 0 6px; display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  h2.section-title .tag{
+    font-size:12px; color:var(--sage); border:1px solid var(--trace);
+    padding:2px 7px; border-radius:var(--radius);
+  }
+  h3{ font-family:var(--mono); font-size:16px; color:var(--gold); margin:26px 0 8px; font-weight:500; }
+  p{margin:10px 0;}
+  ul, ol{padding-left:22px; margin:10px 0;}
+  li{margin:4px 0;}
+  strong{color:var(--paper); font-weight:600;}
+
+  table{ width:100%; border-collapse:collapse; margin:14px 0 8px; font-size:15px; }
+  th,td{ border:1px solid var(--trace); padding:8px 10px; text-align:left; vertical-align:top; }
+  th{ font-family:var(--mono); font-size:12px; color:var(--sage); font-weight:500; background:rgba(134,201,160,0.06); }
+  .table-scroll{ overflow-x:auto; }
+  .note{ color:var(--paper-dim); font-size:14.5px; }
+
+  .block{ border-left:2px solid var(--trace); padding-left:18px; margin:18px 0; }
+  .block ul, .block ol{ margin:0; padding-left:20px; }
+
+  .proscons{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 8px; }
+  .pc{ border:1px solid var(--trace); border-radius:var(--radius); background:var(--bg-raised); padding:2px 14px 12px; }
+  .pc.pro{ border-top:2px solid var(--sage); }
+  .pc.con{ border-top:2px solid var(--brick); }
+  .pc-title{ font-family:var(--mono); font-size:12.5px; font-weight:500; margin:12px 0 4px; }
+  .pc.pro .pc-title{ color:var(--sage); }
+  .pc.con .pc-title{ color:var(--brick); }
+  .pc ul{ padding-left:18px; margin:6px 0 0; font-size:15px; }
+  @media (max-width:600px){ .proscons{ grid-template-columns:1fr; } }
+
+  details.fold{ border:1px solid var(--trace); border-radius:var(--radius); margin:12px 0; background:var(--bg-raised); }
+  details.fold summary{ font-family:var(--mono); font-size:13.5px; color:var(--gold); padding:11px 14px; cursor:pointer; }
+  details.fold[open] summary{ border-bottom:1px solid var(--trace); }
+  details.fold .fold-body{ padding:2px 14px 12px; }
+
+  .diagram-box{
+    background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius);
+    padding:14px 10px; margin:18px 0 6px; text-align:center;
+  }
+  .diagram-box svg{ width:100%; height:auto; max-width:460px; }
+  .diagram-box svg.wide{ max-width:600px; }
+  .diagram-caption{ font-family:var(--mono); font-size:12px; color:var(--paper-dim); margin-top:6px; }
+  .signal-caption{ font-family: var(--mono); font-size:12.5px; color:var(--paper-dim); margin-top:8px; text-align:center; }
+
+  .task{ margin:32px 0; border:1px solid var(--trace); border-radius:var(--radius); background: var(--bg-raised); padding:20px 20px 22px; }
+  .task-label{ font-family:var(--mono); font-size:12px; color:var(--signal-bright); margin:0 0 10px; display:flex; justify-content:space-between; align-items:center; }
+  .task-label .pts{color:var(--sage);}
+  .task h4{ margin:0 0 12px; font-family:var(--serif); font-weight:600; font-size:16.5px; color:var(--paper); }
+  .task .sub-q{margin:18px 0;}
+  .task .sub-q:first-child{margin-top:0;}
+  .sub-q label{ display:block; font-family:var(--serif); font-size:15.5px; margin-bottom:8px; color:var(--paper); }
+
+  textarea{
+    width:100%; min-height:52px; background:var(--bg-deep); border:1px solid var(--trace);
+    border-radius:var(--radius); color:var(--paper); font-family:var(--serif);
+    font-size:15.5px; padding:10px 12px; resize:vertical;
+  }
+  textarea:focus, button:focus-visible, .opt:focus-visible, summary:focus-visible, input[type=checkbox]:focus-visible{ outline:2px solid var(--signal-bright); outline-offset:1px; }
+  .row{ display:flex; gap:10px; align-items:center; margin-top:8px; flex-wrap:wrap; }
+
+  button{
+    font-family:var(--mono); font-size:13px; background:var(--signal); color:#04141a;
+    border:none; padding:9px 15px; border-radius:var(--radius); cursor:pointer; font-weight:500;
+  }
+  button:hover{background:var(--signal-bright);}
+  button.ghost{ background:transparent; border:1px solid var(--trace); color:var(--paper-dim); }
+  button.ghost:hover{ color:var(--paper); border-color:var(--paper-dim); background:transparent; }
+  button:disabled{opacity:.5; cursor:default;}
+
+  .error-msg{ color:var(--brick); font-family:var(--mono); font-size:13px; margin-top:8px; display:none; }
+  .error-msg.show{display:block;}
+
+  .answer-reveal{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .answer-reveal.show{display:block;}
+  .answer-reveal .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:5px; }
+
+  .self-mark{ display:none; align-items:center; gap:8px; margin-top:12px; font-family:var(--mono); font-size:13px; color:var(--paper-dim); }
+  .self-mark.show{display:flex;}
+  .self-mark input[type=checkbox]{ width:17px; height:17px; accent-color: var(--gold); cursor:pointer; }
+  .self-mark label{cursor:pointer; margin:0; font-family:var(--mono); font-size:13px; color:var(--paper-dim);}
+
+  .markpoints{
+    display:none; margin-top:12px; padding:12px 14px; background:rgba(134,201,160,0.08);
+    border-left:2px solid var(--sage); border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .markpoints.show{display:block;}
+  .markpoints .lbl{ font-family:var(--mono); font-size:11.5px; color:var(--sage); display:block; margin-bottom:6px; }
+  .markpoints .mp-item{
+    display:flex; gap:10px; align-items:flex-start; margin:0; padding:7px 0;
+    border-bottom:1px solid var(--trace-dim); font-size:15px; font-weight:400; cursor:pointer;
+  }
+  .markpoints .mp-item:last-of-type{border-bottom:none;}
+  .markpoints .mp-item input{ width:17px; height:17px; margin-top:3px; flex-shrink:0; accent-color:var(--gold); cursor:pointer; }
+  .mp-foot{ display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:8px; font-family:var(--mono); font-size:13px; }
+  .mp-count{ color:var(--gold); }
+  .mp-note{ color:var(--brick); }
+
+  .mcq{margin:20px 0;}
+  .mcq:first-of-type{margin-top:0;}
+  .mcq p.q{ font-family:var(--serif); font-size:15.5px; color:var(--paper); margin:0 0 10px; }
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{
+    text-align:left; background:var(--bg-deep); border:1px solid var(--trace); color:var(--paper);
+    padding:10px 13px; border-radius:var(--radius); font-family:var(--serif); font-size:15px; cursor:pointer; font-weight:400;
+  }
+  .opt:hover:not(:disabled){border-color:var(--signal); background:var(--bg-deep);}
+  .opt.correct{border-color:var(--sage); background:rgba(134,201,160,0.14);}
+  .opt.incorrect{border-color:var(--brick); background:rgba(224,104,92,0.14);}
+  .opt:disabled{cursor:default;}
+  .mcq-feedback{ font-family:var(--mono); font-size:13px; margin-top:8px; min-height:1.2em; }
+  .mcq-feedback.ok{color:var(--sage);}
+  .mcq-feedback.bad{color:var(--brick);}
+
+  .classify-item{
+    display:flex; justify-content:space-between; align-items:center; gap:12px;
+    padding:10px 0; border-bottom:1px solid var(--trace-dim); flex-wrap:wrap;
+  }
+  .classify-item:last-child{border-bottom:none;}
+  .classify-item .term{font-size:15px; max-width:60%;}
+  .classify-item .choices{display:flex; gap:8px; flex-wrap:wrap;}
+  .classify-item .choices button{
+    background:transparent; border:1px solid var(--trace); color:var(--paper-dim);
+    font-size:12px; padding:6px 10px;
+  }
+  .classify-item .choices button:hover:not(:disabled){ color:var(--paper); border-color:var(--paper-dim); }
+  .classify-item .choices button.correct{background:rgba(134,201,160,0.16); border-color:var(--sage); color:var(--paper);}
+  .classify-item .choices button.incorrect{background:rgba(224,104,92,0.16); border-color:var(--brick); color:var(--paper);}
+  @media (max-width:600px){ .classify-item .term{max-width:100%;} }
+
+  #score-badge{
+    position:fixed; top:14px; right:14px; z-index:50; font-family:var(--mono); font-size:13px;
+    background:var(--bg-raised); border:1px solid var(--signal); color:var(--signal-bright);
+    padding:8px 13px; border-radius:var(--radius); box-shadow:0 2px 10px rgba(0,0,0,.35);
+  }
+  #score-badge .n{color:var(--gold); font-weight:700;}
+
+  footer{ max-width:760px; margin:0 auto; padding:40px 24px 0; font-family:var(--mono); font-size:12.5px; color:var(--paper-dim); }
+
+  @media (max-width:600px){
+    body{font-size:16px;}
+    header.hero{padding:36px 20px 26px;}
+    #score-badge{top:auto; bottom:14px; right:14px;}
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+
+  .diagram-box img{ max-width:100%; height:auto; background:#fff; border-radius:3px; padding:8px; }
+  pre{ background:var(--bg-deep); border:1px solid var(--trace); border-radius:var(--radius); padding:12px 14px; overflow-x:auto; font-family:var(--mono); font-size:13.5px; line-height:1.55; margin:14px 0; color:var(--paper); }
+  code{ font-family:var(--mono); font-size:.9em; color:var(--signal-bright); }
+  pre code{ color:inherit; }
+
+  .diagram-box svg text{ fill:var(--paper); font-family:var(--mono); font-size:12.5px; }
+  .diagram-box svg .bx{ fill:var(--bg-raised); stroke:var(--signal); stroke-width:1.5; }
+  .diagram-box svg .ar{ stroke:var(--paper-dim); stroke-width:1.5; fill:none; }
+</style>
+</head>
+<body>
+<div id="score-badge">Score: <span class="n" id="score-val">0</span> / <span id="score-max">0</span></div>
+<nav class="theory-nav"><a class="disabled" href="#">← <span class="full">Previous theory</span></a><span class="spacer"></span><a class="disabled" href="#"><span class="full">Next theory</span> →</a></nav>
+<header class="hero"><p class="kicker">Cambridge AS &amp; A Level IT · Chapter 16</p><h1 class="title">The System Life Cycle</h1><p>This page covers the five stages of the system life cycle, from analysis to maintenance, the methods used to develop software, and how prototyping helps developers and clients agree what a system should do.</p></header>
+<nav class="tabs"><button class="tab-btn active" data-panel="lifecycle">16.1 Stages of the life cycle</button><button class="tab-btn" data-panel="methods">16.2 Development methods</button><button class="tab-btn" data-panel="prototyping">16.3 Prototyping</button><button class="tab-btn" data-panel="practice">Practice questions</button></nav>
+<div class="wrap">
+<div class="panel active" id="panel-lifecycle"><h2 class="section-title">Stages in the system life cycle <span class="tag">16.1</span></h2>
+<p>The life cycle of a computer system usually consists of five main stages. Each stage includes a range of tasks, and after the final stage the cycle may repeat with changes or additions.</p>
+<h3>The five stages</h3><div class="diagram-box"><svg class="wide" viewBox="0 0 660 150" role="img" aria-label="The five stages of the system life cycle in a loop"><g><rect class="bx" x="6" y="20" width="112" height="44" rx="6"/><text x="62" y="47" text-anchor="middle">1 Analysis</text><rect class="bx" x="140" y="20" width="112" height="44" rx="6"/><text x="196" y="47" text-anchor="middle">2 Design</text><rect class="bx" x="274" y="20" width="132" height="44" rx="6"/><text x="340" y="38" text-anchor="middle">3 Development</text><text x="340" y="55" text-anchor="middle">and testing</text><rect class="bx" x="428" y="20" width="112" height="44" rx="6"/><text x="484" y="47" text-anchor="middle">4 Implementation</text><rect class="bx" x="556" y="20" width="98" height="44" rx="6"/><text x="605" y="47" text-anchor="middle">5 Maintenance</text></g><path class="ar" d="M118 42h22M252 42h22M406 42h22M540 42h16"/><path class="ar" d="M605 64v50H62V68"/><path class="ar" d="M56 76l6-8 6 8"/><text x="330" y="108" text-anchor="middle">the cycle may repeat with changes or feedback from users</text></svg></div><ul><li><b>Analysis</b> researches the current situation and decides what the new system needs.</li><li><b>Design</b> looks at processing, data flow, inputs, outputs and data storage.</li></ul><h3>Researching a situation</h3><ul><li><b>Questionnaires</b>: many users, large sample, can be anonymous. Take time to write and give limited information.</li><li><b>Interviews</b>: small groups, detailed views, follow-up questions. Slow, and few responses.</li><li><b>Observation</b>: see tasks done in person and links between processes. Slow, and people behave differently when watched.</li><li><b>Document analysis</b>: study existing forms and data. Never used on its own, because it doesn’t show how documents are used.</li></ul><h3>Three specifications</h3><ul><li><b>User requirements</b>: what the client needs the system to do. The client approves it.</li><li><b>System</b>: the hardware and software needed. Software is usually chosen first.</li><li><b>Design</b>: how the system will look, its data structures and how it will work.</li></ul><h3>Design tools</h3><ul><li><b>Data flow diagram (DFD)</b>: how data moves around a system. It does not show the order of processes. Levels 0, 1 and 2.</li><li><b>System flowchart</b>: data and processes in a whole system. A <b>data dictionary</b> lists field names, data types, sizes and keys.</li><li><b>Validation rules</b>: presence, range, type, length and format. Each needs a rule and a helpful error message.</li><li><b>Screens and forms</b>: consistent legible fonts, careful colour, no clutter, instructions, enough space. Tick boxes for several answers, drop-downs or option buttons for one.</li></ul><h3>Development and testing</h3><ul><li>A <b>test plan</b> lists what is tested, the test type, input data, expected result and the actual pass or fail.</li><li><b>Valid</b> data is accepted. <b>Invalid</b> data is rejected. <b>Extreme</b> data is accepted but at the very limit.</li><li><b>Alpha</b>: developers or specialist testers, near the end of development, controlled. <b>Beta</b>: selected real users try a nearly finished version.</li><li><b>White box</b>: developers who know the system test modules in depth. <b>Black box</b>: inputs and outputs only, no knowledge of how it works, checks the requirements are met.</li></ul><h3>Implementation</h3><ul><li><b>Parallel</b>: old and new run together. Least risky but duplicates work.</li><li><b>Direct changeover</b>: old stops, new starts. Cheap but risky.</li><li><b>Phased</b>: parts introduced at different times. Suits large, complex systems.</li><li><b>Pilot</b>: one part of the organisation tries it first. Suits systems that need more testing or lots of training.</li></ul><h3>Documentation and evaluation</h3><ul><li><b>Requirements</b> and <b>design</b> documentation guide developers and users.</li><li><b>Technical</b> documentation helps future maintainers: data dictionary, annotated code, validation rules, test results, backup routines.</li><li><b>User</b> documentation: instructions, screenshots, a glossary of terms and a troubleshooting table of problems, causes and solutions.</li><li><b>Evaluation</b> checks efficiency, ease of use and whether the system suits its purpose, using the specifications, the user requirements and user feedback.</li></ul><h3>Maintenance</h3><ul><li><b>Perfective</b> improves or enhances. <b>Adaptive</b> keeps the system usable when things change. <b>Preventative</b> stops problems arising. <b>Corrective</b> fixes errors and failures.</li></ul><div class="task"><p class="task-label"><span>Worked example</span><span class="pts">4 points</span></p><h4>Answer from the notes.</h4><div class="sub-q"><label>Identify the five stages in the system life cycle.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Analysis, design, development and testing, implementation and maintenance</div><div class="self-mark"><input type="checkbox" id="sm-1"><label for="sm-1">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>State the purpose of the system specification.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>To list the hardware and software needed for the new system</div><div class="self-mark"><input type="checkbox" id="sm-2"><label for="sm-2">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>State the purpose of a data flow diagram (DFD).</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>To show how data flows (moves) around a system</div><div class="self-mark"><input type="checkbox" id="sm-3"><label for="sm-3">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Describe the purpose of using extreme test data.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>To test data that the validation rule accepts but that is at the limit of what is acceptable</div><div class="self-mark"><input type="checkbox" id="sm-4"><label for="sm-4">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">4 points</span></p><h4>Click which research method each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="d"><span class="term">Should never be used on its own</span><span class="choices"><button data-choice="a">Questionnaire</button><button data-choice="b">Interview</button><button data-choice="c">Observation</button><button data-choice="d">Document analysis</button></span></div><div class="classify-item" data-answer="a"><span class="term">Suits a large number of users and responses can be anonymous</span><span class="choices"><button data-choice="a">Questionnaire</button><button data-choice="b">Interview</button><button data-choice="c">Observation</button><button data-choice="d">Document analysis</button></span></div><div class="classify-item" data-answer="c"><span class="term">Users may behave differently because they are being watched</span><span class="choices"><button data-choice="a">Questionnaire</button><button data-choice="b">Interview</button><button data-choice="c">Observation</button><button data-choice="d">Document analysis</button></span></div><div class="classify-item" data-answer="b"><span class="term">Follow-up questions can clarify answers</span><span class="choices"><button data-choice="a">Questionnaire</button><button data-choice="b">Interview</button><button data-choice="c">Observation</button><button data-choice="d">Document analysis</button></span></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">3 points</span></p><h4>Click which specification each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="a"><span class="term">Approved by the client and says what the system must do</span><span class="choices"><button data-choice="a">User requirements</button><button data-choice="b">System</button><button data-choice="c">Design</button></span></div><div class="classify-item" data-answer="b"><span class="term">Lists the hardware and software needed to run the system</span><span class="choices"><button data-choice="a">User requirements</button><button data-choice="b">System</button><button data-choice="c">Design</button></span></div><div class="classify-item" data-answer="c"><span class="term">Shows how the system will look and what the data structures will be</span><span class="choices"><button data-choice="a">User requirements</button><button data-choice="b">System</button><button data-choice="c">Design</button></span></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">3 points</span></p><h4>A validation rule accepts whole numbers from 2500 to 5000. Click what type of test data each value is.</h4><div class="classify-list"><div class="classify-item" data-answer="c"><span class="term">5000</span><span class="choices"><button data-choice="a">Valid</button><button data-choice="b">Invalid</button><button data-choice="c">Extreme</button></span></div><div class="classify-item" data-answer="a"><span class="term">3800</span><span class="choices"><button data-choice="a">Valid</button><button data-choice="b">Invalid</button><button data-choice="c">Extreme</button></span></div><div class="classify-item" data-answer="b"><span class="term">6000</span><span class="choices"><button data-choice="a">Valid</button><button data-choice="b">Invalid</button><button data-choice="c">Extreme</button></span></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">4 points</span></p><h4>Click which implementation method each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="a"><span class="term">Old and new systems run at the same time</span><span class="choices"><button data-choice="a">Parallel</button><button data-choice="b">Direct</button><button data-choice="c">Phased</button><button data-choice="d">Pilot</button></span></div><div class="classify-item" data-answer="c"><span class="term">Parts of the new system are introduced at different times</span><span class="choices"><button data-choice="a">Parallel</button><button data-choice="b">Direct</button><button data-choice="c">Phased</button><button data-choice="d">Pilot</button></span></div><div class="classify-item" data-answer="d"><span class="term">Only one part of the organisation uses the new system first</span><span class="choices"><button data-choice="a">Parallel</button><button data-choice="b">Direct</button><button data-choice="c">Phased</button><button data-choice="d">Pilot</button></span></div><div class="classify-item" data-answer="b"><span class="term">A clear break from the old system with no backup</span><span class="choices"><button data-choice="a">Parallel</button><button data-choice="b">Direct</button><button data-choice="c">Phased</button><button data-choice="d">Pilot</button></span></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">3 points</span></p><h4>Click which type of testing each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="c"><span class="term">Developers test each module in depth</span><span class="choices"><button data-choice="a">Alpha</button><button data-choice="b">Beta</button><button data-choice="c">White box</button><button data-choice="d">Black box</button></span></div><div class="classify-item" data-answer="b"><span class="term">Selected real users try a nearly finished version</span><span class="choices"><button data-choice="a">Alpha</button><button data-choice="b">Beta</button><button data-choice="c">White box</button><button data-choice="d">Black box</button></span></div><div class="classify-item" data-answer="d"><span class="term">Tests inputs and outputs with no knowledge of how the system works</span><span class="choices"><button data-choice="a">Alpha</button><button data-choice="b">Beta</button><button data-choice="c">White box</button><button data-choice="d">Black box</button></span></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">4 points</span></p><h4>Click which type of maintenance each situation describes.</h4><div class="classify-list"><div class="classify-item" data-answer="d"><span class="term">Fixing a bug that makes a program stop responding</span><span class="choices"><button data-choice="a">Perfective</button><button data-choice="b">Adaptive</button><button data-choice="c">Preventative</button><button data-choice="d">Corrective</button></span></div><div class="classify-item" data-answer="b"><span class="term">Updating software for a new legal requirement</span><span class="choices"><button data-choice="a">Perfective</button><button data-choice="b">Adaptive</button><button data-choice="c">Preventative</button><button data-choice="d">Corrective</button></span></div><div class="classify-item" data-answer="a"><span class="term">Adding a new feature to improve performance</span><span class="choices"><button data-choice="a">Perfective</button><button data-choice="b">Adaptive</button><button data-choice="c">Preventative</button><button data-choice="d">Corrective</button></span></div><div class="classify-item" data-answer="c"><span class="term">Regularly cleaning hardware so fans do not clog with dust</span><span class="choices"><button data-choice="a">Perfective</button><button data-choice="b">Adaptive</button><button data-choice="c">Preventative</button><button data-choice="d">Corrective</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">4 points</span></p><div class="mcq" data-answer="0"><p class="q">1. Which validation check makes sure a surname is not left empty?</p><div class="opts"><button class="opt" data-idx="0">Presence check</button><button class="opt" data-idx="1">Range check</button><button class="opt" data-idx="2">Format check</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. What does a data flow diagram show?</p><div class="opts"><button class="opt" data-idx="0">How data moves around a system</button><button class="opt" data-idx="1">The order in which processes run</button><button class="opt" data-idx="2">The hardware a system needs</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">3. Which documentation includes a glossary and a troubleshooting section?</p><div class="opts"><button class="opt" data-idx="0">User documentation</button><button class="opt" data-idx="1">Technical documentation</button><button class="opt" data-idx="2">Design documentation</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="1"><p class="q">4. Which method suits a system that is large and complex?</p><div class="opts"><button class="opt" data-idx="0">Direct changeover</button><button class="opt" data-idx="1">Phased implementation</button><button class="opt" data-idx="2">Parallel running</button></div><p class="mcq-feedback"></p></div></div><div class="task"><p class="task-label"><span>Questions from the book</span><span class="pts">2 points</span></p><h4>Explain why interviews are more often used than questionnaires for smaller groups of users. (2 marks)</h4><div class="sub-q mp" data-max="2"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 2)</span><label class="mp-item"><input type="checkbox"><span>A questionnaire gives too small a sample to judge opinion when there are few users</span></label><label class="mp-item"><input type="checkbox"><span>Interviews are quicker, and questions can be explained or followed up</span></label><div class="mp-foot"><span class="mp-count">0 / 2 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Questions from the book</span><span class="pts">2 points</span></p><h4>Explain the importance of having a test plan. (2 marks)</h4><div class="sub-q mp" data-max="2"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 2)</span><label class="mp-item"><input type="checkbox"><span>It lists each test with its data and expected result, so every feature is checked</span></label><label class="mp-item"><input type="checkbox"><span>Recording the actual result shows what failed so it can be fixed</span></label><div class="mp-foot"><span class="mp-count">0 / 2 marks</span><span class="mp-note"></span></div></div></div></div></div>
+<div class="panel" id="panel-methods"><h2 class="section-title">Methods of software development <span class="tag">16.2</span></h2>
+<p>A number of different methods of working can be used to produce software during the development stage.</p>
+<h3>Five methods</h3><ul><li><b>Agile</b>: small stages, working software delivered quickly, requirements can change late. Each <b>iteration</b> is a timebox in which part of the software is planned, designed, built and tested. A customer representative (product owner) is available throughout.</li><li><b>Iterative</b>: planned rework. Part of each section is built, then customer feedback is used to improve it.</li><li><b>Incremental</b>: one part is fully developed, including feedback, before the next. High-priority features come first.</li><li><b>RAD</b>: prototyping, strict deadlines and reuse of existing modules. Timeboxes can run in parallel.</li><li><b>Waterfall</b>: all requirements gathered at the start and each stage finished before the next.</li></ul><div class="diagram-box"><svg class="wide" viewBox="0 0 660 190" role="img" aria-label="Waterfall method: five stages, each completed before the next"><g><rect class="bx" x="6" y="6" width="150" height="32" rx="5"/><text x="81" y="27" text-anchor="middle">Requirements</text><rect class="bx" x="136" y="46" width="150" height="32" rx="5"/><text x="211" y="67" text-anchor="middle">Design</text><rect class="bx" x="266" y="86" width="150" height="32" rx="5"/><text x="341" y="107" text-anchor="middle">Implementation</text><rect class="bx" x="396" y="126" width="150" height="32" rx="5"/><text x="471" y="147" text-anchor="middle">Verification</text><rect class="bx" x="506" y="156" width="150" height="30" rx="5"/><text x="581" y="176" text-anchor="middle">Maintenance</text></g></svg></div><h3>Strengths and weaknesses</h3><ul><li>Agile and iterative: easy to change and good user fit, but timescales are hard to predict and many iterations are hard to manage.</li><li>Incremental: users benefit early, but it needs careful planning so the parts integrate.</li><li>RAD: fast delivery, but little documentation makes maintenance harder.</li><li>Waterfall: clear structure and timescales, but changes are hard once a stage is complete and user involvement is limited.</li></ul><div class="task"><p class="task-label"><span>Worked example</span><span class="pts">3 points</span></p><h4>Answer from the notes.</h4><div class="sub-q"><label>What is an iteration in agile development?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>A timebox (a set period of time) in which part of the software is planned, designed, developed and tested</div><div class="self-mark"><input type="checkbox" id="sm-5"><label for="sm-5">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>What does RAD use to develop a system in a very short time?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Prototyping, with strict deadlines and reuse of existing modules</div><div class="self-mark"><input type="checkbox" id="sm-6"><label for="sm-6">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Name the five stages of the waterfall method.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Requirements, design, implementation, verification and maintenance</div><div class="self-mark"><input type="checkbox" id="sm-7"><label for="sm-7">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">5 points</span></p><h4>Click which development method each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="e"><span class="term">Gathers all requirements at the start and finishes each stage before the next</span><span class="choices"><button data-choice="a">Agile</button><button data-choice="b">Iterative</button><button data-choice="c">Incremental</button><button data-choice="d">RAD</button><button data-choice="e">Waterfall</button></span></div><div class="classify-item" data-answer="a"><span class="term">Uses timeboxes with a product owner available throughout</span><span class="choices"><button data-choice="a">Agile</button><button data-choice="b">Iterative</button><button data-choice="c">Incremental</button><button data-choice="d">RAD</button><button data-choice="e">Waterfall</button></span></div><div class="classify-item" data-answer="c"><span class="term">Fully develops one part, including feedback, before the next</span><span class="choices"><button data-choice="a">Agile</button><button data-choice="b">Iterative</button><button data-choice="c">Incremental</button><button data-choice="d">RAD</button><button data-choice="e">Waterfall</button></span></div><div class="classify-item" data-answer="d"><span class="term">Uses prototyping, strict deadlines and reuse of existing modules</span><span class="choices"><button data-choice="a">Agile</button><button data-choice="b">Iterative</button><button data-choice="c">Incremental</button><button data-choice="d">RAD</button><button data-choice="e">Waterfall</button></span></div><div class="classify-item" data-answer="b"><span class="term">Builds part of each section, then seeks feedback for planned rework</span><span class="choices"><button data-choice="a">Agile</button><button data-choice="b">Iterative</button><button data-choice="c">Incremental</button><button data-choice="d">RAD</button><button data-choice="e">Waterfall</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">2 points</span></p><div class="mcq" data-answer="1"><p class="q">1. Which method finds it hardest to include changes once a stage is complete?</p><div class="opts"><button class="opt" data-idx="0">Agile</button><button class="opt" data-idx="1">Waterfall</button><button class="opt" data-idx="2">RAD</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. Which method lets users start benefiting before the system is fully implemented?</p><div class="opts"><button class="opt" data-idx="0">Incremental</button><button class="opt" data-idx="1">Waterfall</button><button class="opt" data-idx="2">Neither</button></div><p class="mcq-feedback"></p></div></div><div class="task"><p class="task-label"><span>Questions from the book</span><span class="pts">2 points</span></p><h4>Describe the differences between incremental and iterative development. (2 marks)</h4><div class="sub-q mp" data-max="2"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 2)</span><label class="mp-item"><input type="checkbox"><span>Iterative builds part of each section and seeks feedback, repeating to improve a working but incomplete version</span></label><label class="mp-item"><input type="checkbox"><span>Incremental fully develops one part, including feedback, before moving to the next part</span></label><div class="mp-foot"><span class="mp-count">0 / 2 marks</span><span class="mp-note"></span></div></div></div></div></div>
+<div class="panel" id="panel-prototyping"><h2 class="section-title">Prototyping <span class="tag">16.3</span></h2>
+<p>A prototype is an early version of a software solution with limited functionality. It is used to show how a system will look and function.</p>
+<h3>What a prototype is</h3><ul><li>A <b>prototype</b> is an early version of a software solution with limited functionality.</li><li>It usually focuses on the user interface, not data structures. The client can try it, give feedback and compare it with the requirements specification.</li></ul><h3>Types</h3><ul><li><b>Evolutionary</b>: the first prototype has the core features. It is improved from client feedback until it becomes the product.</li><li><b>Incremental</b>: each prototype adds functions to the last. Only clearly understood requirements are built.</li><li><b>Throwaway</b>: never part of the final software. Used to explore ideas and fine-tune requirements early, which is cheaper than late changes.</li><li><b>Rapid</b>: quickly built working prototypes that are incorporated into the final system.</li></ul><h3>Strengths and weaknesses</h3><ul><li>Evolutionary: refined over time, but frequent changes need careful management.</li><li>Incremental: working parts early, but needs careful planning to integrate.</li><li>Throwaway: quick feedback, but effort is wasted if the ideas are not used.</li><li>Rapid: quick feedback, but limited functionality and hard to integrate.</li></ul><div class="task"><p class="task-label"><span>Worked example</span><span class="pts">3 points</span></p><h4>Answer from the notes.</h4><div class="sub-q"><label>Define the term prototype.</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>An early version of a software solution with limited functionality</div><div class="self-mark"><input type="checkbox" id="sm-8"><label for="sm-8">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>What does a prototype usually focus on?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>The user interface, rather than the data structures</div><div class="self-mark"><input type="checkbox" id="sm-9"><label for="sm-9">My answer was close enough — award myself the point</label></div></div><div class="sub-q"><label>Why can throwaway prototyping be cost-effective?</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>It fine-tunes the requirements early, which is cheaper than making changes after a lot of work has been done</div><div class="self-mark"><input type="checkbox" id="sm-10"><label for="sm-10">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Sort it</span><span class="pts">5 points</span></p><h4>Click which type of prototyping each statement describes.</h4><div class="classify-list"><div class="classify-item" data-answer="c"><span class="term">Never becomes part of the final software</span><span class="choices"><button data-choice="a">Evolutionary</button><button data-choice="b">Incremental</button><button data-choice="c">Throwaway</button><button data-choice="d">Rapid</button></span></div><div class="classify-item" data-answer="a"><span class="term">The first version holds the core features and is improved from client feedback</span><span class="choices"><button data-choice="a">Evolutionary</button><button data-choice="b">Incremental</button><button data-choice="c">Throwaway</button><button data-choice="d">Rapid</button></span></div><div class="classify-item" data-answer="d"><span class="term">A quickly built working prototype that joins the final system</span><span class="choices"><button data-choice="a">Evolutionary</button><button data-choice="b">Incremental</button><button data-choice="c">Throwaway</button><button data-choice="d">Rapid</button></span></div><div class="classify-item" data-answer="b"><span class="term">Each prototype adds more functions to the previous one</span><span class="choices"><button data-choice="a">Evolutionary</button><button data-choice="b">Incremental</button><button data-choice="c">Throwaway</button><button data-choice="d">Rapid</button></span></div><div class="classify-item" data-answer="c"><span class="term">Effort may be wasted if its ideas are not used</span><span class="choices"><button data-choice="a">Evolutionary</button><button data-choice="b">Incremental</button><button data-choice="c">Throwaway</button><button data-choice="d">Rapid</button></span></div></div></div><div class="task"><p class="task-label"><span>Quick check</span><span class="pts">2 points</span></p><div class="mcq" data-answer="0"><p class="q">1. Which type is built quickly and then incorporated into the final system?</p><div class="opts"><button class="opt" data-idx="0">Rapid</button><button class="opt" data-idx="1">Throwaway</button><button class="opt" data-idx="2">Evolutionary</button></div><p class="mcq-feedback"></p></div><div class="mcq" data-answer="0"><p class="q">2. Which type helps fine-tune requirements early, cheaper than late changes?</p><div class="opts"><button class="opt" data-idx="0">Throwaway</button><button class="opt" data-idx="1">Evolutionary</button><button class="opt" data-idx="2">Rapid</button></div><p class="mcq-feedback"></p></div></div><div class="task"><p class="task-label"><span>Questions from the book</span><span class="pts">3 points</span></p><h4>Compare and contrast evolutionary and throwaway prototyping. (3 marks)</h4><div class="sub-q mp" data-max="3"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 3)</span><label class="mp-item"><input type="checkbox"><span>Both are early versions that the client reviews and gives feedback on</span></label><label class="mp-item"><input type="checkbox"><span>Evolutionary: improved from feedback until it becomes the final software</span></label><label class="mp-item"><input type="checkbox"><span>Throwaway: discarded and never part of the final system</span></label><div class="mp-foot"><span class="mp-count">0 / 3 marks</span><span class="mp-note"></span></div></div></div></div></div>
+<div class="panel" id="panel-practice"><h2 class="section-title">Practice questions <span class="tag">Exam style</span></h2><p>Thornhill Estates runs several hotels. It would like a new software solution to manage room bookings, dinner reservations and purchases across all its hotels. It has asked a software developer to produce the software, and the developer will follow the system life cycle. Write each answer in full first, then compare it with the mark points and tick the ones you covered. Total: 43 marks.</p><div class="task"><p class="task-label"><span>Question 1a</span><span class="pts">1 point</span></p><div class="sub-q"><label>State one purpose of analysis in the system life cycle. [1]</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>To research the current situation and decide the requirements of the new system.</div><div class="self-mark"><input type="checkbox" id="sm-11"><label for="sm-11">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Question 1b</span><span class="pts">4 points</span></p><h4>Suggest four reasons why questionnaires would be appropriate for researching how bookings are currently managed. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Information is needed from a large number of users</span></label><label class="mp-item"><input type="checkbox"><span>It would be impractical to interview them all</span></label><label class="mp-item"><input type="checkbox"><span>A large sample size gives results that can be analysed</span></label><label class="mp-item"><input type="checkbox"><span>Responses can be anonymous</span></label><label class="mp-item"><input type="checkbox"><span>Online responses are stored for immediate analysis</span></label><label class="mp-item"><input type="checkbox"><span>They can be used if an interview time cannot be arranged</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Question 1c</span><span class="pts">3 points</span></p><h4>State three other methods that could be used to research the current booking system. (3 marks)</h4><div class="sub-q mp" data-max="3"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 3)</span><label class="mp-item"><input type="checkbox"><span>Interviews</span></label><label class="mp-item"><input type="checkbox"><span>Observation</span></label><label class="mp-item"><input type="checkbox"><span>Document analysis</span></label><div class="mp-foot"><span class="mp-count">0 / 3 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Question 2</span><span class="pts">1 point</span></p><div class="sub-q"><label>State the purpose of a requirements specification. [1]</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>To set out what the client needs the system to do, so the client can approve it.</div><div class="self-mark"><input type="checkbox" id="sm-12"><label for="sm-12">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Question 3a</span><span class="pts">3 points</span></p><h4>Identify three factors that should be considered when designing a screen layout. (3 marks)</h4><div class="sub-q mp" data-max="3"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 3)</span><label class="mp-item"><input type="checkbox"><span>Colour used carefully and appropriately</span></label><label class="mp-item"><input type="checkbox"><span>Fonts used consistently and legible</span></label><label class="mp-item"><input type="checkbox"><span>No clutter from too many elements</span></label><label class="mp-item"><input type="checkbox"><span>Instructions on how to complete it</span></label><label class="mp-item"><input type="checkbox"><span>Show which questions must be answered</span></label><label class="mp-item"><input type="checkbox"><span>Enough space for each answer</span></label><label class="mp-item"><input type="checkbox"><span>Suitable controls such as tick boxes or drop-downs</span></label><div class="mp-foot"><span class="mp-count">0 / 3 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Question 3b</span><span class="pts">3 points</span></p><h4>Using an example, show how a validation rule could be designed for the hotel booking system. (3 marks)</h4><div class="sub-q mp" data-max="3"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 3)</span><label class="mp-item"><input type="checkbox"><span>The input data is identified (e.g. number of nights)</span></label><label class="mp-item"><input type="checkbox"><span>A validation type is named (e.g. range check)</span></label><label class="mp-item"><input type="checkbox"><span>The rule is stated (e.g. between 1 and 28)</span></label><label class="mp-item"><input type="checkbox"><span>A clear error message tells the user how to correct it</span></label><div class="mp-foot"><span class="mp-count">0 / 3 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Question 3c</span><span class="pts">3 points</span></p><h4>Apart from keyboards, mice and monitors, describe three external hardware components that will be needed. (3 marks)</h4><div class="sub-q mp" data-max="3"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 3)</span><label class="mp-item"><input type="checkbox"><span>A printer for booking confirmations and bills</span></label><label class="mp-item"><input type="checkbox"><span>A card reader to take payments</span></label><label class="mp-item"><input type="checkbox"><span>A device to encode the key cards used for room access</span></label><label class="mp-item"><input type="checkbox"><span>An external drive for backups</span></label><div class="mp-foot"><span class="mp-count">0 / 3 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Question 4a</span><span class="pts">1 point</span></p><div class="sub-q"><label>Define the term ‘prototype’. [1]</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>An early version of a software solution with limited functionality.</div><div class="self-mark"><input type="checkbox" id="sm-13"><label for="sm-13">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Question 4b</span><span class="pts">4 points</span></p><h4>Justify the manager’s choice of an evolutionary approach. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>The first prototype has the core features, so the client sees them early</span></label><label class="mp-item"><input type="checkbox"><span>Client feedback is used to improve each new prototype</span></label><label class="mp-item"><input type="checkbox"><span>Requirements can change as the client uses the prototype</span></label><label class="mp-item"><input type="checkbox"><span>The system is refined over time into a usable product</span></label><label class="mp-item"><input type="checkbox"><span>Functioning parts are available from an early stage</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Question 5a</span><span class="pts">4 points</span></p><h4>Describe two differences between white box and black box testing. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>White box is done by developers who know the system; black box needs no knowledge of how it works</span></label><label class="mp-item"><input type="checkbox"><span>White box tests separate modules in depth; black box tests the whole system</span></label><label class="mp-item"><input type="checkbox"><span>White box checks features such as validation were built correctly; black box checks the requirements are met</span></label><label class="mp-item"><input type="checkbox"><span>White box needs access to system documentation; black box does not</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Question 5b</span><span class="pts">2 points</span></p><div class="sub-q"><label>Explain one reason why beta testing might not be appropriate for the hotel system. [2]</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>Beta testing uses real users with limited control, so real booking data could be lost or the live bookings disrupted.</div><div class="self-mark"><input type="checkbox" id="sm-14"><label for="sm-14">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Question 5c</span><span class="pts">2 points</span></p><div class="sub-q"><label>Explain why invalid test data is used. [2]</label><textarea placeholder="Type your answer here…"></textarea><div class="row"><button class="check-btn">Check answer</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="answer-reveal"><span class="lbl">Answer</span>To check that the validation rules reject data that should not be accepted, and that a suitable error message is shown.</div><div class="self-mark"><input type="checkbox" id="sm-15"><label for="sm-15">My answer was close enough — award myself the point</label></div></div></div><div class="task"><p class="task-label"><span>Question 6a</span><span class="pts">4 points</span></p><h4>Justify the choice of the pilot implementation for the hotel system. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Bugs only affect the pilot group</span></label><label class="mp-item"><input type="checkbox"><span>Bugs can be fixed before all hotels use the system</span></label><label class="mp-item"><input type="checkbox"><span>The pilot group can train other staff</span></label><label class="mp-item"><input type="checkbox"><span>It suits a new system with new features that needs more testing or training</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Question 6b</span><span class="pts">4 points</span></p><h4>Explain why the user documentation should include troubleshooting and glossary sections. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Troubleshooting lists common problems and error messages with causes</span></label><label class="mp-item"><input type="checkbox"><span>It gives solutions so staff can fix problems themselves</span></label><label class="mp-item"><input type="checkbox"><span>A glossary is an alphabetical list of technical terms with definitions</span></label><label class="mp-item"><input type="checkbox"><span>Staff unfamiliar with technical words can understand the guide</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div><div class="task"><p class="task-label"><span>Question 6c</span><span class="pts">4 points</span></p><h4>Suggest four reasons why the hotel system may require maintenance in the future. (4 marks)</h4><div class="sub-q mp" data-max="4"><textarea placeholder="Write your full answer here…" style="min-height:110px;"></textarea><div class="row"><button class="check-btn">Show mark points</button></div><p class="error-msg">Try writing your own answer first — that's how you actually learn it. Don't skip straight to the answer!</p><div class="markpoints"><span class="lbl">Mark points — tick each one your answer covered (up to 4)</span><label class="mp-item"><input type="checkbox"><span>Bugs or errors need fixing (corrective)</span></label><label class="mp-item"><input type="checkbox"><span>Laws or procedures change so the system must adapt (adaptive)</span></label><label class="mp-item"><input type="checkbox"><span>New technology allows improvements or new features (perfective)</span></label><label class="mp-item"><input type="checkbox"><span>Problems can be prevented, e.g. regular hardware checks (preventative)</span></label><div class="mp-foot"><span class="mp-count">0 / 4 marks</span><span class="mp-note"></span></div></div></div></div></div>
+</div>
+<footer>Cambridge AS &amp; A Level IT · The System Life Cycle — built for revision, points are just for you.</footer>
+<script>
+(function(){
+  const scoreValEl = document.getElementById('score-val');
+  const scoreMaxEl = document.getElementById('score-max');
+  let score = 0;
+  function addScore(n){
+    score += n;
+    if(score < 0) score = 0;
+    scoreValEl.textContent = score;
+  }
+
+  // Work out the maximum score from what is actually on the page
+  let max = 0;
+  document.querySelectorAll('.self-mark input[type=checkbox]').forEach(function(cb){
+    max += parseInt(cb.dataset.points || '1', 10);
+  });
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    max += parseInt(sq.dataset.max, 10);
+  });
+  max += document.querySelectorAll('.classify-item').length;
+  max += document.querySelectorAll('.mcq').length;
+  scoreMaxEl.textContent = max;
+
+  // Tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.panel');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // Written questions with one self-marked point each
+  document.querySelectorAll('.sub-q:not(.mp)').forEach(function(sq){
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const reveal = sq.querySelector('.answer-reveal');
+    const mark = sq.querySelector('.self-mark');
+    const checkbox = mark ? mark.querySelector('input[type=checkbox]') : null;
+    if(!btn || !reveal || !mark) return;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        reveal.classList.remove('show');
+        mark.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      reveal.classList.add('show');
+      mark.classList.add('show');
+    });
+
+    if(checkbox){
+      checkbox.addEventListener('change', function(){
+        const pts = parseInt(checkbox.dataset.points || '1', 10);
+        addScore(checkbox.checked ? pts : -pts);
+      });
+    }
+  });
+
+  // Extended answers: tick the mark points you covered, capped at the maximum
+  document.querySelectorAll('.sub-q.mp').forEach(function(sq){
+    const cap = parseInt(sq.dataset.max, 10);
+    const btn = sq.querySelector('.check-btn');
+    const ta = sq.querySelector('textarea');
+    const err = sq.querySelector('.error-msg');
+    const panel = sq.querySelector('.markpoints');
+    const note = sq.querySelector('.mp-note');
+    const count = sq.querySelector('.mp-count');
+    const boxes = panel.querySelectorAll('input[type=checkbox]');
+    let awarded = 0;
+
+    btn.addEventListener('click', function(){
+      if(!ta.value.trim()){
+        err.classList.add('show');
+        panel.classList.remove('show');
+        ta.focus();
+        return;
+      }
+      err.classList.remove('show');
+      panel.classList.add('show');
+    });
+
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        if(cb.checked){
+          if(awarded >= cap){
+            cb.checked = false;
+            note.textContent = "That's already full marks (" + cap + "). Untick a point first to swap it.";
+            return;
+          }
+          awarded += 1;
+          addScore(1);
+        } else {
+          awarded -= 1;
+          addScore(-1);
+        }
+        note.textContent = '';
+        count.textContent = awarded + ' / ' + cap + ' marks';
+      });
+    });
+  });
+
+  // Sort-it tasks
+  document.querySelectorAll('.classify-item').forEach(function(item){
+    const answer = item.dataset.answer;
+    const buttons = item.querySelectorAll('.choices button');
+    buttons.forEach(function(b){
+      b.addEventListener('click', function(){
+        buttons.forEach(function(other){ other.disabled = true; });
+        if(b.dataset.choice === answer){
+          b.classList.add('correct');
+          addScore(1);
+        } else {
+          b.classList.add('incorrect');
+          buttons.forEach(function(other){
+            if(other.dataset.choice === answer) other.classList.add('correct');
+          });
+        }
+      });
+    });
+  });
+
+  // Quick checks
+  document.querySelectorAll('.mcq').forEach(function(mcq){
+    const correctIdx = mcq.dataset.answer;
+    const opts = mcq.querySelectorAll('.opt');
+    const feedback = mcq.querySelector('.mcq-feedback');
+    opts.forEach(function(opt){
+      opt.addEventListener('click', function(){
+        opts.forEach(function(o){ o.disabled = true; });
+        if(opt.dataset.idx === correctIdx){
+          opt.classList.add('correct');
+          feedback.textContent = 'Correct.';
+          feedback.className = 'mcq-feedback ok';
+          addScore(1);
+        } else {
+          opt.classList.add('incorrect');
+          opts.forEach(function(o){
+            if(o.dataset.idx === correctIdx) o.classList.add('correct');
+          });
+          feedback.textContent = 'Not quite — the correct answer is highlighted above.';
+          feedback.className = 'mcq-feedback bad';
+        }
+      });
+    });
+  });
+
+  })();
+</script>
+<script>
+(function(){
+  var STORE_KEY = 'ict-lesson-progress::' + location.pathname + '::' + document.title;
+
+  function load(){
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; }
+    catch(e){ return {}; }
+  }
+  function save(mutator){
+    try {
+      var s = load();
+      mutator(s);
+      localStorage.setItem(STORE_KEY, JSON.stringify(s));
+    } catch(e){ /* storage unavailable or full: fail silently */ }
+  }
+  function all(sel){ return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+  function all_in(root, sel){ return Array.prototype.slice.call(root.querySelectorAll(sel)); }
+
+  var subQs      = all('.sub-q:not(.mp)');   // short written answers (self-marked)
+  var mpQs       = all('.sub-q.mp');         // extended answers (mark points)
+  var classifyIt = all('.classify-item');
+  var mcqs       = all('.mcq');
+
+  // ---- SAVE ----
+
+  subQs.forEach(function(sq, i){
+    var key = 'subq-' + i;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var cb = sq.querySelector('.self-mark input[type=checkbox]');
+    if(ta) ta.addEventListener('input', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+    });
+    if(btn) btn.addEventListener('click', function(){
+      save(function(s){
+        s[key] = s[key] || {};
+        s[key].text = ta ? ta.value : '';
+        s[key].checked = !!(ta && ta.value.trim());
+      });
+    });
+    if(cb) cb.addEventListener('change', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].selfMarked = cb.checked; });
+    });
+  });
+
+  mpQs.forEach(function(sq, i){
+    var key = 'mp-' + i;
+    var ta = sq.querySelector('textarea');
+    var btn = sq.querySelector('.check-btn');
+    var boxes = all_in(sq, '.markpoints input[type=checkbox]');
+    if(ta) ta.addEventListener('input', function(){
+      save(function(s){ s[key] = s[key] || {}; s[key].text = ta.value; });
+    });
+    if(btn) btn.addEventListener('click', function(){
+      save(function(s){
+        s[key] = s[key] || {};
+        s[key].text = ta ? ta.value : '';
+        s[key].shown = !!(ta && ta.value.trim());
+      });
+    });
+    boxes.forEach(function(cb){
+      cb.addEventListener('change', function(){
+        save(function(s){
+          s[key] = s[key] || {};
+          var ticked = [];
+          boxes.forEach(function(b, bi){ if(b.checked) ticked.push(bi); });
+          s[key].ticked = ticked;
+        });
+      });
+    });
+  });
+
+  classifyIt.forEach(function(item, i){
+    all_in(item, '.choices button').forEach(function(b, bi){
+      b.addEventListener('click', function(){
+        save(function(s){ s['classify-' + i] = bi; });
+      });
+    });
+  });
+
+  mcqs.forEach(function(mcq, i){
+    all_in(mcq, '.opt').forEach(function(o, oi){
+      o.addEventListener('click', function(){
+        save(function(s){ s['mcq-' + i] = oi; });
+      });
+    });
+  });
+
+  // ---- RESTORE: replay saved answers as real clicks so the page's own scoring runs ----
+
+  (function restore(){
+    var s = load();
+
+    subQs.forEach(function(sq, i){
+      var rec = s['subq-' + i];
+      if(!rec) return;
+      var ta = sq.querySelector('textarea');
+      var btn = sq.querySelector('.check-btn');
+      var cb = sq.querySelector('.self-mark input[type=checkbox]');
+      if(ta && rec.text) ta.value = rec.text;
+      if(rec.checked && btn) btn.click();
+      if(rec.selfMarked && cb){
+        cb.checked = true;
+        cb.dispatchEvent(new Event('change'));
+      }
+    });
+
+    mpQs.forEach(function(sq, i){
+      var rec = s['mp-' + i];
+      if(!rec) return;
+      var ta = sq.querySelector('textarea');
+      var btn = sq.querySelector('.check-btn');
+      var boxes = all_in(sq, '.markpoints input[type=checkbox]');
+      if(ta && rec.text) ta.value = rec.text;
+      if(rec.shown && btn) btn.click();
+      (rec.ticked || []).forEach(function(bi){
+        if(boxes[bi]){
+          boxes[bi].checked = true;
+          boxes[bi].dispatchEvent(new Event('change'));
+        }
+      });
+    });
+
+    classifyIt.forEach(function(item, i){
+      var bi = s['classify-' + i];
+      if(bi === undefined) return;
+      var buttons = item.querySelectorAll('.choices button');
+      if(buttons[bi]) buttons[bi].click();
+    });
+
+    mcqs.forEach(function(mcq, i){
+      var oi = s['mcq-' + i];
+      if(oi === undefined) return;
+      var opts = mcq.querySelectorAll('.opt');
+      if(opts[oi]) opts[oi].click();
+    });
+  })();
+
+  // ---- "Reset my answers" button ----
+  var resetBtn = document.createElement('button');
+  resetBtn.textContent = 'Reset my answers';
+  resetBtn.setAttribute('type', 'button');
+  resetBtn.style.cssText = 'position:fixed;bottom:14px;left:14px;z-index:50;font-family:JetBrains Mono,monospace;'
+    + 'font-size:11px;padding:7px 11px;background:#141b2e;border:1px solid #40557d;'
+    + 'color:#9ba4bc;border-radius:3px;cursor:pointer;';
+  resetBtn.addEventListener('mouseenter', function(){ resetBtn.style.color = '#e7e9f1'; });
+  resetBtn.addEventListener('mouseleave', function(){ resetBtn.style.color = '#9ba4bc'; });
+  resetBtn.addEventListener('click', function(){
+    if(confirm('Clear all your saved answers on this page?')){
+      try { localStorage.removeItem(STORE_KEY); } catch(e){}
+      location.reload();
+    }
+  });
+  document.body.appendChild(resetBtn);
+})();
+</script>
+</body>
+</html>
